@@ -1,0 +1,102 @@
+Dependencies For macOS
+
+Table of Contents
+
+ 1. Introduction
+ 2. Program and library dependencies
+ 3. Corresponding package dependencies
+ 4. Installing OpenGL
+ 5. Overview of different ways to install non-system dependencies
+ 6. Installing non-system dependencies using Macports
+ 7. Troubleshooting  
+
+Introduction
+
+This page lists the package dependencies which need to be satisfied to be able
+to build GPlates from source on macOS.
+
+Program and library dependencies
+
+To compile GPlates, you will need the following programs and libraries
+installed:
+
+  • XCode (see "BUILD.OSX" for instructions on how to install)
+  • cmake (3.5 or newer)
+  • make
+  • GL library (the OpenGL shared library)
+  • GLU library (the OpenGL Utility shared library)
+  • GLEW library (the OpenGL Extension Wrangler Library)
+  * Python (version 2.7 or 3; preferably 3.5 or newer)
+  • Boost library headers (version 1.35 or newer)
+  • Qt library (version 5.6 or newer)
+  • GDAL (Geospatial Data Abstraction Library) (1.3.2 or newer; preferably 2 or newer)
+  • CGAL (Computational Geometry Algorithms Library) (4.7 or newer; preferably 4.12 or newer for improved CMake support)
+  • PROJ (4.6.0 or newer; preferably 6 or newer)
+  • Qwt (6.0.1 or newer; preferably 6.1 or newer)
+  • zlib
+
+Corresponding package dependencies
+
+Program/library Corresponding Macports packages
+cmake           cmake
+GLEW            glew
+Python          python
+Boost           boost
+Qt              qt5
+Qwt             qwt61
+GDAL            gdal
+PROJ            proj
+CGAL            cgal
+zlib            zlib
+
+Overview of different ways to install non-system dependencies
+
+There are multiple ways to install the remaining dependencies.
+You can use Macports (http://www.macports.org) or Homebrew (https://brew.sh/) or Fink (http://www.finkproject.org/).
+Or you can compile the dependent packages directly from source code.
+Or you can install the dependent packages using precompiled installer packages where available.
+
+Installing non-system dependencies using Macports
+
+Here we briefly describe how to install dependencies using Macports (http://www.macports.org).
+  • Install Macports (http://www.macports.org) if it's not already installed.
+  • Start a new terminal window (by running Applications->Utilities->Terminal in Finder).
+  • You may need to set the path to Macports with "export PATH=/opt/local/bin:/opt/local/sbin:$PATH".
+  • Update Macports with 'sudo port -d selfupdate'.
+  • Install CMake with 'sudo port install cmake' (or download an installer from http://www.cmake.org ).
+  • Install GLEW with 'sudo port install glew'.
+  • Install Python with 'sudo port install python3[x]' where 'x' is the minor version (eg, 'sudo port install python38).
+  • Install Boost with 'sudo port install boost +python3[x]'.
+    Note the additional '+python3[x]' where 'x' is the python minor version number (eg, 'sudo port install boost +python38').
+  • Install Qt with 'sudo port install qt5'.
+  • Instal Qwt with 'sudo port install qwt61 +qt5'.
+    This appears to install qwt inside qt5, and so it should get found once qt5 is found.
+  • Install GDAL with 'sudo port install gdal +netcdf'.
+    Note the additional "+netcdf" is required to enable GPlates to import/export NetCDF rasters.
+  • Install PROJ with 'sudo port install proj'.
+    Note that this will likely already be installed since it's a dependency of gdal (installed above).
+  • Install CGAL with 'sudo port install cgal'.
+  • Install zlib with 'sudo port install zlib'.
+
+A note about Python
+
+You may need to explicitly specify the location of the Macports Python otherwise the system Python will instead be found by CMake.
+For example, if you installed Python 3.8 via Macports (and are running CMake 3.12 or greater) then build GPlates by typing (see BUILD.OSX):
+
+    cmake -D Python3_ROOT=/opt/local/Library/Frameworks/Python.framework/Python.framework/Versions/3.8 .
+    make
+
+A note about GDAL
+
+If you decide to compile GDAL from source (instead of using Macports) then ensure that GDAL links *statically*
+to PROJ if the PROJ library is in a non-standard location. This ensures GPlates does not generate a dynamic
+library loading error (for PROJ) when a raster with an inbuilt spatial reference system (eg, a projection) is loaded.
+This does not appear to be necessary when using GDAL installed via Macports (since it statically links PROJ to GDAL).
+You'll also need to ensure that the NetCDF library is installed and that GDAL is configured to use it - this is
+necessary for GPlates to be able to load gridded rasters.
+Here are the relevant options for the GDAL 2.x 'configure' script (assuming GDAL dependencies have been installed with Macports /opt/local/):
+
+    configure --with-netcdf=/opt/local  --enable-netcdf4 --with-proj=/opt/local --with-threads --disable-static --without-grass --with-libtiff=/opt/local --with-jpeg=/opt/local --with-gif=/opt/local --with-png=/opt/local --with-geotiff=/opt/local --with-sqlite3=/opt/local --with-expat=/opt/local
+
+...where '--enable-netcdf4' enables NetCDF version 4 which may require HDF5 '--with-hdf5=/path/to/hdf5' according to https://trac.osgeo.org/gdal/wiki/NetCDF.
+And if using a version of GDAL older than 3.0 then replace '--with-proj=/opt/local ' with '--with-static-proj4=/opt/local'.

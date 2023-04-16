@@ -1,0 +1,181 @@
+#
+# List the non-generated source files (*.h, *.cc, *.ui, *.qrc).
+#
+# You can either explicitly add/remove source files here, or
+# run 'python cmake/add_sources.py' to automatically list them (here).
+#
+# Note that CMake discourages use of the 'file(GLOB)' CMake command to automatically collect source files.
+# One of the reasons is if source files are added or removed, CMake is not automatically re-run,
+# so the build is unaware of the change.
+#
+set(srcs
+    GLAgeGridMaskSource.cc
+    GLAgeGridMaskSource.h
+    GLBuffer.cc
+    GLBuffer.h
+    GLBufferImpl.cc
+    GLBufferImpl.h
+    GLBufferObject.cc
+    GLBufferObject.h
+    GLCapabilities.cc
+    GLCapabilities.h
+    GLCompiledDrawState.cc
+    GLCompiledDrawState.h
+    GLContext.cc
+    GLContext.h
+    GLContextImpl.h
+    GLCubeMeshGenerator.cc
+    GLCubeMeshGenerator.h
+    GLCubeSubdivision.cc
+    GLCubeSubdivision.h
+    GLCubeSubdivisionCache.h
+    GLDataRasterSource.cc
+    GLDataRasterSource.h
+    GLDepthRange.h
+    GLFilledPolygonsGlobeView.cc
+    GLFilledPolygonsGlobeView.h
+    GLFilledPolygonsMapView.cc
+    GLFilledPolygonsMapView.h
+    GLFrameBufferObject.cc
+    GLFrameBufferObject.h
+    GLFrustum.cc
+    GLFrustum.h
+    GLImageUtils.cc
+    GLImageUtils.h
+    GLIntersect.cc
+    GLIntersect.h
+    GLIntersectPrimitives.cc
+    GLIntersectPrimitives.h
+    GLLight.cc
+    GLLight.h
+    GLMapCubeMeshGenerator.cc
+    GLMapCubeMeshGenerator.h
+    GLMatrix.cc
+    GLMatrix.h
+    GLMultiResolutionCubeMesh.cc
+    GLMultiResolutionCubeMesh.h
+    GLMultiResolutionCubeRaster.cc
+    GLMultiResolutionCubeRaster.h
+    GLMultiResolutionCubeRasterInterface.h
+    GLMultiResolutionCubeReconstructedRaster.cc
+    GLMultiResolutionCubeReconstructedRaster.h
+    GLMultiResolutionMapCubeMesh.cc
+    GLMultiResolutionMapCubeMesh.h
+    GLMultiResolutionRaster.cc
+    GLMultiResolutionRaster.h
+    GLMultiResolutionRasterInterface.cc
+    GLMultiResolutionRasterInterface.h
+    GLMultiResolutionRasterMapView.cc
+    GLMultiResolutionRasterMapView.h
+    GLMultiResolutionRasterSource.h
+    GLMultiResolutionStaticPolygonReconstructedRaster.cc
+    GLMultiResolutionStaticPolygonReconstructedRaster.h
+    GLNormalMapSource.cc
+    GLNormalMapSource.h
+    GLObject.h
+    GLObjectResource.h
+    GLObjectResourceManager.h
+    GLOffScreenContext.cc
+    GLOffScreenContext.h
+    GLPixelBuffer.cc
+    GLPixelBuffer.h
+    GLPixelBufferImpl.cc
+    GLPixelBufferImpl.h
+    GLPixelBufferObject.cc
+    GLPixelBufferObject.h
+    GLProgramObject.cc
+    GLProgramObject.h
+    GLProjectionUtils.cc
+    GLProjectionUtils.h
+    GLRasterCoRegistration.cc
+    GLRasterCoRegistration.h
+    GLReconstructedStaticPolygonMeshes.cc
+    GLReconstructedStaticPolygonMeshes.h
+    GLRenderBufferObject.cc
+    GLRenderBufferObject.h
+    GLRenderer.cc
+    GLRenderer.h
+    GLRendererImpl.h
+    GLRenderTarget.cc
+    GLRenderTarget.h
+    GLRenderTargetImpl.cc
+    GLRenderTargetImpl.h
+    GLSaveRestoreFrameBuffer.cc
+    GLSaveRestoreFrameBuffer.h
+    GLScalarField3D.cc
+    GLScalarField3D.h
+    GLScalarField3DGenerator.cc
+    GLScalarField3DGenerator.h
+    GLScalarFieldDepthLayersSource.cc
+    GLScalarFieldDepthLayersSource.h
+    GLScreenRenderTarget.cc
+    GLScreenRenderTarget.h
+    GLShaderObject.cc
+    GLShaderObject.h
+    GLShaderProgramUtils.cc
+    GLShaderProgramUtils.h
+    GLShaderSource.cc
+    GLShaderSource.h
+    GLState.cc
+    GLState.h
+    GLStateSet.h
+    GLStateSetKeys.cc
+    GLStateSetKeys.h
+    GLStateSets.cc
+    GLStateSets.h
+    GLStateSetStore.h
+    GLStateStore.cc
+    GLStateStore.h
+    GLStreamPrimitives.h
+    GLStreamPrimitiveWriters.h
+    GLText.cc
+    GLText.h
+    GLTexture.cc
+    GLTexture.h
+    GLTextureUtils.cc
+    GLTextureUtils.h
+    GLTileRender.cc
+    GLTileRender.h
+    GLTransform.h
+    GLUtils.cc
+    GLUtils.h
+    GLVertex.cc
+    GLVertex.h
+    GLVertexArray.cc
+    GLVertexArray.h
+    GLVertexArrayImpl.cc
+    GLVertexArrayImpl.h
+    GLVertexArrayObject.cc
+    GLVertexArrayObject.h
+    GLVertexBuffer.cc
+    GLVertexBuffer.h
+    GLVertexBufferImpl.cc
+    GLVertexBufferImpl.h
+    GLVertexBufferObject.cc
+    GLVertexBufferObject.h
+    GLVertexElementBuffer.cc
+    GLVertexElementBuffer.h
+    GLVertexElementBufferImpl.cc
+    GLVertexElementBufferImpl.h
+    GLVertexElementBufferObject.cc
+    GLVertexElementBufferObject.h
+    GLViewport.h
+    GLVisualLayers.cc
+    GLVisualLayers.h
+    GLVisualRasterSource.cc
+    GLVisualRasterSource.h
+    OpenGL.h
+    OpenGLBadAllocException.h
+    OpenGLException.h
+)
+
+# Add the source files to the gplates static library.
+target_sources_util(gplates-lib PRIVATE ${srcs})
+
+# Add the source files to the pygplates extension module.
+#
+# Note this is the external Python library that is not embedded inside GPlates.
+# All sources files compiled in pygplates need to be position independent and hence
+# compiled differently (POSITION_INDEPENDENT_CODE target property is set on pygplates).
+set(pygplates_srcs ${srcs})
+target_sources_util(pygplates PRIVATE ${pygplates_srcs})

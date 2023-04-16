@@ -1,0 +1,94 @@
+/* $Id: InsertVGPReconstructionPoleDialog.h 19478 2020-06-12 08:12:57Z jcannon $ */
+
+/**
+ * \file 
+ * $Revision: 19478 $
+ * $Date: 2020-06-12 01:12:57 -0700 (Fri, 12 Jun 2020) $ 
+ * 
+ * Copyright (C) 2010 Geological Survey of Norway
+ *
+ * This file is part of GPlates.
+ *
+ * GPlates is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License, version 2, as published by
+ * the Free Software Foundation.
+ *
+ * GPlates is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+ * for more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, write to Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ */
+ 
+#ifndef GPLATES_QTWIDGETS_INSERTVGPRECONSTRUCTIONPOLEDIALOG_H
+#define GPLATES_QTWIDGETS_INSERTVGPRECONSTRUCTIONPOLEDIALOG_H
+
+#include <QDialog>
+
+#include "PoleSequenceTableWidget.h"
+#include "ReconstructionPoleWidget.h"
+#include "ui_InsertVGPReconstructionPoleDialogUi.h"
+
+namespace GPlatesAppLogic
+{
+	class ApplicationState;
+	class FeatureCollectionFileState;
+	class FeatureCollectionFileIO;
+}
+
+namespace GPlatesMaths
+{
+	class Rotation;
+}
+
+namespace GPlatesPresentation
+{
+	class ViewState;
+}
+
+namespace GPlatesQtWidgets
+{
+
+	class InsertVGPReconstructionPoleDialog:
+		public QDialog,
+		protected Ui_InsertVGPReconstructionPoleDialog
+	{
+		Q_OBJECT
+	public:
+
+		InsertVGPReconstructionPoleDialog(
+			GPlatesPresentation::ViewState &view_state_,
+			QWidget *parent_ = NULL);
+		
+		void
+		setup(
+			const GPlatesQtWidgets::ReconstructionPole &reconstruction_pole);
+			
+			
+	private:
+	
+		ReconstructionPole d_reconstruction_pole;
+		
+		PoleSequenceTableWidget *d_pole_sequence_table_widget_ptr;
+	
+		ReconstructionPoleWidget *d_reconstruction_pole_widget_ptr;
+		
+		GPlatesAppLogic::ApplicationState *d_application_state_ptr;
+		
+		/**
+		 * The loaded feature collection files.
+		 */
+		GPlatesAppLogic::FeatureCollectionFileState &d_file_state;
+
+		/**
+		 * Used to create an empty feature collection file.
+		 */
+		GPlatesAppLogic::FeatureCollectionFileIO &d_file_io;		
+				
+	};
+}
+
+#endif  // GPLATES_QTWIDGETS_INSERTVGPRECONSTRUCTIONPOLEDIALOG_H

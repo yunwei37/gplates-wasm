@@ -1,0 +1,145 @@
+/* $Id: SpatialReferenceSystem.h 19130 2019-07-31 14:03:48Z jcannon $ */
+
+/**
+ * \file 
+ * $Revision: 19130 $
+ * $Date: 2019-07-31 07:03:48 -0700 (Wed, 31 Jul 2019) $
+ * 
+ * Copyright (C) 2014 The University of Sydney, Australia
+ *
+ * This file is part of GPlates.
+ *
+ * GPlates is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License, version 2, as published by
+ * the Free Software Foundation.
+ *
+ * GPlates is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+ * for more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, write to Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ */
+
+#ifndef GPLATES_PROPERTY_VALUES_SPATIALREFERENCESYSTEM_H
+#define GPLATES_PROPERTY_VALUES_SPATIALREFERENCESYSTEM_H
+
+#include <memory>
+#include <boost/shared_ptr.hpp>
+
+#include "global/CompilerWarnings.h"
+PUSH_MSVC_WARNINGS
+// Avoid warning: "needs to have dll-interface to be used by clients of class" OGRSpatialReference and OGRCoordinateTransformationOptions.
+DISABLE_MSVC_WARNING(4251)
+#include <ogr_spatialref.h>
+POP_MSVC_WARNINGS
+
+#include "utils/non_null_intrusive_ptr.h"
+#include "utils/ReferenceCount.h"
+
+
+namespace GPlatesPropertyValues
+{
+	/**
+	 * A spatial reference system.
+	 *
+	 * This class wraps OGRSpatialReference.
+	 */
+	class SpatialReferenceSystem :
+			public GPlatesUtils::ReferenceCount<SpatialReferenceSystem>
+	{
+	public:
+
+		typedef GPlatesUtils::non_null_intrusive_ptr<SpatialReferenceSystem> non_null_ptr_type;
+		typedef GPlatesUtils::non_null_intrusive_ptr<const SpatialReferenceSystem> non_null_ptr_to_const_type;
+
+
+		/**
+		 * Spatial reference system for standard "WGS84".
+		 */
+		static
+		non_null_ptr_to_const_type
+		get_WGS84();
+
+
+		/**
+		 * Creates a spatial reference system.
+		 *
+		 * The specified OGRSpatialReference is copied/cloned internally.
+		 */
+		static
+		non_null_ptr_type
+		create(
+				const OGRSpatialReference &ogr_srs)
+		{
+			return non_null_ptr_type(new SpatialReferenceSystem(ogr_srs));
+		}
+
+
+		~SpatialReferenceSystem();
+
+
+		/**
+		 * Returns true if this spatial reference system is a geographic coordinate system.
+		 */
+		bool
+		is_geographic() const;
+
+		/**
+		 * Returns true if this spatial reference system is a projected coordinate system.
+		 */
+		bool
+		is_projected() const;
+
+		/**
+		 * Returns true if the spatial reference system is WGS84.
+		 */
+		bool is_wgs84() const;
+
+		/**
+		 * Return the internal OGR spatial reference system.
+		 */
+		const OGRSpatialReference &
+		get_ogr_srs() const
+		{
+			return *d_ogr_srs;
+		}
+
+		/**
+		 * Return the internal OGR spatial reference system.
+		 */
+		OGRSpatialReference &
+		get_ogr_srs()
+		{
+			return *d_ogr_srs;
+		}
+
+	private:
+
+		/**
+		 * Release our reference count (ie, decrement OGR reference count in OGRSpatialReference)
+		 * when all our boost 'd_ogr_srs' references to the OGRSpatialReference object are destroyed.
+		 *
+		 * Our clients may also hold OGR references, so the OGRSpatialReference object won't
+		 * necessarily get destroyed until those reference are also released.
+		 */
+		struct OGRSpatialReferenceReleaser
+		{
+			void
+			operator()(
+					OGRSpatialReference *ogr_srs);
+		};
+
+		boost::shared_ptr<OGRSpatialReference> d_ogr_srs;
+		
+
+		explicit
+		SpatialReferenceSystem(
+				const OGRSpatialReference &ogr_srs);
+
+	};
+}
+
+#endif // GPLATES_PROPERTY_VALUES_SPATIALREFERENCESYSTEM_H
