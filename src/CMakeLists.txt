@@ -300,8 +300,8 @@ add_library(gplates-lib STATIC EXCLUDE_FROM_ALL
 #
 # Add 'gplates' executable target (linked to gplates-lib).
 #
-# add_executable(gplates gplates_main.cc ScribeExportGPlates.cc)
-# target_link_libraries(gplates PRIVATE gplates-lib)
+#add_executable(gplates gplates_main.cc ScribeExportGPlates.cc)
+#target_link_libraries(gplates PRIVATE gplates-lib)
 
 #
 # Add 'gplates-no-gui' executable target (linked to gplates-lib).
@@ -315,10 +315,10 @@ target_link_libraries(gplates-no-gui PRIVATE gplates-lib)
 # It's only added if we have a Boost unit test framework.
 # It will be populated by source files from the 'unit-test/' sub-directory.
 # if (TARGET Boost::unit_test_framework)
-        add_executable(gplates-unit-test EXCLUDE_FROM_ALL gplates_unit_test_main.cc ScribeExportGPlatesUnitTest.cc)
+add_executable(gplates-unit-test EXCLUDE_FROM_ALL gplates_unit_test_main.cc ScribeExportGPlatesUnitTest.cc)
 #        target_include_directories(gplates-unit-test PUBLIC SYSTEM ${CMAKE_CURRENT_SOURCE_DIR}/../third_party)
 #        target_link_directories(gplates-unit-test PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../lib)
-	target_link_libraries(gplates-unit-test PRIVATE gplates-lib)
+target_link_libraries(gplates-unit-test PRIVATE gplates-lib)
 # else()
 # 	# Only print status message if this is not a public release.
 # 	# Because it'll only confuse users (because gplate-unit-test is not part of public release).
