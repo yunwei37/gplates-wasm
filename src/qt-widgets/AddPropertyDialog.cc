@@ -86,10 +86,9 @@ namespace
 	 * Used to sort GPGIM properties by the unqualified part of their property names.
 	 */
 	class SortByUnqualifiedPropertyName :
-			public std::binary_function<
+			public std::function<bool(
 					GPlatesModel::GpgimProperty::non_null_ptr_to_const_type,
-					GPlatesModel::GpgimProperty::non_null_ptr_to_const_type,
-					bool>
+					GPlatesModel::GpgimProperty::non_null_ptr_to_const_type)>
 	{
 	public:
 		bool

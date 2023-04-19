@@ -38,6 +38,7 @@
 #include <boost/optional.hpp>
 #include <boost/none.hpp>
 #include <boost/numeric/conversion/cast.hpp>
+#include <boost/bind/placeholders.hpp>
 
 #include <QtDebug>
 #include <QtGlobal>
@@ -53,7 +54,6 @@
 
 #include "TopologyTools.h"
 
-#include "ChooseCanvasToolUndoCommand.h"
 #include "FeatureFocus.h"
 
 #include "app-logic/ApplicationState.h"
@@ -3448,7 +3448,7 @@ GPlatesGui::TopologyTools::is_section_visible_boundary(
 			std::find_if(
 					d_visible_boundary_section_seq.begin(),
 					d_visible_boundary_section_seq.end(),
-					boost::bind(&VisibleSection::d_section_info_index, _1) ==
+                    boost::bind(&VisibleSection::d_section_info_index, boost::placeholders::_1) ==
 						boost::cref(section_index));
 
 	if (visible_section_iter == d_visible_boundary_section_seq.end())
@@ -3467,7 +3467,7 @@ GPlatesGui::TopologyTools::is_section_visible_interior(
 			std::find_if(
 					d_visible_interior_section_seq.begin(),
 					d_visible_interior_section_seq.end(),
-					boost::bind(&VisibleSection::d_section_info_index, _1) ==
+                    boost::bind(&VisibleSection::d_section_info_index, boost::placeholders::_1) ==
 						boost::cref(section_index));
 
 	if (visible_section_iter == d_visible_interior_section_seq.end())

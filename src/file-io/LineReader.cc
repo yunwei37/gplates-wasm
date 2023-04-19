@@ -33,7 +33,7 @@ GPlatesFileIO::LineReader::LineReader(
 {
 	// Assume input text file is UTF8 encoded (which includes the ASCII character set).
 	// If we don't specify this then UTF8 characters will not decoded correctly on reading.
-	d_text_stream.setCodec("UTF-8");
+    d_text_stream.setEncoding(QStringConverter::Utf8);
 }
 
 

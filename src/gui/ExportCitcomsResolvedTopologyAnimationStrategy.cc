@@ -256,8 +256,8 @@ GPlatesGui::ExportCitcomsResolvedTopologyAnimationStrategy::export_files(
 			filebasename,
 			GPlatesFileIO::ExportTemplateFilename::PLACEHOLDER_FORMAT_STRING,
 			d_configuration->output_options,
-			GPlatesFileIO::CitcomsResolvedTopologicalBoundaryExport::get_export_file_format(
-					filebasename,
+            GPlatesFileIO::CitcomsResolvedTopologicalBoundaryExport::get_export_file_format(
+            QFileInfo(filebasename),
 					d_export_animation_context_ptr->view_state().get_application_state()
 							.get_feature_collection_file_format_registry()),
 			resolved_geom_seq,

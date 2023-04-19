@@ -93,13 +93,13 @@ Qt
      Run the online installer exe:
      - It will ask for the username and password of your Qt account (it will ask you to sign in or create a new account).
      - Accept the obligations of using Qt Open Source (and specify whether you are an individual or a company).
-     - Select 'Custom' installation (we want Qt5, not Qt6 since we don't yet support it).
+     - Select 'Custom' installation (we want Qt6, not Qt6 since we don't yet support it).
      - Under 'Qt 5.15.2' select the compiler you are using.
        For example, select "MSVC 2015 64-bit" when compiling 64-bit using Visual Studio 2015.
      - Accept the license.
      - Select your Start Menu shortcut.
      - Finish the installation of the pre-built components.
-  2. Alternatively you can download the latest Qt5 opensource *offline* installer from: https://download.qt.io/archive/qt/
+  2. Alternatively you can download the latest Qt6 opensource *offline* installer from: https://download.qt.io/archive/qt/
      However, the latest will be Qt 5.14 (not Qt 5.15) since offline installers are no longer supported by Qt (for non-commercial).
      This is https://download.qt.io/archive/qt/5.14/5.14.2/qt-opensource-windows-x86-5.14.2.exe
      Note that you now need a Qt account to use the installer (it will ask you to sign in or create a new account).
@@ -113,8 +113,8 @@ Qt
      For example, "C:\SDK\qt\qt-5.15.2\5.15.2\msvc2015_64".
   5. Add the Qt \bin directory (associated with your selected pre-built components) to the PATH environment variable.
      For example, "C:\SDK\qt\qt-5.15.2\5.15.2\msvc2015_64\bin".
-     Note you may need to insert near front of PATH to prioritise over other installed software containing Qt5 DLLs
-     otherwise GPlates might not start complaining that some symbol in one of the Qt5 DLLs cannot be found.
+     Note you may need to insert near front of PATH to prioritise over other installed software containing Qt6 DLLs
+     otherwise GPlates might not start complaining that some symbol in one of the Qt6 DLLs cannot be found.
 
 Qwt
 

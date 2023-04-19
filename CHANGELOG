@@ -19,7 +19,7 @@ Changes since 2.2:
    * Added two new age palettes ('traditional' and 'modern') to built-in palette dialog (along with existing 'legacy').
      * Can now also be used in non-raster layers (3D scalar field layers and reconstructed scalar coverage layers).
    * Improve look of tool palette on macOS (using stylesheet):
-     * Native look is worse on Qt5 than Qt4 (which itself wasn't that good).
+     * Native look is worse on Qt6 than Qt4 (which itself wasn't that good).
      * Now looks much more similar to Windows and Linux (which still use the native look).
    * Support high-DPI displays (eg, Apple Retina):
      * In globe/map views, colouring previews and canvas tool icons.

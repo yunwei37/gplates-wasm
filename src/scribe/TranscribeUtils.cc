@@ -25,7 +25,7 @@
 
 #include <boost/optional.hpp>
 #include <QDir>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QString>
 #include <QStringList>
 #include <QtGlobal>
@@ -42,12 +42,12 @@ namespace GPlatesScribe
 		/**
 		 * Regular expression for a Windows drive letter (eg, "C:/").
 		 */
-		const QRegExp WINDOWS_DRIVE_LETTER_REGEXP("^[a-zA-Z]\\:/");
+		const QRegularExpression WINDOWS_DRIVE_LETTER_REGEXP("^[a-zA-Z]\\:/");
 
 		/**
 		 * Regular expression for a Windows share name (eg, "//sharename/").
 		 */
-		const QRegExp WINDOWS_SHARE_NAME_REGEXP("^//[^/]+/");
+		const QRegularExpression WINDOWS_SHARE_NAME_REGEXP("^//[^/]+/");
 
 
 		/**
@@ -64,28 +64,29 @@ namespace GPlatesScribe
 		{
 			QStringList dir_path;
 
-			if (WINDOWS_DRIVE_LETTER_REGEXP.indexIn(file_path) >= 0)
+            if (WINDOWS_DRIVE_LETTER_REGEXP.match(file_path).hasMatch())
 			{
 				// Split "C:/dir/file.txt" into "C:" and "dir/file.txt" for example.
-
-				const QString drive_letter = file_path.left(WINDOWS_DRIVE_LETTER_REGEXP.matchedLength() - 1);
-
-				// Make the drive letters are uppercase so they compare properly later on.
-				// They should already be uppercase if QFileInfo::absoluteFilePath() was used to create them.
-				// But we make sure anyway.
-				dir_path.append(drive_letter.toUpper());
-
-				file_path = file_path.mid(WINDOWS_DRIVE_LETTER_REGEXP.matchedLength());
+                QRegularExpressionMatch match = WINDOWS_DRIVE_LETTER_REGEXP.match(file_path);
+                if (match.hasMatch()) {
+                    const QString drive_letter = file_path.left(match.capturedLength() - 1);
+                    // Make the drive letters are uppercase so they compare properly later on.
+                    // They should already be uppercase if QFileInfo::absoluteFilePath() was used to create them.
+                    // But we make sure anyway.
+                    dir_path.append(drive_letter.toUpper());
+                    file_path = file_path.mid(match.capturedLength());
+                }
 			}
-			else if (WINDOWS_SHARE_NAME_REGEXP.indexIn(file_path) >= 0)
+            else if (WINDOWS_SHARE_NAME_REGEXP.match(file_path).hasMatch())
 			{
-				// Split "//sharename/dir/file.txt" into "//sharename" and "dir/file.txt" for example.
+                // Split "//sharename/dir/file.txt" into "//sharename" and "dir/file.txt" for example.
 
-				const QString share_name = file_path.left(WINDOWS_SHARE_NAME_REGEXP.matchedLength() - 1);
-
-				dir_path.append(share_name);
-
-				file_path = file_path.mid(WINDOWS_SHARE_NAME_REGEXP.matchedLength());
+                QRegularExpressionMatch match = WINDOWS_SHARE_NAME_REGEXP.match(file_path);
+                if (match.hasMatch()) {
+                    const QString share_name = file_path.left(match.capturedLength() - 1);
+                    dir_path.append(share_name);
+                    file_path = file_path.mid(match.capturedLength());
+                }
 			}
 
 			dir_path = dir_path + file_path.split('/');
@@ -378,17 +379,33 @@ GPlatesScribe::TranscribeUtils::convert_file_path(
 
 #else // Mac or Linux...
 
-	// Remove Windows drive letter if necessary.
-	if (WINDOWS_DRIVE_LETTER_REGEXP.indexIn(file_path) >= 0)
-	{
-		// Change "C:/dir/file.txt" into "/dir/file.txt" for example.
-		return '/' + file_path.mid(WINDOWS_DRIVE_LETTER_REGEXP.matchedLength());
-	}
-	else if (WINDOWS_SHARE_NAME_REGEXP.indexIn(file_path) >= 0)
-	{
-		// Change "//sharename/dir/file.txt" into "/dir/file.txt" for example.
-		return '/' + file_path.mid(WINDOWS_SHARE_NAME_REGEXP.matchedLength());
-	}
+//	// Remove Windows drive letter if necessary.
+//	if (WINDOWS_DRIVE_LETTER_REGEXP.indexIn(file_path) >= 0)
+//	{
+//		// Change "C:/dir/file.txt" into "/dir/file.txt" for example.
+//		return '/' + file_path.mid(WINDOWS_DRIVE_LETTER_REGEXP.matchedLength());
+//	}
+//	else if (WINDOWS_SHARE_NAME_REGEXP.indexIn(file_path) >= 0)
+//	{
+//		// Change "//sharename/dir/file.txt" into "/dir/file.txt" for example.
+//		return '/' + file_path.mid(WINDOWS_SHARE_NAME_REGEXP.matchedLength());
+//	}
+    // Remove Windows drive letter if necessary.
+    QRegularExpressionMatch driveLetterMatch = WINDOWS_DRIVE_LETTER_REGEXP.match(file_path);
+    if (driveLetterMatch.hasMatch())
+    {
+        // Change "C:/dir/file.txt" into "/dir/file.txt" for example.
+        return '/' + file_path.mid(driveLetterMatch.capturedLength());
+    }
+    else
+    {
+        QRegularExpressionMatch shareNameMatch = WINDOWS_SHARE_NAME_REGEXP.match(file_path);
+        if (shareNameMatch.hasMatch())
+        {
+            // Change "//sharename/dir/file.txt" into "/dir/file.txt" for example.
+            return '/' + file_path.mid(shareNameMatch.capturedLength());
+        }
+    }
 
 #endif
 

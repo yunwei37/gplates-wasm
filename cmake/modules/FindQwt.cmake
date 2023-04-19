@@ -22,7 +22,7 @@ find_path(QWT_INCLUDE_DIR
   /usr/include
   /usr/local/include
   /opt/local/include
-  # On Macports Qwt is installed into Qt5 (using "sudo port install qwt61 +qt5")...
+  # On Macports Qwt is installed into Qt6 (using "sudo port install qwt61 +qt5")...
   /opt/local/libexec/qt5/include
   "$ENV{QWT_INCLUDE_DIR}"
   "$ENV{INCLUDE}" 
@@ -40,7 +40,7 @@ find_library(QWT_LIBRARY
     /usr/lib
     /usr/local/lib
     /opt/local/lib
-    # On Macports Qwt is installed into Qt5 (using "sudo port install qwt61 +qt5")...
+    # On Macports Qwt is installed into Qt6 (using "sudo port install qwt61 +qt5")...
     /opt/local/libexec/qt5/lib
     "$ENV{QWT_LIB_DIR}"
 )

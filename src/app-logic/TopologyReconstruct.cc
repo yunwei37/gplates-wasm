@@ -89,7 +89,7 @@ namespace GPlatesAppLogic
 		 * resolved boundary bounding small circle.
 		 */
 		class IntersectGeometryPointsAndResolvedBoundarySmallCircleBounds :
-				public std::unary_function<ResolvedTopologicalBoundary::non_null_ptr_type, bool>
+				public std::__unary_function<ResolvedTopologicalBoundary::non_null_ptr_type, bool>
 		{
 		public:
 
@@ -119,7 +119,7 @@ namespace GPlatesAppLogic
 		 * resolved network bounding small circle.
 		 */
 		class IntersectGeometryPointsAndResolvedNetworkSmallCircleBounds :
-				public std::unary_function<ResolvedTopologicalNetwork::non_null_ptr_type, bool>
+				public std::__unary_function<ResolvedTopologicalNetwork::non_null_ptr_type, bool>
 		{
 		public:
 

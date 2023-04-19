@@ -296,9 +296,9 @@ namespace
 		//
 		boost::optional<Model::GpgimVersion> gpml_version;
 
-		const QStringRef file_version_string = reader.attributes().value(
-				XmlUtils::get_gpml_namespace_qstring(), "version");
-		if (file_version_string == "")
+		const QStringView file_version_string = reader.attributes().value(
+                XmlUtils::get_gpml_namespace_qstring(), "version");
+        if (file_version_string == QString(""))
 		{
 			append_warning(params,
 					IO::ReadErrors::MissingVersionAttribute,

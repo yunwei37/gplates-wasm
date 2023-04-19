@@ -70,8 +70,8 @@ namespace GPlatesFileIO
 				case OGRGMT:
 				case GEOJSON:
 					OgrFormatReconstructedFeatureGeometryExport::export_geometries(
-						grouped_recon_geoms_seq,
-						filename,
+                        grouped_recon_geoms_seq,
+                        QFileInfo(filename),
 						referenced_files,
 						active_reconstruction_files,
 						reconstruction_anchor_plate_id,
@@ -81,8 +81,8 @@ namespace GPlatesFileIO
 
 				case GMT:
 					GMTFormatReconstructedFeatureGeometryExport::export_geometries(
-						grouped_recon_geoms_seq,
-						filename,
+                        grouped_recon_geoms_seq,
+                        QFileInfo(filename),
 						referenced_files,
 						active_reconstruction_files,
 						reconstruction_anchor_plate_id,
@@ -112,8 +112,8 @@ namespace GPlatesFileIO
 				case OGRGMT:
 				case GEOJSON:
 					OgrFormatReconstructedFeatureGeometryExport::export_geometries_per_collection(
-						grouped_recon_geoms_seq,
-						filename,
+                        grouped_recon_geoms_seq,
+                        QFileInfo(filename),
 						referenced_files,
 						active_reconstruction_files,
 						reconstruction_anchor_plate_id,
@@ -122,8 +122,8 @@ namespace GPlatesFileIO
 					break;
 				case GMT:
 					GMTFormatReconstructedFeatureGeometryExport::export_geometries(
-						grouped_recon_geoms_seq,
-						filename,
+                        grouped_recon_geoms_seq,
+                        QFileInfo(filename),
 						referenced_files,
 						active_reconstruction_files,
 						reconstruction_anchor_plate_id,

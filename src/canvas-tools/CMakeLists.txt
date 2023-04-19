@@ -63,7 +63,7 @@ set(srcs
 )
 
 # Add the source files to the gplates static library.
-target_sources_util(gplates-lib PRIVATE ${srcs})
+# target_sources_util(gplates-lib PRIVATE ${srcs})
 
 # Add the source files to the pygplates extension module.
 #
@@ -71,4 +71,4 @@ target_sources_util(gplates-lib PRIVATE ${srcs})
 # All sources files compiled in pygplates need to be position independent and hence
 # compiled differently (POSITION_INDEPENDENT_CODE target property is set on pygplates).
 set(pygplates_srcs ${srcs})
-target_sources_util(pygplates PRIVATE ${pygplates_srcs})
+# target_sources_util(pygplates PRIVATE ${pygplates_srcs})

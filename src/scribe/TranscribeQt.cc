@@ -28,7 +28,7 @@
 #include <QDataStream>
 #include <QLocale>
 #include <QtGlobal>
-
+#include <QIODevice>
 #include "TranscribeQt.h"
 
 #include "Scribe.h"
@@ -155,7 +155,7 @@ GPlatesScribe::transcribe(
 		}
 		else
 		{
-			// Just stream the invalid object - this is what Qt5 does inside its '<<' operator.
+			// Just stream the invalid object - this is what Qt6 does inside its '<<' operator.
 			qdatetime_array_writer << QVariant(qdatetime_object);
 		}
 		// Also serialise whether the time spec is local or not so we can return to local time spec
@@ -217,7 +217,7 @@ GPlatesScribe::transcribe(
 			// Convert from UTC to local time spec if the system that saved the project/session used a local time spec.
 			// Note that the local timezones on the save and load systems might be different though.
 			if (is_local_time_spec &&
-				// Avoid conversion if invalid object - this is what Qt5 does inside its '<<' operator...
+				// Avoid conversion if invalid object - this is what Qt6 does inside its '<<' operator...
 				qdatetime_object.isValid())
 			{
 				qdatetime_object = qdatetime_object.toLocalTime();

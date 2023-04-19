@@ -30,26 +30,26 @@
 
 namespace GPlatesApi
 {
-	/**
-	 * On construction, replaces Python's time.sleep with our own functor and on
-	 * destruction restores the original time.sleep.
-	 *
-	 * The reason for this replacement is that the function that we are using to
-	 * interrupt threads (PyThreadState_SetAsyncExc) fails to interrupt the built-in
-	 * time.sleep. This replacement calls the built-in time.sleep in small
-	 * increments until the requested sleep time has passed.
-	 */
-	class Sleeper
-	{
-	public:
-		Sleeper();
+//	/**
+//	 * On construction, replaces Python's time.sleep with our own functor and on
+//	 * destruction restores the original time.sleep.
+//	 *
+//	 * The reason for this replacement is that the function that we are using to
+//	 * interrupt threads (PyThreadState_SetAsyncExc) fails to interrupt the built-in
+//	 * time.sleep. This replacement calls the built-in time.sleep in small
+//	 * increments until the requested sleep time has passed.
+//	 */
+//	class Sleeper
+//	{
+//	public:
+//		Sleeper();
 
-		~Sleeper();
+//		~Sleeper();
 
-	private:
-		boost::python::object d_old_object;
+//	private:
+//		boost::python::object d_old_object;
 
-	};
+//	};
 }
 
 #endif  // GPLATES_API_SLEEPER_H

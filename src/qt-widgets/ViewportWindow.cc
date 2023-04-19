@@ -82,8 +82,8 @@
 #include "VisualLayersDialog.h"
 
 #include "api/DeferredApiCall.h"
-#include "api/PythonInterpreterLocker.h"
-#include "api/PythonUtils.h"
+// #include "api/PythonInterpreterLocker.h"
+// #include "api/PythonUtils.h"
 #include "api/Sleeper.h"
 
 #include "app-logic/ApplicationState.h"
@@ -115,7 +115,7 @@
 #include "gui/FullScreenMode.h"
 #include "gui/GuiDebug.h"
 #include "gui/ImportMenu.h"
-#include "gui/PythonManager.h"
+// #include "gui/PythonManager.h"
 #include "gui/RenderSettings.h"
 #include "gui/SessionMenu.h"
 #include "gui/TrinketArea.h"

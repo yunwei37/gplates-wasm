@@ -26,9 +26,11 @@
 #ifndef GPLATES_OPENGL_GLCONTEXTIMPL_H
 #define GPLATES_OPENGL_GLCONTEXTIMPL_H
 
-#include <QGLPixelBuffer>
-#include <QGLWidget>
-
+#include <QOpenGLWidget>
+#include <QOpenGLContext>
+#include <QOpenGLPaintDevice>
+#include <QOffscreenSurface>
+#include <QOpenGLFramebufferObject>
 #include "GLContext.h"
 
 
@@ -37,15 +39,15 @@ namespace GPlatesOpenGL
 	namespace GLContextImpl
 	{
 		/**
-		 * A derivation of GLContext::Impl for QGLWidget.
+		 * A derivation of GLContext::Impl for QOpenGLWidget.
 		 */
-		class QGLWidgetImpl :
+		class QOpenGLWidgetImpl :
 				public GLContext::Impl
 		{
 		public:
 			explicit
-			QGLWidgetImpl(
-					QGLWidget &qgl_widget) :
+			QOpenGLWidgetImpl(
+					QOpenGLWidget &qgl_widget) :
 				d_qgl_widget(qgl_widget)
 			{  }
 
@@ -54,13 +56,6 @@ namespace GPlatesOpenGL
 			make_current()
 			{
 				d_qgl_widget.makeCurrent();
-			}
-
-			virtual
-			const QGLFormat
-			get_qgl_format() const
-			{
-				return d_qgl_widget.context()->format();
 			}
 
 			virtual
@@ -80,31 +75,31 @@ namespace GPlatesOpenGL
 			}
 
 		private:
-			QGLWidget &d_qgl_widget;
+			QOpenGLWidget &d_qgl_widget;
 		};
 
 
 		/**
-		 * A derivation of GLContext::Impl for QGLPixelBuffer.
+		 * A derivation of GLContext::Impl for QOpenGLFramebufferObject.
 		 */
-		class QGLPixelBufferImpl :
+		class QOpenGLFramebufferObjectImpl :
 				public GLContext::Impl
 		{
 		public:
 			explicit
-			QGLPixelBufferImpl(
-					QGLPixelBuffer &qgl_pixel_buffer) :
+			QOpenGLFramebufferObjectImpl(
+					QOpenGLFramebufferObject &qgl_pixel_buffer) :
 				d_qgl_pixel_buffer(&qgl_pixel_buffer)
 			{  }
 
 			void
 			set_pixel_buffer(
-					QGLPixelBuffer &qgl_pixel_buffer)
+					QOpenGLFramebufferObject &qgl_pixel_buffer)
 			{
 				d_qgl_pixel_buffer = &qgl_pixel_buffer;
 			}
 
-			QGLPixelBuffer &
+			QOpenGLFramebufferObject &
 			get_pixel_buffer() const
 			{
 				return *d_qgl_pixel_buffer;
@@ -114,34 +109,33 @@ namespace GPlatesOpenGL
 			void
 			make_current()
 			{
-				d_qgl_pixel_buffer->makeCurrent();
-			}
+                // d_qgl_pixel_buffer->makeCurrent();
+                QOpenGLContext *context = QOpenGLContext::currentContext();
+                QSurface *surface = context->surface(); // Store the current surface to restore it later
+                QOffscreenSurface offscreenSurface;
+                offscreenSurface.create(); // Create the offscreen surface
 
-			virtual
-			const QGLFormat
-			get_qgl_format() const
-			{
-				return d_qgl_pixel_buffer->format();
+                context->makeCurrent(&offscreenSurface); // Make the context current for the offscreen surface
 			}
 
 			virtual
 			unsigned int
 			get_width() const
 			{
-				// Dimensions, in OpenGL, are in device pixels.
-				return d_qgl_pixel_buffer->width() * d_qgl_pixel_buffer->devicePixelRatio();
+                // Dimensions, in OpenGL, are in device pixels.
+                return d_qgl_pixel_buffer->width(); //* d_qgl_pixel_buffer->devicePixelRatio();
 			}
 
 			virtual
 			unsigned int
 			get_height() const
 			{
-				// Dimensions, in OpenGL, are in device pixels.
-				return d_qgl_pixel_buffer->height() * d_qgl_pixel_buffer->devicePixelRatio();
+                // Dimensions, in OpenGL, are in device pixels.
+                return d_qgl_pixel_buffer->height(); // * d_qgl_pixel_buffer->devicePixelRatio();
 			}
 
 		private:
-			QGLPixelBuffer *d_qgl_pixel_buffer;
+			QOpenGLFramebufferObject *d_qgl_pixel_buffer;
 		};
 	}
 }

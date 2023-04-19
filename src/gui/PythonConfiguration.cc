@@ -23,8 +23,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "api/PythonInterpreterLocker.h"
-#include "api/PythonUtils.h"
+// #include "api/PythonInterpreterLocker.h"
+// #include "api/PythonUtils.h"
 
 #include "Colour.h"
 #include "DrawStyleManager.h"

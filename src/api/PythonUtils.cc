@@ -203,7 +203,7 @@ GPlatesApi::PythonUtils::get_error_message()
 // And qRegisterMetaType<type>() expects Q_DECLARE_METATYPE(typename), so we declare that here.
 //
 // We avoid compiling qRegisterMetaType<type>(typename) (ie, *with* a string argument) in the header file
-// since qRegisterMetaType<type>(typename) declares QMetaTypeId<type> (in Qt5). And there might be a
+// since qRegisterMetaType<type>(typename) declares QMetaTypeId<type> (in Qt6). And there might be a
 // CC file that includes the header but also declares Q_DECLARE_METATYPE(typename)
 // (presumably because it uses  'type' in a QVariant) which in turn declares QMetaTypeId<type>.
 // This duplicate declaration of QMetaTypeId<type> would result in a compile error.

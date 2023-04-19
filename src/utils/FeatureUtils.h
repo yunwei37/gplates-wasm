@@ -28,7 +28,7 @@
 
 #include <boost/optional.hpp>
 #include <boost/tuple/tuple.hpp>
-
+#include <QRegularExpression>
 #include "maths/Real.h"
 
 #include "model/types.h"
@@ -78,10 +78,11 @@ namespace GPlatesUtils
 			const QString& name)
 	{
 		boost::optional<QString> shape_name = boost::none;
-		QRegExp rx("^\\s*(gpml:shapefileAttributes)\\s*:\\s*\\b(\\w+)\\b\\s*"); // gpml:shapefileAttributes
-		if(rx.indexIn(name) != -1)
+        QRegularExpression rx("^\\s*(gpml:shapefileAttributes)\\s*:\\s*\\b(\\w+)\\b\\s*"); // gpml:shapefileAttributes
+        auto match = rx.match(name);
+        if(!match.hasMatch())
 		{
-			shape_name = rx.cap(2);
+            shape_name = match.captured(2);
 		//	qDebug() << "Shapefile attribute name: " << *shape_name;
 		}
 		return shape_name;

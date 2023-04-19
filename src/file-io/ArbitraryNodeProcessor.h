@@ -34,7 +34,7 @@
 #include <QBuffer>
 #include <QFile>
 #include <QString>
-#include <QXmlQuery>
+//#include <QXmlQuery>
 
 namespace GPlatesFileIO
 {

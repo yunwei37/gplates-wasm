@@ -486,7 +486,7 @@ namespace GPlatesPresentation
 		 * Enables @a smoothed_vertex_type to be used as a key in a 'std::map'.
 		 */
 		class SmoothedVertexMapPredicate :
-				public std::binary_function<smoothed_vertex_type, smoothed_vertex_type, bool>
+				public std::function<bool(smoothed_vertex_type, smoothed_vertex_type)>
 		{
 		public:
 			bool

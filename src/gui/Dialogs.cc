@@ -27,7 +27,7 @@
 #include <boost/foreach.hpp>
 #include <QDebug>
 #include <QtGlobal>
-
+#include <QObject>
 #include "Dialogs.h"
 
 #include "app-logic/ApplicationState.h"

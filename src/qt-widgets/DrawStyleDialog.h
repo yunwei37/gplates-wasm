@@ -35,7 +35,7 @@
 
 #include "ui_DrawStyleDialogUi.h"
 #include "GPlatesDialog.h"
-#include "PythonArgumentWidget.h"
+// #include "PythonArgumentWidget.h"
 #include "VisualLayersComboBox.h"
 
 #include "gui/PythonConfiguration.h"
@@ -192,23 +192,23 @@ namespace GPlatesQtWidgets
 		void
 		refresh_current_icon();
 
-		QWidget *
-		create_cfg_widget(
-				GPlatesGui::PythonCfgItem* item)
-		{
-			//this function is temporary.
-			if(dynamic_cast<GPlatesGui::PythonCfgColor*>(item) != 0)
-			{
-				return new PythonArgColorWidget(item,this);
-			}
+//		QWidget *
+//		create_cfg_widget(
+//				GPlatesGui::PythonCfgItem* item)
+//		{
+////			//this function is temporary.
+////			if(dynamic_cast<GPlatesGui::PythonCfgColor*>(item) != 0)
+////			{
+////				return new PythonArgColorWidget(item,this);
+////			}
 
-			if(dynamic_cast<GPlatesGui::PythonCfgPalette*>(item) != 0)
-			{
-				return new PythonArgPaletteWidget(item,this);
-			}
+////			if(dynamic_cast<GPlatesGui::PythonCfgPalette*>(item) != 0)
+////			{
+////				return new PythonArgPaletteWidget(item,this);
+////			}
 		
-			return new PythonArgDefaultWidget(item,this);
-		}
+////			return new PythonArgDefaultWidget(item,this);
+//		}
 
 		void
 		build_config_panel(const GPlatesGui::Configuration& cfg);

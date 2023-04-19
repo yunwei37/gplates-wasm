@@ -36,7 +36,7 @@
 
 #include "maths/types.h"
 
-#include "qt-widgets/MovePoleWidget.h"
+//#include "qt-widgets/MovePoleWidget.h"
 
 
 // Highlight arrow in yellow with some transparency.
@@ -78,13 +78,13 @@ GPlatesViewOperations::MovePoleOperation::MovePoleOperation(
 void
 GPlatesViewOperations::MovePoleOperation::activate()
 {
-	// Activate the Move Pole widget.
-	d_move_pole_widget.activate();
+//	// Activate the Move Pole widget.
+//	d_move_pole_widget.activate();
 
-	// Listen for pole changes due to the Move Pole widget (eg, text entry).
-	QObject::connect(
-			&d_move_pole_widget, SIGNAL(pole_changed(boost::optional<GPlatesMaths::PointOnSphere>)),
-			this, SLOT(react_pole_changed()));
+//	// Listen for pole changes due to the Move Pole widget (eg, text entry).
+//	QObject::connect(
+//			&d_move_pole_widget, SIGNAL(pole_changed(boost::optional<GPlatesMaths::PointOnSphere>)),
+//			this, SLOT(react_pole_changed()));
 
 	// Create the rendered geometry layers.
 	create_rendered_geometry_layers();
@@ -108,13 +108,13 @@ GPlatesViewOperations::MovePoleOperation::deactivate()
 	d_pole_layer_ptr->clear_rendered_geometries();
 	d_is_dragging_pole = false;
 
-	// Stop listening for pole changes due to the Move Pole widget.
-	QObject::disconnect(
-			&d_move_pole_widget, SIGNAL(pole_changed(boost::optional<GPlatesMaths::PointOnSphere>)),
-			this, SLOT(react_pole_changed()));
+//	// Stop listening for pole changes due to the Move Pole widget.
+//	QObject::disconnect(
+//			&d_move_pole_widget, SIGNAL(pole_changed(boost::optional<GPlatesMaths::PointOnSphere>)),
+//			this, SLOT(react_pole_changed()));
 
-	// Deactivate the Move Pole widget.
-	d_move_pole_widget.deactivate();
+//	// Deactivate the Move Pole widget.
+//	d_move_pole_widget.deactivate();
 }
 
 
@@ -156,10 +156,10 @@ GPlatesViewOperations::MovePoleOperation::start_drag_on_globe(
 		const GPlatesMaths::PointOnSphere &oriented_initial_pos_on_globe,
 		const double &closeness_inclusion_threshold)
 {
-	if (!d_move_pole_widget.can_change_pole())
-	{
-		return false;
-	}
+//	if (!d_move_pole_widget.can_change_pole())
+//	{
+//		return false;
+//	}
 
 	if (!test_proximity_to_pole_on_globe(
 		oriented_initial_pos_on_globe,
@@ -183,10 +183,10 @@ GPlatesViewOperations::MovePoleOperation::start_drag_on_map(
 		const GPlatesMaths::PointOnSphere &initial_point_on_sphere,
 		const GPlatesGui::MapProjection &map_projection)
 {
-	if (!d_move_pole_widget.can_change_pole())
-	{
-		return false;
-	}
+//	if (!d_move_pole_widget.can_change_pole())
+//	{
+//		return false;
+//	}
 
 	if (!test_proximity_to_pole_on_map(initial_point_on_scene, initial_point_on_sphere, map_projection))
 	{
@@ -271,17 +271,17 @@ GPlatesViewOperations::MovePoleOperation::test_proximity_to_pole_on_globe(
 		const GPlatesMaths::PointOnSphere &oriented_pos_on_sphere,
 		const double &closeness_inclusion_threshold)
 {
-	// If pole is not enabled then we cannot be close to it.
-	if (!d_move_pole_widget.get_pole())
-	{
-		return false;
-	}
+//	// If pole is not enabled then we cannot be close to it.
+//	if (!d_move_pole_widget.get_pole())
+//	{
+//		return false;
+//	}
 
-	const GPlatesMaths::real_t closeness = dot(
-			oriented_pos_on_sphere.position_vector(),
-			d_move_pole_widget.get_pole()->position_vector());
+//	const GPlatesMaths::real_t closeness = dot(
+//			oriented_pos_on_sphere.position_vector(),
+//			d_move_pole_widget.get_pole()->position_vector());
 
-	return closeness.is_precisely_greater_than(closeness_inclusion_threshold);
+//	return closeness.is_precisely_greater_than(closeness_inclusion_threshold);
 }
 
 
@@ -291,18 +291,18 @@ GPlatesViewOperations::MovePoleOperation::test_proximity_to_pole_on_map(
 		const GPlatesMaths::PointOnSphere &point_on_sphere,
 		const GPlatesGui::MapProjection &map_projection)
 {
-	// If pole is not enabled then we cannot be close to it.
-	if (!d_move_pole_widget.get_pole())
-	{
-		return false;
-	}
+//	// If pole is not enabled then we cannot be close to it.
+//	if (!d_move_pole_widget.get_pole())
+//	{
+//		return false;
+//	}
 
 	// Find the pole location in map *scene* coordinates.
 	double pole_on_scene_x, pole_on_scene_y;
-	map_projection.forward_transform(
-			d_move_pole_widget.get_pole().get(),
-			pole_on_scene_x,
-			pole_on_scene_y);
+//	map_projection.forward_transform(
+//			d_move_pole_widget.get_pole().get(),
+//			pole_on_scene_x,
+//			pole_on_scene_y);
 	const QPointF pole_on_scene(pole_on_scene_x, pole_on_scene_y);
 
 	// Calculate distance between pole and point in scene coordinates.
@@ -319,7 +319,7 @@ void
 GPlatesViewOperations::MovePoleOperation::move_pole(
 		const GPlatesMaths::PointOnSphere &pole)
 {
-	d_move_pole_widget.set_pole(pole);
+//	d_move_pole_widget.set_pole(pole);
 }
 
 
@@ -331,19 +331,19 @@ GPlatesViewOperations::MovePoleOperation::render_pole(
 	d_pole_layer_ptr->clear_rendered_geometries();
 
 	// We should only be rendering the pole if it's currently enabled.
-	if (d_move_pole_widget.get_pole())
-	{
-		// Render the pole as an arrow.
-		const RenderedGeometry pole_arrow_rendered_geom =
-				RenderedGeometryFactory::create_rendered_radial_arrow(
-						d_move_pole_widget.get_pole().get(),
-						ARROW_PROJECTED_LENGTH,
-						ARROW_HEAD_PROJECTED_SIZE,
-						RATIO_ARROW_LINE_WIDTH_TO_ARROW_HEAD_SIZE,
-						highlight ? ARROW_HIGHLIGHT_COLOUR : ARROW_UNHIGHLIGHT_COLOUR,
-						SYMBOL_TYPE,
-						SYMBOL_SIZE,
-						highlight ? SYMBOL_HIGHLIGHT_COLOUR : SYMBOL_UNHIGHLIGHT_COLOUR);
-		d_pole_layer_ptr->add_rendered_geometry(pole_arrow_rendered_geom);
-	}
+//	if (d_move_pole_widget.get_pole())
+//	{
+//		// Render the pole as an arrow.
+//		const RenderedGeometry pole_arrow_rendered_geom =
+//				RenderedGeometryFactory::create_rendered_radial_arrow(
+//						d_move_pole_widget.get_pole().get(),
+//						ARROW_PROJECTED_LENGTH,
+//						ARROW_HEAD_PROJECTED_SIZE,
+//						RATIO_ARROW_LINE_WIDTH_TO_ARROW_HEAD_SIZE,
+//						highlight ? ARROW_HIGHLIGHT_COLOUR : ARROW_UNHIGHLIGHT_COLOUR,
+//						SYMBOL_TYPE,
+//						SYMBOL_SIZE,
+//						highlight ? SYMBOL_HIGHLIGHT_COLOUR : SYMBOL_UNHIGHLIGHT_COLOUR);
+//		d_pole_layer_ptr->add_rendered_geometry(pole_arrow_rendered_geom);
+//	}
 }

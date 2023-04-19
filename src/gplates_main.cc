@@ -44,7 +44,7 @@
 #include "app-logic/ApplicationState.h"
 #include "app-logic/GPlatesQtMsgHandler.h"
 
-#include "api/PythonInterpreterLocker.h"
+// #include "api/PythonInterpreterLocker.h"
 #include "api/Sleeper.h"
 
 #include "cli/CliCommandDispatcher.h"
@@ -59,13 +59,13 @@
 #include "gui/DrawStyleManager.h"
 #include "gui/FileIOFeedback.h"
 #include "gui/GPlatesQApplication.h"
-#include "gui/PythonManager.h"
+// #include "gui/PythonManager.h"
 
 #include "maths/MathsUtils.h"
 
 #include "presentation/Application.h"
 
-#include "qt-widgets/PythonInitFailedDialog.h"
+// #include "qt-widgets/PythonInitFailedDialog.h"
 #include "qt-widgets/ViewportWindow.h"
 
 #include "utils/CommandLineParser.h"
@@ -725,31 +725,34 @@ namespace
 			GPlatesPresentation::Application *app,
 			char* argv[])
 	{
-		using namespace GPlatesGui;
-		PythonManager* mgr = PythonManager::instance();
-		try
-		{
-			mgr->initialize(argv,app);
-		}
-		catch(const PythonInitFailed& ex)
-		{
-			std::stringstream ss;
-			ex.write(ss);
-			qWarning() << ss.str().c_str();
+		// using namespace GPlatesGui;
+		// PythonManager* mgr = PythonManager::instance();
+		// try
+		// {
+		// 	mgr->initialize(argv,app);
+		// }
+		// catch(const PythonInitFailed& ex)
+		// {
+		// 	std::stringstream ss;
+		// 	ex.write(ss);
+		// 	qWarning() << ss.str().c_str();
 			
-			if(mgr->show_init_fail_dlg())
-			{
-				using namespace GPlatesQtWidgets;
-				boost::scoped_ptr<PythonInitFailedDialog> python_fail_dlg(
-					new PythonInitFailedDialog);
+		// 	if(mgr->show_init_fail_dlg())
+		// 	{
+		// 		// using namespace GPlatesQtWidgets;
+		// 		// boost::scoped_ptr<PythonInitFailedDialog> python_fail_dlg(
+		// 		// 	new PythonInitFailedDialog);
 
-				python_fail_dlg->exec();
-				mgr->set_show_init_fail_dlg(python_fail_dlg->show_again());
-			}
+		// 		// python_fail_dlg->exec();
+		// 		// mgr->set_show_init_fail_dlg(python_fail_dlg->show_again());
+		// 		// print an error message
+		// 		qWarning() << "Python initialization failed. GPlates will not be able to run any Python scripts.";
 
-			GPlatesUtils::ComponentManager::instance().disable(
-				GPlatesUtils::ComponentManager::Component::python());
-		}
+		// 	}
+
+		// 	GPlatesUtils::ComponentManager::instance().disable(
+		// 		GPlatesUtils::ComponentManager::Component::python());
+		// }
 	}
 
 	void

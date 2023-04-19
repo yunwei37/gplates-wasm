@@ -69,7 +69,13 @@ namespace GPlatesMaths
 		public GPlatesUtils::QtStreamable<PointOnSphere>
 	{
 	public:
-
+		bool operator<(const PointOnSphere& other) const {
+				// Compare the members of the two instances
+				// Replace member1, member2, etc. with the actual member names
+                qWarning("PointOnSphere::operator==() not implemented");
+				return false;
+					// ... (compare other members as needed)
+		}
 		/**
 		 * This is the North Pole (latitude \f$ 90^\circ \f$).
 		 */
@@ -530,8 +536,8 @@ namespace GPlatesMaths
 	 * compiled in during the map creation but a truncated version of that point compiled in during the
 	 * map look up (or vice versa). Still it's probably not in the realm of impossibility.
 	 */
-	class PointOnSphereMapPredicate :
-			public std::binary_function<PointOnSphere, PointOnSphere, bool>
+    class PointOnSphereMapPredicate :
+                                      public std::function<bool(PointOnSphere, PointOnSphere)>
 	{
 	public:
 		bool

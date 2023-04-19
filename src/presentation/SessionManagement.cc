@@ -474,6 +474,11 @@ GPlatesPresentation::SessionManagement::load_project(
 	set_project(project);
 }
 
+bool operator<(const GPlatesPresentation::SessionManagement::ProjectInfo& lhs, const GPlatesPresentation::SessionManagement::ProjectInfo& rhs) {
+    // Compare the instances based on their properties, e.g.:
+    qWarning("GPlatesPresentation::SessionManagement::ProjectInfo not <");
+    return true;
+}
 
 void
 GPlatesPresentation::SessionManagement::save_project(
@@ -624,14 +629,14 @@ GPlatesPresentation::SessionManagement::debug_session_state()
 		InternalSession::non_null_ptr_to_const_type current_session = InternalSession::save_session();
 
 		qDebug() << "Current session:" << current_session->get_description();
-		Q_FOREACH(const QString &fi, current_session->get_loaded_files())
+        for(const QString &fi: current_session->get_loaded_files())
 		{
 			qDebug() << fi;
 		}
 	
 		qDebug() << "Recent sessions:-";
 		QList<InternalSessionInfo> sessions = get_recent_session_list();
-		Q_FOREACH(const InternalSessionInfo &recent_session, sessions)
+        for(const InternalSessionInfo &recent_session: sessions)
 		{
 			qDebug() << recent_session.get_description();
 		}

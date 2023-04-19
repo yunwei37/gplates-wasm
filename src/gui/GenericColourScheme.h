@@ -33,10 +33,10 @@
 #include "ColourPalette.h"
 #include "Palette.h"
 #include "PlateIdColourPalettes.h"
-
+#include <QProcessEnvironment>
 #include <boost/optional.hpp>
 #include "app-logic/ReconstructionGeometryUtils.h"
-#include "presentation/Application.h"
+//#include "presentation/Application.h"
 #include "utils/FeatureUtils.h"
 
 namespace GPlatesGui
@@ -94,12 +94,12 @@ namespace GPlatesGui
 		{
 			boost::optional<GPlatesModel::FeatureHandle::weak_ref> feature = 
 				GPlatesAppLogic::ReconstructionGeometryUtils::get_feature_ref(&r);
-			if(feature)
-			{
-				return get_colour(GPlatesUtils::get_age(
-						(*feature).handle_ptr(), 
-						GPlatesPresentation::current_time()));
-			}
+//			if(feature)
+//			{
+//				return get_colour(GPlatesUtils::get_age(
+//						(*feature).handle_ptr(),
+//						GPlatesPresentation::current_time()));
+//			}
 			return boost::none;
 		}
 
@@ -107,7 +107,8 @@ namespace GPlatesGui
 		get_colour(
 				const GPlatesModel::FeatureHandle& feature) const
 		{
-			return get_colour(GPlatesUtils::get_age(&feature, GPlatesPresentation::current_time()));
+//			return get_colour(GPlatesUtils::get_age(&feature, GPlatesPresentation::current_time()));
+            return boost::none;
 		}
 	protected:
 		boost::optional<Colour>

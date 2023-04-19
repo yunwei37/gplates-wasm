@@ -45,7 +45,7 @@ if (GPLATES_INSTALL_STANDALONE)
     #
     # This version of CMake is required to prevent errors at *configure* time.
     #
-    # - Currently we're using Qt5 plugin targets which were added in CMake 3.12.
+    # - Currently we're using Qt6 plugin targets which were added in CMake 3.12.
     #   Note that we don't delay this error until install time because we need to access the target
     #   to find its location (to set up the install command) and this needs to be done at configure time.
     set (CMAKE_VERSION_REQUIRED_AT_CONFIGURE_TIME 3.12)
@@ -77,7 +77,7 @@ if (GPLATES_INSTALL_STANDALONE)
         )
     endfunction()
     install_check_cmake_version(gplates)
-    install_check_cmake_version(pygplates EXCLUDE_FROM_ALL)
+    # install_check_cmake_version(pygplates EXCLUDE_FROM_ALL)
 
     # On Apple, warn if a code signing identity has not been specified.
     #
@@ -98,7 +98,7 @@ if (GPLATES_INSTALL_STANDALONE)
             )
         endfunction()
         install_check_code_signing_identity(gplates)
-        install_check_code_signing_identity(pygplates EXCLUDE_FROM_ALL)
+        # install_check_code_signing_identity(pygplates EXCLUDE_FROM_ALL)
     endif()
 endif()
 
@@ -137,37 +137,37 @@ if (GPLATES_INSTALL_STANDALONE)
     # Note that we only do this for standalone installations because non-standalone installations have GDAL/PROJ installed in a standard location and so GDAL/PROJ are able to
     # find their data directories, which means we don't need to bundle them up with pygplates and so we don't need to make pygplates a "Python package" (with an '__init__.py' file).
     # In other words, we just leave it as a single pygplates shared library file (such as 'pygplates.so' or 'pygplates.pyd') and don't need a 'pygplates/' directory.
-    set(STANDALONE_BASE_INSTALL_DIR_pygplates pygplates)
+    # set(STANDALONE_BASE_INSTALL_DIR_pygplates pygplates)
     
     # Install the gplates/pygplates targets.
-    install(TARGETS gplates
-        RUNTIME # Windows and Linux
-            DESTINATION ${STANDALONE_BASE_INSTALL_DIR_gplates}
-            COMPONENT gplates
-        BUNDLE # Apple
-            DESTINATION ${STANDALONE_BASE_INSTALL_DIR_gplates}
-            COMPONENT gplates)
-    install(TARGETS pygplates
-        LIBRARY # Windows, Apple and Linux
-            DESTINATION ${STANDALONE_BASE_INSTALL_DIR_pygplates}
-            COMPONENT pygplates
-            EXCLUDE_FROM_ALL)
+    # install(TARGETS gplates
+    #     RUNTIME # Windows and Linux
+    #         DESTINATION ${STANDALONE_BASE_INSTALL_DIR_gplates}
+    #         COMPONENT gplates
+    #     BUNDLE # Apple
+    #         DESTINATION ${STANDALONE_BASE_INSTALL_DIR_gplates}
+    #         COMPONENT gplates)
+    # install(TARGETS pygplates
+    #     LIBRARY # Windows, Apple and Linux
+    #         DESTINATION ${STANDALONE_BASE_INSTALL_DIR_pygplates}
+    #         COMPONENT pygplates
+    #         EXCLUDE_FROM_ALL)
 else() # not standalone
     #
     # When not a standalone installation just use the standard install locations ('bin' and 'lib').
     #
-    install(TARGETS gplates
-        RUNTIME # Windows and Linux
-            DESTINATION ${CMAKE_INSTALL_BINDIR}
-            COMPONENT gplates
-        BUNDLE # Apple
-            DESTINATION ${CMAKE_INSTALL_BINDIR}
-            COMPONENT gplates)
-    install(TARGETS pygplates
-        LIBRARY
-            DESTINATION ${CMAKE_INSTALL_LIBDIR}
-            COMPONENT pygplates
-            EXCLUDE_FROM_ALL)
+    # install(TARGETS gplates
+    #     RUNTIME # Windows and Linux
+    #         DESTINATION ${CMAKE_INSTALL_BINDIR}
+    #         COMPONENT gplates
+    #     BUNDLE # Apple
+    #         DESTINATION ${CMAKE_INSTALL_BINDIR}
+    #         COMPONENT gplates)
+    # install(TARGETS pygplates
+        # LIBRARY
+        #     DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        #     COMPONENT pygplates
+        #     EXCLUDE_FROM_ALL)
 endif()
 
 
@@ -421,7 +421,7 @@ del pygplates
         endif()
         set(_pygplates_proj_data_rel_base ${GPLATES_STANDALONE_PROJ_DATA_DIR})
         install(DIRECTORY "${_proj_data_dir}/" DESTINATION ${STANDALONE_BASE_INSTALL_DIR_gplates}/${_gplates_proj_data_rel_base} COMPONENT gplates)
-        install(DIRECTORY "${_proj_data_dir}/" DESTINATION ${STANDALONE_BASE_INSTALL_DIR_pygplates}/${_pygplates_proj_data_rel_base} COMPONENT pygplates EXCLUDE_FROM_ALL)
+        # install(DIRECTORY "${_proj_data_dir}/" DESTINATION ${STANDALONE_BASE_INSTALL_DIR_pygplates}/${_pygplates_proj_data_rel_base} COMPONENT pygplates EXCLUDE_FROM_ALL)
     endif()
 
     #################################################################################################
@@ -480,7 +480,7 @@ del pygplates
     # Install the Visual Studio runtime libraries #
     ###############################################
     #
-    # Note that Qt5 should also be using the same runtime libraries because it should be using the same compiler
+    # Note that Qt6 should also be using the same runtime libraries because it should be using the same compiler
     # since, when installing Qt, we selected the pre-built components appropriate for our compiler.
     # For example, "MSVC 2015 64-bit" when compiling 64-bit using Visual Studio 2015.
     #
@@ -544,7 +544,7 @@ del pygplates
     function(install_qt5_plugin qt_plugin_target install_component)
         # Get the target file location of the Qt plugin target.
         #
-        # Note that we have access to Qt imported targets (like Qt5::QJpegPlugin) because we
+        # Note that we have access to Qt imported targets (like Qt6::QJpegPlugin) because we
         # (the file containing this code) gets included by 'src/CMakeLists.txt' (which has found
         # Qt and imported its targets) and so the Qt imported targets are visible to us.
         get_target_property(_qt_plugin_path "${qt_plugin_target}" LOCATION)
@@ -586,47 +586,47 @@ del pygplates
 
     # Install common platform *independent* plugins (used by GPlates and pyGPlates).
     # Note: This list was obtained by running the Qt deployment tool (windeployqt/macdeployqt) on GPlates (to see which plugins it deployed).
-    install_qt5_plugin(Qt5::QGenericEnginePlugin gplates)
-    install_qt5_plugin(Qt5::QGenericEnginePlugin pygplates EXCLUDE_FROM_ALL)
-    install_qt5_plugin(Qt5::QSvgIconPlugin gplates)
-    install_qt5_plugin(Qt5::QSvgIconPlugin pygplates EXCLUDE_FROM_ALL)
-    install_qt5_plugin(Qt5::QGifPlugin gplates)
-    install_qt5_plugin(Qt5::QGifPlugin pygplates EXCLUDE_FROM_ALL)
-    install_qt5_plugin(Qt5::QICOPlugin gplates)
-    install_qt5_plugin(Qt5::QICOPlugin pygplates EXCLUDE_FROM_ALL)
-    install_qt5_plugin(Qt5::QJpegPlugin gplates)
-    install_qt5_plugin(Qt5::QJpegPlugin pygplates EXCLUDE_FROM_ALL)
-    install_qt5_plugin(Qt5::QSvgPlugin gplates)
-    install_qt5_plugin(Qt5::QSvgPlugin pygplates EXCLUDE_FROM_ALL)
+    install_qt5_plugin(Qt6::QGenericEnginePlugin gplates)
+    # install_qt5_plugin(Qt6::QGenericEnginePlugin pygplates EXCLUDE_FROM_ALL)
+    install_qt5_plugin(Qt6::QSvgIconPlugin gplates)
+    # install_qt5_plugin(Qt6::QSvgIconPlugin pygplates EXCLUDE_FROM_ALL)
+    install_qt5_plugin(Qt6::QGifPlugin gplates)
+    # install_qt5_plugin(Qt6::QGifPlugin pygplates EXCLUDE_FROM_ALL)
+    install_qt5_plugin(Qt6::QICOPlugin gplates)
+    # install_qt5_plugin(Qt6::QICOPlugin pygplates EXCLUDE_FROM_ALL)
+    install_qt5_plugin(Qt6::QJpegPlugin gplates)
+    # install_qt5_plugin(Qt6::QJpegPlugin pygplates EXCLUDE_FROM_ALL)
+    install_qt5_plugin(Qt6::QSvgPlugin gplates)
+    # install_qt5_plugin(Qt6::QSvgPlugin pygplates EXCLUDE_FROM_ALL)
     # These are common to Windows and macOS only...
     if (WIN32 OR APPLE)
-        install_qt5_plugin(Qt5::QICNSPlugin gplates)
-        install_qt5_plugin(Qt5::QICNSPlugin pygplates EXCLUDE_FROM_ALL)
-        install_qt5_plugin(Qt5::QTgaPlugin gplates)
-        install_qt5_plugin(Qt5::QTgaPlugin pygplates EXCLUDE_FROM_ALL)
-        install_qt5_plugin(Qt5::QTiffPlugin gplates)
-        install_qt5_plugin(Qt5::QTiffPlugin pygplates EXCLUDE_FROM_ALL)
-        install_qt5_plugin(Qt5::QWbmpPlugin gplates)
-        install_qt5_plugin(Qt5::QWbmpPlugin pygplates EXCLUDE_FROM_ALL)
-        install_qt5_plugin(Qt5::QWebpPlugin gplates)
-        install_qt5_plugin(Qt5::QWebpPlugin pygplates EXCLUDE_FROM_ALL)
+        install_qt5_plugin(Qt6::QICNSPlugin gplates)
+        # install_qt5_plugin(Qt6::QICNSPlugin pygplates EXCLUDE_FROM_ALL)
+        install_qt5_plugin(Qt6::QTgaPlugin gplates)
+        # install_qt5_plugin(Qt6::QTgaPlugin pygplates EXCLUDE_FROM_ALL)
+        install_qt5_plugin(Qt6::QTiffPlugin gplates)
+        # install_qt5_plugin(Qt6::QTiffPlugin pygplates EXCLUDE_FROM_ALL)
+        install_qt5_plugin(Qt6::QWbmpPlugin gplates)
+        # install_qt5_plugin(Qt6::QWbmpPlugin pygplates EXCLUDE_FROM_ALL)
+        install_qt5_plugin(Qt6::QWebpPlugin gplates)
+        # install_qt5_plugin(Qt6::QWebpPlugin pygplates EXCLUDE_FROM_ALL)
     endif()
 
     # Install platform *dependent* plugins (used by GPlates).
     # Note: This list was obtained by running the Qt deployment tool (windeployqt/macdeployqt) on GPlates (to see which plugins it deployed).
     if (WIN32)
-        install_qt5_plugin(Qt5::QWindowsIntegrationPlugin gplates)
-        install_qt5_plugin(Qt5::QWindowsVistaStylePlugin gplates)
+        install_qt5_plugin(Qt6::QWindowsIntegrationPlugin gplates)
+        install_qt5_plugin(Qt6::QWindowsVistaStylePlugin gplates)
     elseif (APPLE)
-        install_qt5_plugin(Qt5::QCocoaIntegrationPlugin gplates)
-        install_qt5_plugin(Qt5::QMacStylePlugin gplates)
+        install_qt5_plugin(Qt6::QCocoaIntegrationPlugin gplates)
+        install_qt5_plugin(Qt6::QMacStylePlugin gplates)
     else() # Linux
-        install_qt5_plugin(Qt5::QXcbIntegrationPlugin gplates)
+        install_qt5_plugin(Qt6::QXcbIntegrationPlugin gplates)
         # The following plugins are needed otherwise GPlates generates the following error and then seg. faults:
         #  "QXcbIntegration: Cannot create platform OpenGL context, neither GLX nor EGL are enabled"
         # Actually installing only the Glx plugin solved the issue (on Ubuntu 20.04), but we'll also install Egl in case.
-        install_qt5_plugin(Qt5::QXcbGlxIntegrationPlugin gplates)
-        install_qt5_plugin(Qt5::QXcbEglIntegrationPlugin gplates)
+        install_qt5_plugin(Qt6::QXcbGlxIntegrationPlugin gplates)
+        install_qt5_plugin(Qt6::QXcbEglIntegrationPlugin gplates)
     endif()
 
     #######################################################
@@ -736,7 +736,7 @@ del pygplates
         )
     endfunction()
     install_get_runtime_dependencies(gplates)
-    install_get_runtime_dependencies(pygplates EXCLUDE_FROM_ALL)
+    # install_get_runtime_dependencies(pygplates EXCLUDE_FROM_ALL)
 
 
     #
@@ -762,7 +762,7 @@ del pygplates
             )
         endfunction()
         install_resolved_dependencies(gplates)
-        install_resolved_dependencies(pygplates EXCLUDE_FROM_ALL)
+        # install_resolved_dependencies(pygplates EXCLUDE_FROM_ALL)
 
         # Install the Python standard library.
         #
@@ -863,7 +863,7 @@ del pygplates
             )
         endfunction()
         install_codesign(gplates)
-        install_codesign(pygplates EXCLUDE_FROM_ALL)
+        # install_codesign(pygplates EXCLUDE_FROM_ALL)
 
         # Copy each resolved dependency (of GPlates/pyGPlates and its Qt plugins) into the appropriate location inside the installed GPlates application bundle
         # (or base install directory of pygplates) depending of whether a regular '.dylib' or a framework.
@@ -1008,7 +1008,7 @@ del pygplates
             )
         endfunction()
         install_resolved_dependencies(gplates)
-        install_resolved_dependencies(pygplates EXCLUDE_FROM_ALL)
+        # install_resolved_dependencies(pygplates EXCLUDE_FROM_ALL)
 
         # Install the Python standard library.
         #
@@ -1247,7 +1247,7 @@ del pygplates
             )
         endfunction()
         install_fix_dependencies(gplates)
-        install_fix_dependencies(pygplates EXCLUDE_FROM_ALL)
+        # install_fix_dependencies(pygplates EXCLUDE_FROM_ALL)
 
     else()  # Linux
 
@@ -1294,7 +1294,7 @@ del pygplates
             )
         endfunction()
         install_resolved_dependencies(gplates)
-        install_resolved_dependencies(pygplates EXCLUDE_FROM_ALL)
+        # install_resolved_dependencies(pygplates EXCLUDE_FROM_ALL)
 
         # Install the Python standard library.
         #
@@ -1384,6 +1384,6 @@ del pygplates
             )
         endfunction()
         install_fix_dependencies(gplates)
-        install_fix_dependencies(pygplates EXCLUDE_FROM_ALL)
+        # install_fix_dependencies(pygplates EXCLUDE_FROM_ALL)
     endif()
 endif()

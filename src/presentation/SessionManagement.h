@@ -143,7 +143,20 @@ namespace GPlatesPresentation
 			explicit
 			InternalSessionInfo(
 					InternalSession::non_null_ptr_type internal_session);
-
+            bool operator==(const InternalSessionInfo& other) const
+			{
+				// Compare the members of the two instances
+				// Replace member1, member2, etc. with the actual member names
+				qWarning("InternalSessionInfo::operator==() not implemented");
+				return false;
+            }
+            bool operator<(const InternalSessionInfo& other) const
+			{
+				// Compare the members of the two instances
+				// Replace member1, member2, etc. with the actual member names
+				qWarning("InternalSessionInfo::operator<() not implemented");
+				return false;
+			}
 			/**
 			 * Returns unique sorted lists of all (absolute) file paths of transcribed files that
 			 * currently exist and are currently missing.
@@ -200,6 +213,13 @@ namespace GPlatesPresentation
 			explicit
 			ProjectInfo(
 					ProjectSession::non_null_ptr_type project_session);
+			bool operator==(const ProjectInfo& other) const {
+				// Compare the members of the two instances
+				// Replace member1, member2, etc. with the actual member names
+				qWarning("ProjectInfo::operator==() not implemented");
+				return false;
+					// ... (compare other members as needed)
+			}
 
 			/**
 			 * Returns the project filename - see "ProjectSession::get_project_filename()".
@@ -209,6 +229,8 @@ namespace GPlatesPresentation
 			{
 				return d_project_session->get_project_filename();
 			}
+
+			friend bool operator<(const ProjectInfo& lhs, const ProjectInfo& rhs);
 
 			/**
 			 * Returns the number of file paths of transcribed files.

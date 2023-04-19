@@ -24,7 +24,7 @@
  */
 
 #include <QLocale>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QTextStream>
 
 #include "ReconstructedScalarCoverageExport.h"
@@ -95,8 +95,8 @@ GPlatesFileIO::ReconstructedScalarCoverageExport::export_reconstructed_scalar_co
 	if (export_single_output_file)
 	{
 		GpmlFormatReconstructedScalarCoverageExport::export_reconstructed_scalar_coverages(
-				grouped_reconstructed_scalar_coverage_seq,
-				filename,
+                grouped_reconstructed_scalar_coverage_seq,
+            QFileInfo(filename),
 				model,
 				include_dilatation_strain,
 				include_dilatation_strain_rate,
@@ -126,8 +126,8 @@ GPlatesFileIO::ReconstructedScalarCoverageExport::export_reconstructed_scalar_co
 			++grouped_features_iter, ++output_filename_iter)
 		{
 			GpmlFormatReconstructedScalarCoverageExport::export_reconstructed_scalar_coverages(
-					grouped_features_iter->feature_geometry_groups,
-					*output_filename_iter,
+                    grouped_features_iter->feature_geometry_groups,
+                QFileInfo(*output_filename_iter),
 					model,
 					include_dilatation_strain,
 					include_dilatation_strain_rate,
@@ -172,8 +172,8 @@ GPlatesFileIO::ReconstructedScalarCoverageExport::export_reconstructed_scalar_co
 	if (export_single_output_file)
 	{
 		GMTFormatReconstructedScalarCoverageExport::export_reconstructed_scalar_coverages(
-				grouped_reconstructed_scalar_coverage_seq,
-				filename,
+                grouped_reconstructed_scalar_coverage_seq,
+            QFileInfo(filename),
 				referenced_files,
 				reconstruction_anchor_plate_id,
 				reconstruction_time,
@@ -206,8 +206,8 @@ GPlatesFileIO::ReconstructedScalarCoverageExport::export_reconstructed_scalar_co
 			++grouped_features_iter, ++output_filename_iter)
 		{
 			GMTFormatReconstructedScalarCoverageExport::export_reconstructed_scalar_coverages(
-					grouped_features_iter->feature_geometry_groups,
-					*output_filename_iter,
+                    grouped_features_iter->feature_geometry_groups,
+                QFileInfo(*output_filename_iter),
 					referenced_files,
 					reconstruction_anchor_plate_id,
 					reconstruction_time,

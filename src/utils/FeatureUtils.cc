@@ -242,10 +242,10 @@ boost::optional<GPlatesModel::PropertyName>
 GPlatesUtils::convert_property_name(
 		const QString& name)
 {
-	QRegExp rx("^\\s*(gpml|gml)\\s*:\\s*(\\w+)\\s*"); // (gpml|gml):(name)
-	rx.indexIn(name);
-	QString prefix = rx.cap(1);
-	QString short_name = rx.cap(2);
+	QRegularExpression rx("^\\s*(gpml|gml)\\s*:\\s*(\\w+)\\s*"); // (gpml|gml):(name)
+    auto m = rx.match(name);
+    QString prefix = m.captured(1);
+    QString short_name = m.captured(2);
 	
 	boost::optional<GPlatesModel::PropertyName> ret = boost::none;
 	if(prefix.length() == 0 || short_name.length() == 0)

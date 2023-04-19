@@ -168,8 +168,8 @@ GPlatesGui::Map::paint(
 		//
 		// Note that we clear the colour to (0,0,0,1) and not (0,0,0,0) because we want any parts of
 		// the scene, that are not rendered, to have *opaque* alpha (=1). This appears to be needed on
-		// Mac with Qt5 (alpha=0 is fine on Qt5 Windows/Ubuntu, and on Qt4 for all platforms). Perhaps because
-		// QGLWidget rendering (on Qt5 Mac) is first done to a framebuffer object which is then blended into the
+		// Mac with Qt6 (alpha=0 is fine on Qt6 Windows/Ubuntu, and on Qt4 for all platforms). Perhaps because
+		// QOpenGLWidget rendering (on Qt6 Mac) is first done to a framebuffer object which is then blended into the
 		// window framebuffer (where having a source alpha of zero would result in the black background not showing).
 		// Or, more likely, maybe a framebuffer object is used on all platforms but the window framebuffer is
 		// white on Mac but already black on Windows/Ubuntu.

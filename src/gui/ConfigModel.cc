@@ -48,7 +48,7 @@ namespace
 			GPlatesUtils::ConfigInterface &config)
 	{
 		QStringList keys = config.subkeys();
-		Q_FOREACH(QString key, keys) {
+        for(QString key: keys) {
 			GPlatesGui::ConfigModel::SchemaEntry entry;
 			entry.key = key;
 			entry.label = key;

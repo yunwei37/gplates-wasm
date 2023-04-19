@@ -33,7 +33,7 @@
 #include <boost/scoped_ptr.hpp>
 #include <boost/noncopyable.hpp>
 #include <QGraphicsView>
-#include <QGLWidget>
+#include <QOpenGLWidget>
 #include <QMouseEvent>
 
 #include "gui/ColourScheme.h"
@@ -104,7 +104,7 @@ namespace GPlatesQtWidgets
 		 * Constructor.
 		 *
 		 * @a share_gl_widget, @a share_gl_context and @a share_persistent_opengl_objects specify
-		 * another QGLWidget and associated helper structures that the map view should try to share
+		 * another QOpenGLWidget and associated helper structures that the map view should try to share
 		 * OpenGL state with. This is state that can be shared across OpenGL contexts (such as
 		 * texture objects, vertex buffer objects, etc).
 		 * This is important since high-resolution rasters can consume a lot of memory and we don't
@@ -115,7 +115,7 @@ namespace GPlatesQtWidgets
 				GPlatesPresentation::ViewState &view_state,
 				GPlatesGui::ColourScheme::non_null_ptr_type colour_scheme,
 				QWidget *parent,
-				const QGLWidget *share_gl_widget,
+				const QOpenGLWidget *share_gl_widget,
 				const GPlatesOpenGL::GLContext::non_null_ptr_type &share_gl_context,
 				const GPlatesOpenGL::GLVisualLayers::non_null_ptr_type &share_gl_visual_layers);
 
@@ -237,7 +237,7 @@ namespace GPlatesQtWidgets
 				const GPlatesMaths::PointOnSphere &click_point) const;
 
 		/**
-		 * Returns the OpenGL context associated with our QGLWidget viewport.
+		 * Returns the OpenGL context associated with our QOpenGLWidget viewport.
 		 */
 		GPlatesOpenGL::GLContext::non_null_ptr_type
 		get_gl_context()
@@ -363,20 +363,19 @@ namespace GPlatesQtWidgets
 	private:
 
 		/**
-		 * A QGLWidget used as the viewport widget and modified slightly to not automatically swap
+		 * A QOpenGLWidget used as the viewport widget and modified slightly to not automatically swap
 		 * OpenGL front and back buffers at 'QPainter::end()'.
 		 *
-		 * We need to inherit QGLWidget because 'setAutoBufferSwap()' is a protected method.
+		 * We need to inherit QOpenGLWidget because 'setAutoBufferSwap()' is a protected method.
 		 */
 		class MapViewport :
-				public QGLWidget
+				public QOpenGLWidget
 		{
 		public:
 
 			MapViewport(
-					const QGLFormat &format_,
 					QWidget *parent_ = 0,
-					const QGLWidget *shareWidget_ = 0,
+					const QOpenGLWidget *shareWidget_ = 0,
 					Qt::WindowFlags flags_ = Qt::WindowFlags());
 
 			void
@@ -415,7 +414,7 @@ namespace GPlatesQtWidgets
 		make_signal_slot_connections();
 
 		/**
-		 * The QGLWidget that we use for this widget's viewport
+		 * The QOpenGLWidget that we use for this widget's viewport
 		 */
 		MapViewport *d_gl_widget_ptr;
 

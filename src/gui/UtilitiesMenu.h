@@ -34,7 +34,7 @@
 #include <QString>
 
 #include "api/Sleeper.h"
-#include "gui/PythonManager.h"
+// #include "gui/PythonManager.h"
 
 
 namespace GPlatesApi
@@ -58,7 +58,7 @@ namespace GPlatesGui
 		UtilitiesMenu(
 				QMenu *utilities_menu,
 				QAction *before_action,
-				GPlatesGui::PythonManager& python_manager,
+//				GPlatesGui::PythonManager& python_manager,
 				QObject *parent_ = NULL);
 
 		~UtilitiesMenu();
@@ -82,7 +82,7 @@ namespace GPlatesGui
 
 		QMenu *d_utilities_menu;
 		QAction *d_before_action;
-		GPlatesGui::PythonManager& d_python_manager;
+//		GPlatesGui::PythonManager& d_python_manager;
 
 		typedef std::map<QString, QMenu *> submenus_map_type;
 		submenus_map_type d_submenus;

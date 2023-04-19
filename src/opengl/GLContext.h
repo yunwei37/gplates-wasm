@@ -34,7 +34,7 @@
 #include <boost/tuple/tuple.hpp>
 #include <boost/tuple/tuple_comparison.hpp>
 #include <opengl/OpenGL.h>
-#include <QGLFormat>
+ 
 
 #include "GLBuffer.h"
 #include "GLBufferObject.h"
@@ -93,11 +93,6 @@ namespace GPlatesOpenGL
 			virtual
 			void
 			make_current() = 0;
-
-			//! Return the QGLFormat of the QGLContext OpenGL context.
-			virtual
-			const QGLFormat
-			get_qgl_format() const = 0;
 
 			//! The width of the frame buffer currently attached to the OpenGL context.
 			virtual
@@ -656,17 +651,6 @@ namespace GPlatesOpenGL
 
 
 		/**
-		 * Returns the QGLFormat to use when creating a Qt OpenGL context (eg, QGLWidget).
-		 *
-		 * This sets various parameters required for OpenGL rendering in GPlates.
-		 * Such as specifying an alpha-channel.
-		 */
-		static
-		QGLFormat
-		get_qgl_format_to_create_context_with();
-
-
-		/**
 		 * Creates a @a GLContext object.
 		 */
 		static
@@ -708,19 +692,6 @@ namespace GPlatesOpenGL
 		{
 			d_context_impl->make_current();
 		}
-
-
-		/**
-		 * Returns the QGLFormat of the QGLContext OpenGL context.
-		 *
-		 * This can be used to determine the number of colour/depth/stencil bits in the frame buffer.
-		 */
-		const QGLFormat &
-		get_qgl_format() const
-		{
-			return d_qgl_format;
-		}
-
 
 		/**
 		 * The width (in device pixels) of the frame buffer currently attached to the OpenGL context.
@@ -838,11 +809,6 @@ namespace GPlatesOpenGL
 		boost::shared_ptr<Impl> d_context_impl;
 
 		/**
-		 * The format of the OpenGL context.
-		 */
-		QGLFormat d_qgl_format;
-
-		/**
 		 * OpenGL state that can be shared with another context.
 		 */
 		boost::shared_ptr<SharedState> d_shared_state;
@@ -867,8 +833,7 @@ namespace GPlatesOpenGL
 		explicit
 		GLContext(
 				const boost::shared_ptr<Impl> &context_impl) :
-			d_context_impl(context_impl),
-			d_qgl_format(context_impl->get_qgl_format()),
+            d_context_impl(context_impl),
 			d_shared_state(new SharedState()),
 			d_non_shared_state(new NonSharedState())
 		{  }
@@ -878,7 +843,6 @@ namespace GPlatesOpenGL
 				const boost::shared_ptr<Impl> &context_impl,
 				const boost::shared_ptr<SharedState> &shared_state) :
 			d_context_impl(context_impl),
-			d_qgl_format(context_impl->get_qgl_format()),
 			d_shared_state(shared_state),
 			d_non_shared_state(new NonSharedState())
 		{  }

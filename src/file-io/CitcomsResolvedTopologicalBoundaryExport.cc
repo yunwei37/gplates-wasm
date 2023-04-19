@@ -768,8 +768,8 @@ namespace GPlatesFileIO
 				{
 				case GMT:
 					CitcomsGMTFormatResolvedTopologicalBoundaryExport::export_resolved_topological_boundaries(
-						resolved_topologies,
-						filename,
+                        resolved_topologies,
+                        QFileInfo(filename),
 						referenced_files,
 						active_reconstruction_files,
 						reconstruction_anchor_plate_id);
@@ -780,8 +780,8 @@ namespace GPlatesFileIO
                 case OGRGMT:
 				case GEOJSON:
 					OgrFormatResolvedTopologicalGeometryExport::export_citcoms_resolved_topological_boundaries(
-						resolved_topologies,
-						filename,
+                        resolved_topologies,
+                        QFileInfo(filename),
 						referenced_files,
 						active_reconstruction_files,
 						reconstruction_anchor_plate_id,
@@ -826,8 +826,8 @@ namespace GPlatesFileIO
 				{
 				case GMT:
 					CitcomsGMTFormatResolvedTopologicalBoundaryExport::export_sub_segments(
-						sub_segment_groups,
-						filename,
+                        sub_segment_groups,
+                        QFileInfo(filename),
 						referenced_files,
 						active_reconstruction_files,
 						reconstruction_anchor_plate_id);
@@ -838,8 +838,8 @@ namespace GPlatesFileIO
                 case OGRGMT:
 				case GEOJSON:
 					OgrFormatResolvedTopologicalGeometryExport::export_citcoms_sub_segments(
-						sub_segment_groups,
-						filename,
+                        sub_segment_groups,
+                        QFileInfo(filename),
 						referenced_files,
 						active_reconstruction_files,
 						reconstruction_anchor_plate_id,

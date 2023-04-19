@@ -31,6 +31,7 @@
 #include <QList>
 #include <QSettings>
 #include <QtGlobal>
+#include <QString>
 
 // For magic defaults:-
 #include <QDir>
@@ -73,10 +74,10 @@ namespace
 		//   Linux: ~/.local/share/GPlates/GPlates/
 		//   Windows 7: C:/Users/*/AppData/Local/GPlates/GPlates/
 		//
-		// NOTE: In Qt5, QStandardPaths::DataLocation (called QDesktopServices::DataLocation in Qt4)
+		// NOTE: In Qt6, QStandardPaths::DataLocation (called QDesktopServices::DataLocation in Qt4)
 		// no longer has 'data/' in the path, so this may prevent user scripts from being found.
-		QDir local_scripts_dir(QStandardPaths::writableLocation(QStandardPaths::DataLocation) + "/scripts/");
-		defaults.setValue("paths/python_user_script_dir", QVariant(local_scripts_dir.absolutePath()));
+//		QDir local_scripts_dir(QStandardPaths::writableLocation(QStandardPaths::DataLocation) + "/scripts/");
+//		defaults.setValue("paths/python_user_script_dir", QVariant(local_scripts_dir.absolutePath()));
 
 		// paths/python_system_script_dir :-
 		//
@@ -353,7 +354,7 @@ GPlatesAppLogic::UserPreferences::clear_value(
 	KeyValueMap backup = get_keyvalues_as_map(key);
 	settings.remove(key);
 
-	Q_FOREACH(QString subkey, backup.keys()) {
+    for(QString subkey: backup.keys()) {
 		QString fullkey = GPlatesUtils::compose_keyname(key, subkey);
 		settings.setValue(fullkey, backup.value(subkey));
 	}
@@ -454,7 +455,7 @@ GPlatesAppLogic::UserPreferences::extract_keyvalues_as_configbundle(
 	QStringList keys = subkeys(prefix);
 	GPlatesUtils::ConfigBundle *bundle = new GPlatesUtils::ConfigBundle(this);
 	
-	Q_FOREACH(QString subkey, keys) {
+    for(QString subkey: keys) {
 		QString fullkey = GPlatesUtils::compose_keyname(prefix, subkey);
 		bundle->set_value(subkey, get_value(fullkey));
 	}
@@ -468,7 +469,7 @@ GPlatesAppLogic::UserPreferences::insert_keyvalues_from_configbundle(
 		const GPlatesUtils::ConfigBundle &bundle)
 {
 	clear_prefix(prefix);
-	Q_FOREACH(QString subkey, bundle.subkeys()) {
+    for(QString subkey: bundle.subkeys()) {
 		QString fullkey = GPlatesUtils::compose_keyname(prefix, subkey);
 		set_value(fullkey, bundle.get_value(subkey));
 	}
@@ -482,7 +483,7 @@ GPlatesAppLogic::UserPreferences::get_keyvalues_as_map(
 	QStringList keys = subkeys(prefix);
 	KeyValueMap map;
 	
-	Q_FOREACH(QString subkey, keys) {
+    for(QString subkey: keys) {
 		QString fullkey = GPlatesUtils::compose_keyname(prefix, subkey);
 		map.insert(subkey, get_value(fullkey));
 	}
@@ -496,7 +497,7 @@ GPlatesAppLogic::UserPreferences::set_keyvalues_from_map(
 		const GPlatesAppLogic::UserPreferences::KeyValueMap &keyvalues)
 {
 	clear_prefix(prefix);
-	Q_FOREACH(QString subkey, keyvalues.keys()) {
+    for(QString subkey: keyvalues.keys()) {
 		QString fullkey = GPlatesUtils::compose_keyname(prefix, subkey);
 		set_value(fullkey, keyvalues.value(subkey));
 	}
@@ -533,7 +534,7 @@ GPlatesAppLogic::UserPreferences::debug_key_values()
 	QStringList keys = subkeys();
 
 	qDebug() << "UserPreferences key values:-";
-	Q_FOREACH(QString key, keys) {
+    for(QString key: keys) {
 		QVariant value = get_value(key);
 		const char *overridden = has_been_set(key) ? "U" : " ";
 		const char *has_default = default_exists(key) ? "D" : " ";

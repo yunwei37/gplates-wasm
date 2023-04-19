@@ -31,6 +31,7 @@
 #include <boost/tuple/tuple.hpp>
 
 #include <QTextStream>
+#include <QRegularExpression>
 
 #include "File.h"
 #include "FileInfo.h"
@@ -712,13 +713,13 @@ namespace GPlatesFileIO
 				RotationPoleData&);
 	protected:
 		
-		QRegExp d_commnet_line_rx, d_pole_rx, d_attr_rx, 
+		QRegularExpression d_commnet_line_rx, d_pole_rx, d_attr_rx, 
 			d_multi_line_attr_rx, d_disabled_pole_rx, d_mprs_header_rx;
 		
 		typedef void (RotationFileReaderV2::*function)
 			(QIODevice&, RotationFileSegmentContainer&) ;
-		typedef std::map<QRegExp*, function> FunctionMap;
-		typedef std::vector<QRegExp*> RegExpVector;
+		typedef std::map<QRegularExpression*, function> FunctionMap;
+		typedef std::vector<QRegularExpression*> RegExpVector;
 
 		FunctionMap d_function_map;
 		RegExpVector d_regexp_vec;

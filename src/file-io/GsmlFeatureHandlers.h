@@ -29,7 +29,7 @@
 #define GPLATES_FILEIO_GSMLFEATUREHANDLERS_H
 
 #include <QString>
-#include <QXmlQuery>
+//#include <QXmlQuery>
 #include <QBuffer>
 
 #include "GsmlConst.h"

@@ -27,7 +27,7 @@
 #include <QDebug>
 
 #include "FeatureFocus.h"
-#include "PythonManager.h"
+// #include "PythonManager.h"
 
 #include "app-logic/ApplicationState.h"
 #include "app-logic/GeometryUtils.h"

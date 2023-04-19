@@ -490,7 +490,7 @@ namespace{
 		}
 
 
-		Q_FOREACH(const QString &filename, filenames)
+        for(const QString &filename: filenames)
 		{
 			if (folder.exists(filename)){
 				QString full_name = folder.absoluteFilePath(filename);

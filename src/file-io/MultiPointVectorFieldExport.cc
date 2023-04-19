@@ -25,7 +25,7 @@
  */
 
 #include <QLocale>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QTextStream>
 
 #include "MultiPointVectorFieldExport.h"
@@ -97,8 +97,8 @@ GPlatesFileIO::MultiPointVectorFieldExport::export_velocity_vector_fields_to_gpm
 	if (export_single_output_file)
 	{
 		GpmlFormatMultiPointVectorFieldExport::export_velocity_vector_fields(
-				grouped_velocity_vector_field_seq,
-				filename,
+                grouped_velocity_vector_field_seq,
+            QFileInfo(filename),
 				model,
 				referenced_files,
 				reconstruction_anchor_plate_id,
@@ -128,8 +128,8 @@ GPlatesFileIO::MultiPointVectorFieldExport::export_velocity_vector_fields_to_gpm
 			++grouped_features_iter, ++output_filename_iter)
 		{
 			GpmlFormatMultiPointVectorFieldExport::export_velocity_vector_fields(
-					grouped_features_iter->feature_geometry_groups,
-					*output_filename_iter,
+                    grouped_features_iter->feature_geometry_groups,
+                QFileInfo(*output_filename_iter),
 					model,
 					referenced_files,
 					reconstruction_anchor_plate_id,
@@ -177,8 +177,8 @@ GPlatesFileIO::MultiPointVectorFieldExport::export_velocity_vector_fields_to_gmt
 	if (export_single_output_file)
 	{
 		GMTFormatMultiPointVectorFieldExport::export_velocity_vector_fields(
-				grouped_velocity_vector_field_seq,
-				filename,
+                grouped_velocity_vector_field_seq,
+            QFileInfo(filename),
 				referenced_files,
 				reconstruction_anchor_plate_id,
 				reconstruction_time,
@@ -214,8 +214,8 @@ GPlatesFileIO::MultiPointVectorFieldExport::export_velocity_vector_fields_to_gmt
 			++grouped_features_iter, ++output_filename_iter)
 		{
 			GMTFormatMultiPointVectorFieldExport::export_velocity_vector_fields(
-					grouped_features_iter->feature_geometry_groups,
-					*output_filename_iter,
+                    grouped_features_iter->feature_geometry_groups,
+                QFileInfo(*output_filename_iter),
 					referenced_files,
 					reconstruction_anchor_plate_id,
 					reconstruction_time,
@@ -281,7 +281,7 @@ GPlatesFileIO::MultiPointVectorFieldExport::export_velocity_vector_fields_to_ter
 	velocity_domain_file_name_reg_exp_string.replace(
 			velocity_domain_processor_place_holder,
 			unsigned_integer_reg_exp_string);
-	const QRegExp velocity_domain_file_name_reg_exp(velocity_domain_file_name_reg_exp_string);
+	const QRegularExpression velocity_domain_file_name_reg_exp(velocity_domain_file_name_reg_exp_string);
 
 	// Determine the order of the template parameter placeholders.
 	const int index_of_mt = velocity_domain_file_name_template.indexOf(velocity_domain_mt_place_holder);
@@ -315,14 +315,14 @@ GPlatesFileIO::MultiPointVectorFieldExport::export_velocity_vector_fields_to_ter
 		const QFileInfo qfile_info = file_ptr->get_file_info().get_qfileinfo();
 		const QString velocity_domain_filename = qfile_info.completeBaseName();
 
-		// See if the current velocity domain filename matches the template.
-		if (velocity_domain_file_name_reg_exp.indexIn(velocity_domain_filename) < 0)
+        // See if the current velocity domain filename matches the template.
+        if (!velocity_domain_file_name_reg_exp.match(velocity_domain_filename).hasMatch())
 		{
 			continue;
 		}
 
-		const QStringList template_parameters = velocity_domain_file_name_reg_exp.capturedTexts();
-
+        QRegularExpressionMatch match = velocity_domain_file_name_reg_exp.match(velocity_domain_filename);
+        const QStringList template_parameters = match.capturedTexts();
 		// All template parameters must have matched to get here.
 		GPlatesGlobal::Assert<GPlatesGlobal::AssertionFailureException>(
 				template_parameters.size() == 5, // 4 Terra parameters plus 1 for the entire match.
@@ -359,8 +359,8 @@ GPlatesFileIO::MultiPointVectorFieldExport::export_velocity_vector_fields_to_ter
 
 		// Finally we can export to the current velocity file.
 		TerraFormatVelocityVectorFieldExport::export_velocity_vector_fields(
-				grouped_features_iter->feature_geometry_groups,
-				velocity_export_file_name,
+                grouped_features_iter->feature_geometry_groups,
+            QFileInfo(velocity_export_file_name),
 				mt,
 				nt,
 				nd,
@@ -415,7 +415,7 @@ GPlatesFileIO::MultiPointVectorFieldExport::export_velocity_vector_fields_to_cit
 	velocity_domain_file_name_reg_exp_string.replace(
 			velocity_domain_cap_number_place_holder,
 			unsigned_integer_reg_exp_string);
-	const QRegExp velocity_domain_file_name_reg_exp(velocity_domain_file_name_reg_exp_string);
+	const QRegularExpression velocity_domain_file_name_reg_exp(velocity_domain_file_name_reg_exp_string);
 
 	// Determine the order of the template parameter placeholders.
 	const int index_of_density = velocity_domain_file_name_template.indexOf(velocity_domain_density_place_holder);
@@ -442,13 +442,13 @@ GPlatesFileIO::MultiPointVectorFieldExport::export_velocity_vector_fields_to_cit
 		const QString velocity_domain_filename = qfile_info.completeBaseName();
 
 		// See if the current velocity domain filename matches the template.
-		if (velocity_domain_file_name_reg_exp.indexIn(velocity_domain_filename) < 0)
+        if (!velocity_domain_file_name_reg_exp.match(velocity_domain_filename).hasMatch())
 		{
 			continue;
 		}
 
-		const QStringList template_parameters = velocity_domain_file_name_reg_exp.capturedTexts();
-
+        QRegularExpressionMatch match = velocity_domain_file_name_reg_exp.match(velocity_domain_filename);
+        const QStringList template_parameters = match.capturedTexts();
 		// All template parameters must have matched to get here.
 		GPlatesGlobal::Assert<GPlatesGlobal::AssertionFailureException>(
 				template_parameters.size() == 3, // 2 CitcomS parameters plus 1 for the entire match.
@@ -478,8 +478,8 @@ GPlatesFileIO::MultiPointVectorFieldExport::export_velocity_vector_fields_to_cit
 
 		// Finally we can export to the current velocity file.
 		CitcomsFormatVelocityVectorFieldExport::export_global_velocity_vector_fields(
-				grouped_features_iter->feature_geometry_groups,
-				velocity_export_file_name,
+                grouped_features_iter->feature_geometry_groups,
+            QFileInfo(velocity_export_file_name),
 				age,
 				include_gmt_export,
 				gmt_velocity_scale,

@@ -37,7 +37,7 @@
 #include <boost/variant.hpp>
 #include <QDebug>
 #include <QFileInfo>
-#include <QRegExp>
+#include <QRegularExpression>
 
 #include "TranscribeSession.h"
 
@@ -989,7 +989,7 @@ namespace GPlatesPresentation
 		 * Regular expression for a variant of a draw style name that ends with
 		 * an underscore and a number (eg, "_1").
 		 */
-		const QRegExp DRAW_STYLE_NAME_VARIANT_REGEXP("^(.*)_\\d+$");
+		const QRegularExpression DRAW_STYLE_NAME_VARIANT_REGEXP("^(.*)_\\d+$");
 
 		/**
 		 * Return the draw style name with any integer suffixes (eg, "_1") removed.
@@ -999,9 +999,10 @@ namespace GPlatesPresentation
 				const QString &draw_style_name)
 		{
 			// Return the base part if ends with "_1" for example.
-			if (DRAW_STYLE_NAME_VARIANT_REGEXP.indexIn(draw_style_name) >= 0)
+            auto match = DRAW_STYLE_NAME_VARIANT_REGEXP.match(draw_style_name);
+            if (DRAW_STYLE_NAME_VARIANT_REGEXP.match(draw_style_name).hasMatch())
 			{
-				return DRAW_STYLE_NAME_VARIANT_REGEXP.cap(1);
+                return match.captured(1);
 			}
 
 			return draw_style_name;
@@ -1110,50 +1111,50 @@ namespace GPlatesPresentation
 				// just transcribing a description of the configuration items.
 				QString cfg_item_type;
 				DrawStyleCfgItemValue cfg_item_value;
-				if (dynamic_cast<const GPlatesGui::PythonCfgColor *>(cfg_item))
-				{
-					cfg_item_type = DRAW_STYLE_PYTHON_CFG_COLOR_TYPE;
-					cfg_item_value.set_value(cfg_item->value().toString());
-				}
-				else if (dynamic_cast<const GPlatesGui::PythonCfgString *>(cfg_item))
-				{
-					cfg_item_type = DRAW_STYLE_PYTHON_CFG_STRING_TYPE;
-					cfg_item_value.set_value(cfg_item->value().toString());
-				}
-				else if (const GPlatesGui::PythonCfgPalette *palette_cfg_item =
-						dynamic_cast<const GPlatesGui::PythonCfgPalette *>(cfg_item))
-				{
-					cfg_item_type = DRAW_STYLE_PYTHON_CFG_PALETTE_TYPE;
+//				if (dynamic_cast<const GPlatesGui::PythonCfgColor *>(cfg_item))
+//				{
+//					cfg_item_type = DRAW_STYLE_PYTHON_CFG_COLOR_TYPE;
+//					cfg_item_value.set_value(cfg_item->value().toString());
+//				}
+//				else if (dynamic_cast<const GPlatesGui::PythonCfgString *>(cfg_item))
+//				{
+//					cfg_item_type = DRAW_STYLE_PYTHON_CFG_STRING_TYPE;
+//					cfg_item_value.set_value(cfg_item->value().toString());
+//				}
+//				else if (const GPlatesGui::PythonCfgPalette *palette_cfg_item =
+//						dynamic_cast<const GPlatesGui::PythonCfgPalette *>(cfg_item))
+//				{
+//					cfg_item_type = DRAW_STYLE_PYTHON_CFG_PALETTE_TYPE;
 
-					// If it's a built-in palette then set a string value (name of built-in palette),
-					// otherwise set a 'GPlatesScribe::TranscribeUtils::FilePath'
-					// (filename of palette file) since that enables relative file paths
-					// (when a project file is moved).
+//					// If it's a built-in palette then set a string value (name of built-in palette),
+//					// otherwise set a 'GPlatesScribe::TranscribeUtils::FilePath'
+//					// (filename of palette file) since that enables relative file paths
+//					// (when a project file is moved).
 
-					if (palette_cfg_item->is_built_in_palette())
-					{
-						cfg_item_value.set_value(cfg_item->value().toString());
-					}
-					else
-					{
-						// Use QFileInfo to ensure the format of the file path is platform independent.
-						// This is because we later compare file paths when searching for matching draw styles.
-						const QFileInfo palette_file_info(cfg_item->value().toString());
+//					if (palette_cfg_item->is_built_in_palette())
+//					{
+//						cfg_item_value.set_value(cfg_item->value().toString());
+//					}
+//					else
+//					{
+//						// Use QFileInfo to ensure the format of the file path is platform independent.
+//						// This is because we later compare file paths when searching for matching draw styles.
+//						const QFileInfo palette_file_info(cfg_item->value().toString());
 
-						cfg_item_value.set_value(
-								GPlatesScribe::TranscribeUtils::FilePath(
-										palette_file_info.absoluteFilePath()));
-					}
-				}
-				else
-				{
-					// There's another concrete derived class of 'GPlatesGui::ConfigurationItem' that
-					// needs to be tested above. All derived classes should be tested above - this is
-					// regardless of whether we're on the save or load path - it's a programmer error.
-					GPlatesGlobal::Assert<GPlatesGlobal::AssertionFailureException>(
-							false,
-							GPLATES_ASSERTION_SOURCE);
-				}
+//						cfg_item_value.set_value(
+//								GPlatesScribe::TranscribeUtils::FilePath(
+//										palette_file_info.absoluteFilePath()));
+//					}
+//				}
+//				else
+//				{
+//					// There's another concrete derived class of 'GPlatesGui::ConfigurationItem' that
+//					// needs to be tested above. All derived classes should be tested above - this is
+//					// regardless of whether we're on the save or load path - it's a programmer error.
+//					GPlatesGlobal::Assert<GPlatesGlobal::AssertionFailureException>(
+//							false,
+//							GPLATES_ASSERTION_SOURCE);
+//				}
 
 				draw_style_cfg_item_map.insert(
 						draw_style_cfg_item_map_type::value_type(
@@ -1264,32 +1265,33 @@ namespace GPlatesPresentation
 				const GPlatesGui::Configuration &configuration,
 				GPlatesFileIO::ReadErrorAccumulation &read_errors)
 		{
+            qWarning("python not support");
 			const std::vector<QString> cfg_item_names = configuration.all_cfg_item_names();
 			for (unsigned int n = 0; n < cfg_item_names.size(); ++n)
 			{
 				const GPlatesGui::ConfigurationItem *cfg_item = configuration.get(cfg_item_names[n]);
 
 				// Test for a palette.
-				if (const GPlatesGui::PythonCfgPalette *palette_cfg_item =
-						dynamic_cast<const GPlatesGui::PythonCfgPalette *>(cfg_item))
-				{
-					// If it's not a built-in palette then it's a palette filename.
-					if (!palette_cfg_item->is_built_in_palette())
-					{
-						// If the palette file doesn't exist then emit a read error.
-						const QString palette_filename = palette_cfg_item->get_value();
-						if (!QFileInfo(palette_filename).exists())
-						{
-							read_errors.d_failures_to_begin.push_back(
-									GPlatesFileIO::make_read_error_occurrence(
-										palette_filename,
-										GPlatesFileIO::DataFormats::Unspecified,
-										0/*line_num*/,
-										GPlatesFileIO::ReadErrors::ErrorOpeningFileForReading,
-										GPlatesFileIO::ReadErrors::FileNotLoaded));
-						}
-					}
-				}
+//				if (const GPlatesGui::PythonCfgPalette *palette_cfg_item =
+//						dynamic_cast<const GPlatesGui::PythonCfgPalette *>(cfg_item))
+//				{
+//					// If it's not a built-in palette then it's a palette filename.
+//					if (!palette_cfg_item->is_built_in_palette())
+//					{
+//						// If the palette file doesn't exist then emit a read error.
+//						const QString palette_filename = palette_cfg_item->get_value();
+//						if (!QFileInfo(palette_filename).exists())
+//						{
+//							read_errors.d_failures_to_begin.push_back(
+//									GPlatesFileIO::make_read_error_occurrence(
+//										palette_filename,
+//										GPlatesFileIO::DataFormats::Unspecified,
+//										0/*line_num*/,
+//										GPlatesFileIO::ReadErrors::ErrorOpeningFileForReading,
+//										GPlatesFileIO::ReadErrors::FileNotLoaded));
+//						}
+//					}
+//				}
 			}
 		}
 

@@ -68,8 +68,8 @@ namespace GPlatesFileIO
 				{
 				case GMT:
 					GMTFormatMotionPathsExport::export_motion_paths(
-						grouped_recon_geoms_seq,
-						filename,
+                        grouped_recon_geoms_seq,
+                        QFileInfo(filename),
 						referenced_files,
 						active_reconstruction_files,
 						reconstruction_anchor_plate_id,
@@ -80,8 +80,8 @@ namespace GPlatesFileIO
 				case OGRGMT:
 				case GEOJSON:
 					OgrFormatMotionPathExport::export_motion_paths(
-						grouped_recon_geoms_seq,
-						filename,
+                        grouped_recon_geoms_seq,
+                        QFileInfo(filename),
 						referenced_files,
 						active_reconstruction_files,
 						reconstruction_anchor_plate_id,
@@ -114,8 +114,8 @@ namespace GPlatesFileIO
 				case OGRGMT:
 				case GEOJSON:
 					OgrFormatMotionPathExport::export_motion_paths(
-						grouped_recon_geoms_seq,
-						filename,
+                        grouped_recon_geoms_seq,
+                        QFileInfo(filename),
 						referenced_files,
 						active_reconstruction_files,
 						reconstruction_anchor_plate_id,
@@ -125,8 +125,8 @@ namespace GPlatesFileIO
 					break;
 				case GMT:
 					GMTFormatMotionPathsExport::export_motion_paths(
-						grouped_recon_geoms_seq,
-						filename,
+                        grouped_recon_geoms_seq,
+                        QFileInfo(filename),
 						referenced_files,
 						active_reconstruction_files,
 						reconstruction_anchor_plate_id,

@@ -170,7 +170,7 @@ GPlatesQtWidgets::ColourScaleButton::enterEvent(
 	// Seems this is needed for Mac, but not Windows or Ubuntu (for Qt 4.8).
 	update();
 
-	QToolButton::enterEvent(ev);
+    QToolButton::enterEvent(static_cast<QEnterEvent *>(ev));
 }
 
 

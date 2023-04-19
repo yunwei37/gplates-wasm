@@ -56,7 +56,7 @@
 
 
 class PointIsCoincident:
- public std::unary_function< GPlatesMaths::PointOnSphere, bool > {
+ public std::__unary_function< GPlatesMaths::PointOnSphere, bool > {
 
  public:
 

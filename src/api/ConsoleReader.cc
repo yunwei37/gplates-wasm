@@ -26,8 +26,8 @@
 
 #include "ConsoleReader.h"
 
-#include "PythonInterpreterLocker.h"
-#include "PythonInterpreterUnlocker.h"
+// #include "PythonInterpreterLocker.h"
+// #include "PythonInterpreterUnlocker.h"
 
 #include "api/PythonUtils.h"
 #include "utils/StringUtils.h"

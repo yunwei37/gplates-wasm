@@ -326,7 +326,7 @@ namespace GPlatesMaths
 		 * Used to sort partitions by their number of bounded arcs.
 		 */
 		class SortPartitionsByNumBoundedArcs :
-				public std::binary_function<unsigned int/*node index*/, unsigned int/*node index*/, bool>
+				public std::function<bool(unsigned int/*node index*/, unsigned int/*node index*/)>
 		{
 		public:
 			explicit
