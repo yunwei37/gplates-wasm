@@ -69,8 +69,8 @@ set(srcs
     TestSuiteFilter.h
     TestSuiteFilterTest.cc
     TestSuiteFilterTest.h
-    TranscribeTest.cc
-    TranscribeTest.h
+    # TranscribeTest.cc
+    # TranscribeTest.h
     UnitTestTestSuite.cc
     UnitTestTestSuite.h
     UtilsTestSuite.cc

@@ -314,16 +314,18 @@ target_link_libraries(gplates-no-gui PRIVATE gplates-lib)
 #
 # It's only added if we have a Boost unit test framework.
 # It will be populated by source files from the 'unit-test/' sub-directory.
-if (TARGET Boost::unit_test_framework)
-	add_executable(gplates-unit-test EXCLUDE_FROM_ALL gplates_unit_test_main.cc ScribeExportGPlatesUnitTest.cc)
+# if (TARGET Boost::unit_test_framework)
+        add_executable(gplates-unit-test EXCLUDE_FROM_ALL gplates_unit_test_main.cc ScribeExportGPlatesUnitTest.cc)
+#        target_include_directories(gplates-unit-test PUBLIC SYSTEM ${CMAKE_CURRENT_SOURCE_DIR}/../third_party)
+#        target_link_directories(gplates-unit-test PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../lib)
 	target_link_libraries(gplates-unit-test PRIVATE gplates-lib)
-else()
-	# Only print status message if this is not a public release.
-	# Because it'll only confuse users (because gplate-unit-test is not part of public release).
-	if (NOT GPLATES_PUBLIC_RELEASE)
-		message(STATUS "Warning: boost unit_test_framework not found so GPlates unit-test executable gplates-unit-test will not be available.")
-	endif()
-endif()
+# else()
+# 	# Only print status message if this is not a public release.
+# 	# Because it'll only confuse users (because gplate-unit-test is not part of public release).
+# 	if (NOT GPLATES_PUBLIC_RELEASE)
+# 		message(STATUS "Warning: boost unit_test_framework not found so GPlates unit-test executable gplates-unit-test will not be available.")
+# 	endif()
+# endif()
 
 #
 # Add the 'pygplates' Python extension module.
@@ -839,7 +841,7 @@ endif()
 #	target_compile_definitions(gplates-unit-test PRIVATE BOOST_TEST_DYN_LINK)
 #endif()
 target_include_directories(gplates-lib PUBLIC SYSTEM ${CMAKE_CURRENT_SOURCE_DIR}/../third_party)
-target_link_directories(gplates-lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../libraries)
+target_link_directories(gplates-lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../lib)
 
 #
 # Qt6 dependency.
