@@ -529,10 +529,10 @@ output_reconstructions(
 #include <QtXml/QDomDocument>
 
 int
-main(int argc, char *argv[])
+main()
 {
 	GPlatesMaths::assert_has_infinity_and_nan();
-
+#if 1
 	GPlatesModel::ModelInterface model;
 
 	// Used to read structural types from a GPML file.
@@ -552,7 +552,7 @@ main(int argc, char *argv[])
 
 	::output_as_gpml(isochrons);
 	//::output_reconstructions(isochrons, total_recon_seqs);
-
+#if 0
 	// Test GPML 1.6 reader.
 	if (argc > 1) {
 
@@ -578,7 +578,7 @@ main(int argc, char *argv[])
 		GPlatesModel::FeatureCollectionHandle::weak_ref features =
 				file->get_reference().get_feature_collection();
 		::output_as_gpml(features);
-
+#endif
 #if 0
 		QFile file(filename);
 		file.open(QIODevice::ReadOnly | QIODevice::Text);
@@ -599,8 +599,7 @@ main(int argc, char *argv[])
 			writer.writeStartDocument("1.0");
 			xml->write_to(writer);
 		}
-#endif
 	}
-	
+#endif
 	return 0;
 }

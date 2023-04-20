@@ -7,7 +7,7 @@
 #include <QOpenGLWindow>
 #include <QMatrix4x4>
 #include <QVector3D>
-#include "../hellogl2/logo.h"
+#include "logo.h"
 
 QT_BEGIN_NAMESPACE
 
