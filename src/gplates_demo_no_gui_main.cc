@@ -67,7 +67,39 @@
 #include "property-values/GpmlPlateId.h"
 #include "property-values/XsString.h"
 #include "property-values/StructuralType.h"
+#include <QtXml/QDomDocument>
+#include <emscripten.h>
+#include <iostream>
+#include <streambuf>
 
+EMSCRIPTEN_KEEPALIVE
+    extern "C" void log_to_console(const char* message) {
+    std::cout << message << std::endl;
+}
+
+EM_JS(void, append_output_text, (const char *text), {
+    var element = document.getElementById("output");
+    element.innerHTML += UTF8ToString(text) + "<br />";
+});
+
+class HtmlStreamBuffer : public std::streambuf {
+public:
+    int overflow(int c) override {
+        if (c != EOF) {
+            char ch = static_cast<char>(c);
+            if (ch == '\n') {
+                append_output_text(buffer.c_str());
+                buffer.clear();
+            } else {
+                buffer.push_back(ch);
+            }
+        }
+        return c;
+    }
+
+private:
+    std::string buffer;
+};
 
 const GPlatesModel::FeatureHandle::weak_ref
 create_isochron(
@@ -525,25 +557,30 @@ output_reconstructions(
 	}
 }
 
-
-#include <QtXml/QDomDocument>
-
 int
 main()
 {
+    qDebug() << QString("Hello from qDebug()");
+	HtmlStreamBuffer htmlStreamBuffer;
+    std::streambuf *oldCoutBuffer = std::cout.rdbuf();
+    std::cout.rdbuf(&htmlStreamBuffer);
+	std::cout << "begin..." << std::endl;
+
 	GPlatesMaths::assert_has_infinity_and_nan();
-#if 1
+
 	GPlatesModel::ModelInterface model;
 
+    std::cout << "read structural types from a GPML file." << std::endl;
 	// Used to read structural types from a GPML file.
 	GPlatesFileIO::GpmlPropertyStructuralTypeReader::non_null_ptr_to_const_type gpml_structural_type_reader =
 			GPlatesFileIO::GpmlPropertyStructuralTypeReader::create();
-
+    std::cout << "create a new GpmlPropertyStructuralType" << std::endl;
 
 	std::pair<GPlatesModel::FeatureCollectionHandle::weak_ref,
 			GPlatesModel::FeatureCollectionHandle::weak_ref>
 			isochrons_and_total_recon_seqs =
 					::populate_feature_store(model);
+    std::cout << "populate_feature_store in model" << std::endl;
 
 	GPlatesModel::FeatureCollectionHandle::weak_ref isochrons =
 			isochrons_and_total_recon_seqs.first;
@@ -551,7 +588,7 @@ main()
 			isochrons_and_total_recon_seqs.second;
 
 	::output_as_gpml(isochrons);
-	//::output_reconstructions(isochrons, total_recon_seqs);
+    ::output_reconstructions(isochrons, total_recon_seqs);
 #if 0
 	// Test GPML 1.6 reader.
 	if (argc > 1) {

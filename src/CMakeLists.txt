@@ -16,14 +16,14 @@
 find_package(OpenGL REQUIRED)
 # CMake 3.8 introduced import targets for OpenGL. For prior versions we need to add the imported target ourself.
 if (NOT TARGET OpenGL::GL)
-	add_library(OpenGL::GL IMPORTED INTERFACE)
-	set_target_properties(OpenGL::GL PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${OPENGL_INCLUDE_DIR}")
-	set_target_properties(OpenGL::GL PROPERTIES INTERFACE_LINK_LIBRARIES "${OPENGL_LIBRARIES}")
+        add_library(OpenGL::GL IMPORTED INTERFACE)
+        set_target_properties(OpenGL::GL PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${OPENGL_INCLUDE_DIR}")
+        set_target_properties(OpenGL::GL PROPERTIES INTERFACE_LINK_LIBRARIES "${OPENGL_LIBRARIES}")
 endif()
 if (NOT TARGET OpenGL::GLU)
-	# We leave the GLU library target empty since the GLU library and include path are already handled by
-	# 'OPENGL_LIBRARIES' and 'OPENGL_INCLUDE_DIR'. We're only creating this because we need to provide a 'OpenGL::GLU' target.
-	add_library(OpenGL::GLU IMPORTED INTERFACE)
+        # We leave the GLU library target empty since the GLU library and include path are already handled by
+        # 'OPENGL_LIBRARIES' and 'OPENGL_INCLUDE_DIR'. We're only creating this because we need to provide a 'OpenGL::GLU' target.
+        add_library(OpenGL::GLU IMPORTED INTERFACE)
 endif()
 
 #############
@@ -201,7 +201,7 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 if(CMAKE_VERSION VERSION_LESS 3.7)
-	set(CMAKE_INCLUDE_CURRENT_DIR ON)
+        set(CMAKE_INCLUDE_CURRENT_DIR ON)
 endif()
 # Require Qt 5.6 for the Qt::AA_EnableHighDpiScaling attribute (Bionic, our minimum supported Ubuntu, uses Qt 5.9).
 # find_package(Qt6 6.5 REQUIRED COMPONENTS Core Gui Network OpenGL Svg Widgets Xml XmlPatterns)
@@ -250,20 +250,20 @@ include (Utils)
 #
 # We use ${GPlates_WC_*} which evaluate to empty strings for public releases (or if Subversion package not found).
 if (NOT GPLATES_PUBLIC_RELEASE)
-	find_package(Subversion)
-	if (SUBVERSION_FOUND)
-		if (CMAKE_VERSION VERSION_LESS 3.13)
-			Subversion_WC_INFO(${GPlates_SOURCE_DIR} GPlates)
-		else()
-			# CMake 3.13 added the IGNORE_SVN_FAILURE option which is useful to ignore errors due to Subversion not
-			# finding a working copy (eg, the '.svn' directory is missing due to exporting source code).
-			Subversion_WC_INFO(${GPlates_SOURCE_DIR} GPlates IGNORE_SVN_FAILURE)
-		endif()
-		# The branch name is the last part of the part of the working-copy URL.
-		if (GPlates_WC_URL)
-			string(REGEX MATCH "[^/]*$" GPlates_WC_BRANCH_NAME ${GPlates_WC_URL})
-		endif()
-	endif()
+        find_package(Subversion)
+        if (SUBVERSION_FOUND)
+                if (CMAKE_VERSION VERSION_LESS 3.13)
+                        Subversion_WC_INFO(${GPlates_SOURCE_DIR} GPlates)
+                else()
+                        # CMake 3.13 added the IGNORE_SVN_FAILURE option which is useful to ignore errors due to Subversion not
+                        # finding a working copy (eg, the '.svn' directory is missing due to exporting source code).
+                        Subversion_WC_INFO(${GPlates_SOURCE_DIR} GPlates IGNORE_SVN_FAILURE)
+                endif()
+                # The branch name is the last part of the part of the working-copy URL.
+                if (GPlates_WC_URL)
+                        string(REGEX MATCH "[^/]*$" GPlates_WC_BRANCH_NAME ${GPlates_WC_URL})
+                endif()
+        endif()
 endif()
 
 # Generate the version source file.
@@ -293,7 +293,7 @@ configure_file(${GPlates_SOURCE_DIR}/src/global/License.cc.in ${GPlates_BINARY_D
 # For now just add the generated version and license source files.
 # Below we'll add the remaining source files in 'add_subdirectory()' calls.
 add_library(gplates-lib STATIC EXCLUDE_FROM_ALL
-	${GPlates_BINARY_DIR}/src/global/Version.cc
+        ${GPlates_BINARY_DIR}/src/global/Version.cc
         ${GPlates_BINARY_DIR}/src/global/License.cc)
         #${GPlates_BINARY_DIR}/src/global/config.h)
 
@@ -308,6 +308,11 @@ add_library(gplates-lib STATIC EXCLUDE_FROM_ALL
 #
 add_executable(gplates-no-gui EXCLUDE_FROM_ALL gplates_demo_no_gui_main.cc ScribeExportGPlatesDemoNoGui.cc)
 target_link_libraries(gplates-no-gui PRIVATE gplates-lib)
+if (EMSCRIPTEN)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -s WASM=1 -s MODULARIZE=1")
+endif()
+#set_target_properties(gplates-no-gui PROPERTIES COMPILE_FLAGS "-sMAIN_MODULE")
+#set_target_properties(gplates-no-gui PROPERTIES LINK_FLAGS "-s MODULARIZE=1 --no-entry")
 
 #
 # Add 'gplates-unit-test' executable (linked to gplates-lib).
@@ -371,27 +376,27 @@ target_link_libraries(gplates-unit-test PRIVATE gplates-lib)
 #
 
 # Specify source sub-directories.
-set(source_sub_directories 
-	api
-	app-logic
-	canvas-tools
-	cli
-	data-mining
-	feature-visitors
-	file-io
-	global
-	gui
-	maths
-	model
-	opengl
-	presentation
-	property-values
-	qt-resources
-	qt-widgets
-	scribe
-	unit-test
-	utils
-	view-operations)
+set(source_sub_directories
+        api
+        app-logic
+        canvas-tools
+        cli
+        data-mining
+        feature-visitors
+        file-io
+        global
+        gui
+        maths
+        model
+        opengl
+        presentation
+        property-values
+        qt-resources
+        qt-widgets
+        scribe
+        unit-test
+        utils
+        view-operations)
 
 # Specify the default grouping of source files (for display in Visual Studio and XCode IDEs).
 # This will apply to the top-level source directories.
@@ -405,22 +410,22 @@ source_group(qrc REGULAR_EXPRESSION "\\.qrc$")
 source_group(rc REGULAR_EXPRESSION "\\.rc$")
 
 foreach(sub_dir ${source_sub_directories})
-	# Traverse into sub-directory "CMakeLists.txt".
-	add_subdirectory(${sub_dir})
-	
-	# Specify specific grouping of source files specific to the current sub-directory (for display in Visual Studio and XCode IDEs).
-	#
-	# Here we give each sub-directory its own folder group.
-	# And under each sub-directory folder we have folders for each source file category (".cc", ".h", ".ui", ".qrc").
-	#
-	# Note: The groups defined by 'source_group' are scoped in the directory where it is called.
-	#       So, since we're matching subdirectories in the regular expressions, we cannot call 'source_group'
-	#       in the sub-directory "CMakeLists.txt" files.
-	source_group(${sub_dir}\\sources REGULAR_EXPRESSION "/${sub_dir}/[a-zA-Z0-9_-]+\\.(cc|cpp|cxx)$")
-	source_group(${sub_dir}\\headers REGULAR_EXPRESSION "/${sub_dir}/[a-zA-Z0-9_-]+\\.hh?$")
-	source_group(${sub_dir}\\ui REGULAR_EXPRESSION "/${sub_dir}/[a-zA-Z0-9_-]+\\.ui$")
-	source_group(${sub_dir}\\qrc REGULAR_EXPRESSION "/${sub_dir}/[a-zA-Z0-9_-]+\\.qrc$")
-	source_group(${sub_dir}\\rc REGULAR_EXPRESSION "/${sub_dir}/[a-zA-Z0-9_-]+\\.rc$")
+        # Traverse into sub-directory "CMakeLists.txt".
+        add_subdirectory(${sub_dir})
+
+        # Specify specific grouping of source files specific to the current sub-directory (for display in Visual Studio and XCode IDEs).
+        #
+        # Here we give each sub-directory its own folder group.
+        # And under each sub-directory folder we have folders for each source file category (".cc", ".h", ".ui", ".qrc").
+        #
+        # Note: The groups defined by 'source_group' are scoped in the directory where it is called.
+        #       So, since we're matching subdirectories in the regular expressions, we cannot call 'source_group'
+        #       in the sub-directory "CMakeLists.txt" files.
+        source_group(${sub_dir}\\sources REGULAR_EXPRESSION "/${sub_dir}/[a-zA-Z0-9_-]+\\.(cc|cpp|cxx)$")
+        source_group(${sub_dir}\\headers REGULAR_EXPRESSION "/${sub_dir}/[a-zA-Z0-9_-]+\\.hh?$")
+        source_group(${sub_dir}\\ui REGULAR_EXPRESSION "/${sub_dir}/[a-zA-Z0-9_-]+\\.ui$")
+        source_group(${sub_dir}\\qrc REGULAR_EXPRESSION "/${sub_dir}/[a-zA-Z0-9_-]+\\.qrc$")
+        source_group(${sub_dir}\\rc REGULAR_EXPRESSION "/${sub_dir}/[a-zA-Z0-9_-]+\\.rc$")
 endforeach()
 
 # Enable the location of each target to be specified using the FOLDER target property (for Visual Studio and XCode).
@@ -450,8 +455,8 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 # Note: This is also set in ConfigDefault.cmake (for CMake < 3.8) as the variable CMAKE_CXX_STANDARD.
 #       So that code can be removed once our minimum CMake requirement is 3.8.
 if (NOT CMAKE_VERSION VERSION_LESS 3.8)
-	target_compile_features(gplates-lib PUBLIC cxx_std_11)
-	# target_compile_features(pygplates PUBLIC cxx_std_11)
+        target_compile_features(gplates-lib PUBLIC cxx_std_11)
+        # target_compile_features(pygplates PUBLIC cxx_std_11)
 endif()
 
 
@@ -465,24 +470,24 @@ endif()
 # Each target has its own pre-compiled "_pch.h" header that currently lists only external headers.
 # Some internal headers that are used a lot but infrequently changed (such as utils) could be added also.
 if (GPLATES_USE_PRECOMPILED_HEADERS)
-	# Pre-compiled headers are supported natively in CMake 3.16 and above.
-	if (COMMAND target_precompile_headers)
-		target_precompile_headers(gplates-lib PRIVATE ${GPlates_SOURCE_DIR}/src/gplates-lib_pch.h)
-		target_precompile_headers(pygplates PRIVATE ${GPlates_SOURCE_DIR}/src/pygplates_pch.h)
-	endif()
+        # Pre-compiled headers are supported natively in CMake 3.16 and above.
+        if (COMMAND target_precompile_headers)
+                target_precompile_headers(gplates-lib PRIVATE ${GPlates_SOURCE_DIR}/src/gplates-lib_pch.h)
+                target_precompile_headers(pygplates PRIVATE ${GPlates_SOURCE_DIR}/src/pygplates_pch.h)
+        endif()
 
-	# Exclude specific source files from including pre-compiled header.
-	#
-	# NOTE: Source file properties are visible only to targets added in the same directory.
-	#       So unfortunately we must set them here (we cannot set them in the source sub-directories).
-	#
-	set(_EXCLUDE_PCH_SOURCE_FILES
-			# HellingerThread.cc redefines BOOST_PYTHON_MAX_ARITY, so Boost headers (eg, pre-compiled header) cannot be included before that...
-			qt-widgets/HellingerThread.cc)
-	foreach(_SOURCE_FILE IN LISTS _EXCLUDE_PCH_SOURCE_FILES)
-		set_source_files_properties(${_SOURCE_FILE} PROPERTIES SKIP_PRECOMPILE_HEADERS ON)
-	endforeach()
-	unset(_EXCLUDE_PCH_SOURCE_FILES)
+        # Exclude specific source files from including pre-compiled header.
+        #
+        # NOTE: Source file properties are visible only to targets added in the same directory.
+        #       So unfortunately we must set them here (we cannot set them in the source sub-directories).
+        #
+        set(_EXCLUDE_PCH_SOURCE_FILES
+                        # HellingerThread.cc redefines BOOST_PYTHON_MAX_ARITY, so Boost headers (eg, pre-compiled header) cannot be included before that...
+                        qt-widgets/HellingerThread.cc)
+        foreach(_SOURCE_FILE IN LISTS _EXCLUDE_PCH_SOURCE_FILES)
+                set_source_files_properties(${_SOURCE_FILE} PROPERTIES SKIP_PRECOMPILE_HEADERS ON)
+        endforeach()
+        unset(_EXCLUDE_PCH_SOURCE_FILES)
 endif()
 
 
@@ -531,13 +536,13 @@ target_compile_definitions(gplates-lib PUBLIC BOOST_ALLOW_DEPRECATED_HEADERS)
 # COMPILE_DEFINITIONS (target property) for MSVC compiler only.
 #
 if (CMAKE_CXX_COMPILER_ID MATCHES MSVC)
-	# Disable Visual Studio deprecation warnings like:
-	# "warning C4996: '_strcpy': This function or variable may be unsafe. Consider using _strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. ".
-	target_compile_definitions(gplates-lib PUBLIC _CRT_SECURE_NO_DEPRECATE)
-	#	target_compile_definitions(pygplates PUBLIC _CRT_SECURE_NO_DEPRECATE)
-	# Disable deprecation warnings about renamed POSIX functions (eg, 'dup' renamed to '_dup' but we want to use 'dup' across all platforms).
-	target_compile_definitions(gplates-lib PUBLIC _CRT_NONSTDC_NO_WARNINGS)
-	#	target_compile_definitions(pygplates PUBLIC _CRT_NONSTDC_NO_WARNINGS)
+        # Disable Visual Studio deprecation warnings like:
+        # "warning C4996: '_strcpy': This function or variable may be unsafe. Consider using _strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. ".
+        target_compile_definitions(gplates-lib PUBLIC _CRT_SECURE_NO_DEPRECATE)
+        #	target_compile_definitions(pygplates PUBLIC _CRT_SECURE_NO_DEPRECATE)
+        # Disable deprecation warnings about renamed POSIX functions (eg, 'dup' renamed to '_dup' but we want to use 'dup' across all platforms).
+        target_compile_definitions(gplates-lib PUBLIC _CRT_NONSTDC_NO_WARNINGS)
+        #	target_compile_definitions(pygplates PUBLIC _CRT_NONSTDC_NO_WARNINGS)
 endif()
 
 #
@@ -548,140 +553,140 @@ endif()
 # COMPILE_OPTIONS (target property) for MSVC compiler only.
 #
 if (CMAKE_CXX_COMPILER_ID MATCHES MSVC)
-	# If we've been asked to do parallel builds in Visual Studio within a project.
-	if (GPLATES_MSVC_PARALLEL_BUILD)
-		target_compile_options(gplates-lib PUBLIC /MP)
+        # If we've been asked to do parallel builds in Visual Studio within a project.
+        if (GPLATES_MSVC_PARALLEL_BUILD)
+                target_compile_options(gplates-lib PUBLIC /MP)
 #	#	target_compile_options(pygplates PUBLIC /MP)
-	endif()
-	# If we've been asked to output a list of header files included by source files.
-	if (GPLATES_MSVC_SHOW_INCLUDES)
-		target_compile_options(gplates-lib PUBLIC /showIncludes)
+        endif()
+        # If we've been asked to output a list of header files included by source files.
+        if (GPLATES_MSVC_SHOW_INCLUDES)
+                target_compile_options(gplates-lib PUBLIC /showIncludes)
 #	#	target_compile_options(pygplates PUBLIC /showIncludes)
-	endif()
-	
-	# Increase pre-compiled header memory allocation limit to avoid compile error.
-	# Error happens on 12-core Windows 8.1 machine (in Visual Studio 2005).
-	target_compile_options(gplates-lib PUBLIC /Zm1000)
+        endif()
+
+        # Increase pre-compiled header memory allocation limit to avoid compile error.
+        # Error happens on 12-core Windows 8.1 machine (in Visual Studio 2005).
+        target_compile_options(gplates-lib PUBLIC /Zm1000)
 #	target_compile_options(pygplates PUBLIC /Zm1000)
-	# Some C++ object files (like "PyPropertyValues.obj") contain a lot of sections (enough to require increasing the limit).
-	target_compile_options(gplates-lib PUBLIC /bigobj)
+        # Some C++ object files (like "PyPropertyValues.obj") contain a lot of sections (enough to require increasing the limit).
+        target_compile_options(gplates-lib PUBLIC /bigobj)
 #	target_compile_options(pygplates PUBLIC /bigobj)
-	
-	#
-	# Warnings
-	#
-	if (GPLATES_PUBLIC_RELEASE)
-		# Disable all warnings when releasing source code to non-developers.
-		target_compile_options(gplates-lib PUBLIC /W0)
+
+        #
+        # Warnings
+        #
+        if (GPLATES_PUBLIC_RELEASE)
+                # Disable all warnings when releasing source code to non-developers.
+                target_compile_options(gplates-lib PUBLIC /W0)
 #	#	target_compile_options(pygplates PUBLIC /W0)
-	else()
-		# Default warning level /W3 seems sufficient (/W4 generates informational warnings which are not necessary to write good code).
-		# But avoid /WX - we don't want to treat all warnings as errors.
-		target_compile_options(gplates-lib PUBLIC /W3)
+        else()
+                # Default warning level /W3 seems sufficient (/W4 generates informational warnings which are not necessary to write good code).
+                # But avoid /WX - we don't want to treat all warnings as errors.
+                target_compile_options(gplates-lib PUBLIC /W3)
 #	#	target_compile_options(pygplates PUBLIC /W3)
-		
-		# Disable warning C4267: 'var' : conversion from 'size_t' to 'type', possible loss of data
-		#
-		# When compiling with Visual Studio in 64-bit mode this warning shows up in a very large number of places.
-		# Mostly because std::vector<Type>::size(), etc, return 'size_t' (which is 64 bits) and we store the result
-		# in an 'unsigned int' loop counter (which is 32 bits). However, in pretty much all cases we do not
-		# need more than 32 bits. We could explicitly tell the compiler this by using 'static_cast<unsigned int>()'
-		# (or use size_t for the loop counter) but it just becomes far too cumbersome to change this everywhere.
-		#
-		# Also this warning is not produced by gcc, even with "-Wall" and "-Wextra" turned on (just checked this with gcc 8.3).
-		# The only way to enable this warning with gcc is with "-Wconversion" (and then use "-W-no-float-conversion" to
-		# disable the extra 'double->float' warnings also created by this).
-		#
-		# So we'll disable it for Visual Studio also.
-		target_compile_options(gplates-lib PUBLIC /wd4267)
+
+                # Disable warning C4267: 'var' : conversion from 'size_t' to 'type', possible loss of data
+                #
+                # When compiling with Visual Studio in 64-bit mode this warning shows up in a very large number of places.
+                # Mostly because std::vector<Type>::size(), etc, return 'size_t' (which is 64 bits) and we store the result
+                # in an 'unsigned int' loop counter (which is 32 bits). However, in pretty much all cases we do not
+                # need more than 32 bits. We could explicitly tell the compiler this by using 'static_cast<unsigned int>()'
+                # (or use size_t for the loop counter) but it just becomes far too cumbersome to change this everywhere.
+                #
+                # Also this warning is not produced by gcc, even with "-Wall" and "-Wextra" turned on (just checked this with gcc 8.3).
+                # The only way to enable this warning with gcc is with "-Wconversion" (and then use "-W-no-float-conversion" to
+                # disable the extra 'double->float' warnings also created by this).
+                #
+                # So we'll disable it for Visual Studio also.
+                target_compile_options(gplates-lib PUBLIC /wd4267)
 #	#	target_compile_options(pygplates PUBLIC /wd4267)
-		# Disable warning C4503: 'identifier' : decorated name length exceeded, name was truncated
-		#
-		# Apparently a hash is applied to truncated names, so program correctness is unaffected.
-		# However debugging and linking are possibly affected.
-		# But this warning no longer occurs in Visual Studio 2017 and later compilers.
-		target_compile_options(gplates-lib PUBLIC /wd4503)
+                # Disable warning C4503: 'identifier' : decorated name length exceeded, name was truncated
+                #
+                # Apparently a hash is applied to truncated names, so program correctness is unaffected.
+                # However debugging and linking are possibly affected.
+                # But this warning no longer occurs in Visual Studio 2017 and later compilers.
+                target_compile_options(gplates-lib PUBLIC /wd4503)
 #	#	target_compile_options(pygplates PUBLIC /wd4503)
-	endif()
+        endif()
 endif()
 
 #
 # COMPILE_OPTIONS (target property) common to GNU and Clang compilers.
 #
 if (CMAKE_CXX_COMPILER_ID MATCHES GNU OR
-	CMAKE_CXX_COMPILER_ID MATCHES Clang)
-	#
-	# Warnings
-	#
-	if (GPLATES_PUBLIC_RELEASE)
-		# Disable all warnings when releasing source code to non-developers.
-		target_compile_options(gplates-lib PUBLIC -w)
+        CMAKE_CXX_COMPILER_ID MATCHES Clang)
+        #
+        # Warnings
+        #
+        if (GPLATES_PUBLIC_RELEASE)
+                # Disable all warnings when releasing source code to non-developers.
+                target_compile_options(gplates-lib PUBLIC -w)
 #	#	target_compile_options(pygplates PUBLIC -w)
-	else()
-		# Compile warnings.
-		set(_WARNINGS
-				-Wall -Wcast-align -Wwrite-strings -Wfloat-equal
-				-Wpointer-arith -Wshadow -Wnon-virtual-dtor
-				-Woverloaded-virtual -Wold-style-cast)
-		target_compile_options(gplates-lib PUBLIC ${_WARNINGS})
+        else()
+                # Compile warnings.
+                set(_WARNINGS
+                                -Wall -Wcast-align -Wwrite-strings -Wfloat-equal
+                                -Wpointer-arith -Wshadow -Wnon-virtual-dtor
+                                -Woverloaded-virtual -Wold-style-cast)
+                target_compile_options(gplates-lib PUBLIC ${_WARNINGS})
 #	#	target_compile_options(pygplates PUBLIC ${_WARNINGS})
-		unset(_WARNINGS)
+                unset(_WARNINGS)
 
-		# Disable some warnings.
-		set(_DISABLE_WARNINGS
-				-Wno-long-long -Wno-unused-parameter -Wno-unused-const-variable
-				# Prefer to keep unused functions available...
-				-Wno-unused-function
-				# Keep unused local typedefs - used by some compilers but not others...
-				-Wno-unused-local-typedefs)
-		target_compile_options(gplates-lib PUBLIC ${_DISABLE_WARNINGS})
+                # Disable some warnings.
+                set(_DISABLE_WARNINGS
+                                -Wno-long-long -Wno-unused-parameter -Wno-unused-const-variable
+                                # Prefer to keep unused functions available...
+                                -Wno-unused-function
+                                # Keep unused local typedefs - used by some compilers but not others...
+                                -Wno-unused-local-typedefs)
+                target_compile_options(gplates-lib PUBLIC ${_DISABLE_WARNINGS})
 #	#	target_compile_options(pygplates PUBLIC ${_DISABLE_WARNINGS})
-		unset(_DISABLE_WARNINGS)
-	endif()
+                unset(_DISABLE_WARNINGS)
+        endif()
 endif()
 
 #
 # COMPILE_OPTIONS (target property) for GNU compiler only.
 #
 if (CMAKE_CXX_COMPILER_ID MATCHES GNU)
-	target_compile_options(gplates-lib PUBLIC -fno-strict-aliasing)
-	# target_compile_options(pygplates PUBLIC -fno-strict-aliasing)
+        target_compile_options(gplates-lib PUBLIC -fno-strict-aliasing)
+        # target_compile_options(pygplates PUBLIC -fno-strict-aliasing)
 
-	#
-	# Warnings
-	#
-	if (NOT GPLATES_PUBLIC_RELEASE)
-		# Disable some warnings.
-		set(_DISABLE_WARNINGS
-				-Wno-clobbered -Wno-maybe-uninitialized)
-		target_compile_options(gplates-lib PUBLIC ${_DISABLE_WARNINGS})
-		# target_compile_options(pygplates PUBLIC ${_DISABLE_WARNINGS})
-		unset(_DISABLE_WARNINGS)
-	endif()
+        #
+        # Warnings
+        #
+        if (NOT GPLATES_PUBLIC_RELEASE)
+                # Disable some warnings.
+                set(_DISABLE_WARNINGS
+                                -Wno-clobbered -Wno-maybe-uninitialized)
+                target_compile_options(gplates-lib PUBLIC ${_DISABLE_WARNINGS})
+                # target_compile_options(pygplates PUBLIC ${_DISABLE_WARNINGS})
+                unset(_DISABLE_WARNINGS)
+        endif()
 endif()
 
 #
 # COMPILE_OPTIONS (target property) for Clang compiler only.
 #
 if (CMAKE_CXX_COMPILER_ID MATCHES Clang)
-	#
-	# Warnings
-	#
-	if (NOT GPLATES_PUBLIC_RELEASE)
-		# Disable some warnings.
-		set(_DISABLE_WARNINGS
-				# Suppress redeclared-class-member warnings from boost (from boost 1.47 at least), related to BOOST_BIMAP...
-				-Wno-redeclared-class-member
-				# Suppress warnings about command-line arguments unused by Clang...
-				-Qunused-arguments -Wno-unknown-warning-option
-				# We don't always use private data members...
-				-Wno-unused-private-field
-				# We have a lot of boost-python 'bp::list' returned as 'bp::object', for example, which we won't std::move...
-				-Wno-return-std-move)
-		target_compile_options(gplates-lib PUBLIC ${_DISABLE_WARNINGS})
-		# target_compile_options(pygplates PUBLIC ${_DISABLE_WARNINGS})
-		unset(_DISABLE_WARNINGS)
-	endif()
+        #
+        # Warnings
+        #
+        if (NOT GPLATES_PUBLIC_RELEASE)
+                # Disable some warnings.
+                set(_DISABLE_WARNINGS
+                                # Suppress redeclared-class-member warnings from boost (from boost 1.47 at least), related to BOOST_BIMAP...
+                                -Wno-redeclared-class-member
+                                # Suppress warnings about command-line arguments unused by Clang...
+                                -Qunused-arguments -Wno-unknown-warning-option
+                                # We don't always use private data members...
+                                -Wno-unused-private-field
+                                # We have a lot of boost-python 'bp::list' returned as 'bp::object', for example, which we won't std::move...
+                                -Wno-return-std-move)
+                target_compile_options(gplates-lib PUBLIC ${_DISABLE_WARNINGS})
+                # target_compile_options(pygplates PUBLIC ${_DISABLE_WARNINGS})
+                unset(_DISABLE_WARNINGS)
+        endif()
 endif()
 
 target_compile_options(gplates-lib PUBLIC -Wno-enum-constexpr-conversion)
@@ -699,36 +704,36 @@ add_link_options("SHELL:-s USE_PTHREADS")
 # LINK_OPTIONS (target_property) for MSVC compiler only.
 #
 if (CMAKE_CXX_COMPILER_ID MATCHES MSVC)
-	# Enable 4Gb of virtual address space instead of 2Gb (default for Windows).
-	# This doubles addressable memory if GPlates is compiled as 32-bit but run on a 64-bit Windows OS.
-	# On a 32-bit Windows OS this won't help because only 2Gb (by default) is accessible
-	# (the 2-4Gb process address range is reserved for the system).
-	#
-	# Note: It seems not needed for pygplates (only the 'python.exe' that load the pygplates DLL).
-	if (CMAKE_VERSION VERSION_LESS 3.13)
-		get_target_property(_LINK_FLAGS gplates-lib LINK_FLAGS)
-		set_target_properties(gplates-lib PROPERTIES LINK_FLAGS "${_LINK_FLAGS} /LARGEADDRESSAWARE")
-		unset(_LINK_FLAGS)
-	else()
-		target_link_options(gplates-lib PRIVATE /LARGEADDRESSAWARE)
-	endif()
+        # Enable 4Gb of virtual address space instead of 2Gb (default for Windows).
+        # This doubles addressable memory if GPlates is compiled as 32-bit but run on a 64-bit Windows OS.
+        # On a 32-bit Windows OS this won't help because only 2Gb (by default) is accessible
+        # (the 2-4Gb process address range is reserved for the system).
+        #
+        # Note: It seems not needed for pygplates (only the 'python.exe' that load the pygplates DLL).
+        if (CMAKE_VERSION VERSION_LESS 3.13)
+                get_target_property(_LINK_FLAGS gplates-lib LINK_FLAGS)
+                set_target_properties(gplates-lib PROPERTIES LINK_FLAGS "${_LINK_FLAGS} /LARGEADDRESSAWARE")
+                unset(_LINK_FLAGS)
+        else()
+                target_link_options(gplates-lib PRIVATE /LARGEADDRESSAWARE)
+        endif()
 endif()
 
 #
 # LINK_OPTIONS (target_property) for Apple compilers only.
 #
 if (APPLE)
-	# 'bind_at_load' causes undefined symbols to be referenced at load/launch.
-	if (CMAKE_VERSION VERSION_LESS 3.13)
-		get_target_property(_LINK_FLAGS gplates-lib LINK_FLAGS)
-		set_target_properties(gplates-lib PROPERTIES LINK_FLAGS "${_LINK_FLAGS} -bind_at_load")
-		# get_target_property(_LINK_FLAGS pygplates LINK_FLAGS)
-		# set_target_properties(pygplates PROPERTIES LINK_FLAGS "${_LINK_FLAGS} -bind_at_load")
-		unset(_LINK_FLAGS)
-	else()
-		target_link_options(gplates-lib PRIVATE LINKER:-bind_at_load)
-		# target_link_options(pygplates PRIVATE LINKER:-bind_at_load)
-	endif()
+        # 'bind_at_load' causes undefined symbols to be referenced at load/launch.
+        if (CMAKE_VERSION VERSION_LESS 3.13)
+                get_target_property(_LINK_FLAGS gplates-lib LINK_FLAGS)
+                set_target_properties(gplates-lib PROPERTIES LINK_FLAGS "${_LINK_FLAGS} -bind_at_load")
+                # get_target_property(_LINK_FLAGS pygplates LINK_FLAGS)
+                # set_target_properties(pygplates PROPERTIES LINK_FLAGS "${_LINK_FLAGS} -bind_at_load")
+                unset(_LINK_FLAGS)
+        else()
+                target_link_options(gplates-lib PRIVATE LINKER:-bind_at_load)
+                # target_link_options(pygplates PRIVATE LINKER:-bind_at_load)
+        endif()
 endif(APPLE)
 
 
@@ -738,47 +743,47 @@ endif(APPLE)
 
 # Set the platform-dependent icon file.
 if (APPLE)
-	set(GPlates_ICON "${GPlates_SOURCE_DIR}/cmake/distribution/gplates_desktop_icon.icns")
+        set(GPlates_ICON "${GPlates_SOURCE_DIR}/cmake/distribution/gplates_desktop_icon.icns")
 elseif (MSVC)
-	set(GPlates_ICON "${GPlates_SOURCE_DIR}/cmake/distribution/gplates_desktop_icon.rc")
+        set(GPlates_ICON "${GPlates_SOURCE_DIR}/cmake/distribution/gplates_desktop_icon.rc")
 endif()
 if (GPlates_ICON)
-	target_sources_util(gplates PRIVATE ${GPlates_ICON})
+        target_sources_util(gplates PRIVATE ${GPlates_ICON})
 endif()
 
 if (APPLE)
-	# Copy icon file to 'Resources' directory inside application bundle.
-	set_source_files_properties(${GPlates_ICON} PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
+        # Copy icon file to 'Resources' directory inside application bundle.
+        set_source_files_properties(${GPlates_ICON} PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
 
-	set_target_properties(gplates PROPERTIES
-			# Tell cmake to build gplates as an application bundle.
-			MACOSX_BUNDLE TRUE
+        set_target_properties(gplates PROPERTIES
+                        # Tell cmake to build gplates as an application bundle.
+                        MACOSX_BUNDLE TRUE
 
-			# Specify our own Info.plist template file.
-			# We add a couple of keys to ensure Qt includes support Mac Retina displays.
-			MACOSX_BUNDLE_INFO_PLIST "${GPlates_SOURCE_DIR}/cmake/distribution/MacOSXBundleInfo.plist.in"
+                        # Specify our own Info.plist template file.
+                        # We add a couple of keys to ensure Qt includes support Mac Retina displays.
+                        MACOSX_BUNDLE_INFO_PLIST "${GPlates_SOURCE_DIR}/cmake/distribution/MacOSXBundleInfo.plist.in"
 
-			MACOSX_BUNDLE_INFO_STRING "${GPLATES_PACKAGE_DESCRIPTION_SUMMARY}"
-			MACOSX_BUNDLE_ICON_FILE gplates_desktop_icon.icns
-			MACOSX_BUNDLE_GUI_IDENTIFIER "${PROJECT_NAME} ${PROJECT_VERSION}-${CMAKE_SYSTEM}"
-			MACOSX_BUNDLE_LONG_VERSION_STRING "${PROJECT_NAME} ${PROJECT_VERSION}"
-			MACOSX_BUNDLE_BUNDLE_NAME "${PROJECT_NAME}"
-			MACOSX_BUNDLE_SHORT_VERSION_STRING "${PROJECT_VERSION}"
-			MACOSX_BUNDLE_BUNDLE_VERSION "${PROJECT_VERSION}"
-			MACOSX_BUNDLE_COPYRIGHT "${GPLATES_COPYRIGHT_STRING}")
+                        MACOSX_BUNDLE_INFO_STRING "${GPLATES_PACKAGE_DESCRIPTION_SUMMARY}"
+                        MACOSX_BUNDLE_ICON_FILE gplates_desktop_icon.icns
+                        MACOSX_BUNDLE_GUI_IDENTIFIER "${PROJECT_NAME} ${PROJECT_VERSION}-${CMAKE_SYSTEM}"
+                        MACOSX_BUNDLE_LONG_VERSION_STRING "${PROJECT_NAME} ${PROJECT_VERSION}"
+                        MACOSX_BUNDLE_BUNDLE_NAME "${PROJECT_NAME}"
+                        MACOSX_BUNDLE_SHORT_VERSION_STRING "${PROJECT_VERSION}"
+                        MACOSX_BUNDLE_BUNDLE_VERSION "${PROJECT_VERSION}"
+                        MACOSX_BUNDLE_COPYRIGHT "${GPLATES_COPYRIGHT_STRING}")
 endif()
 
 if (WIN32)
-	# UPDATE: Don't build GPlates as a GUI application on Windows (with a WinMain entry point).
-	#
-	# If GPlates is built as a GUI application (on Windows) then it detaches from the parent console and
-	# all output to stdout and stderr are lost. We actually capture the stdout/stderr output in GPlates
-	# (eg, generated from dependency libraries) and output them to the GPlates log window and log file,
-	# but there's nothing to capture unless GPlates is built as a console application. In fact a simple
-	# 'print()' statement in the embedded Python interpreter would have triggered an error.
-	if (FALSE)
-		set_target_properties(gplates PROPERTIES WIN32_EXECUTABLE TRUE)  # This also tells Qt6::Core to link in its WinMain.
-	endif()
+        # UPDATE: Don't build GPlates as a GUI application on Windows (with a WinMain entry point).
+        #
+        # If GPlates is built as a GUI application (on Windows) then it detaches from the parent console and
+        # all output to stdout and stderr are lost. We actually capture the stdout/stderr output in GPlates
+        # (eg, generated from dependency libraries) and output them to the GPlates log window and log file,
+        # but there's nothing to capture unless GPlates is built as a console application. In fact a simple
+        # 'print()' statement in the embedded Python interpreter would have triggered an error.
+        if (FALSE)
+                set_target_properties(gplates PROPERTIES WIN32_EXECUTABLE TRUE)  # This also tells Qt6::Core to link in its WinMain.
+        endif()
 endif()
 
 
@@ -802,10 +807,10 @@ target_link_libraries(gplates-lib PUBLIC OpenGL::GL OpenGL::GLU)
 #
 # Note: Prior to CMake 3.11 none of the 'target_*()' commands could set INTERFACE_ properties on imported targets.
 if (CMAKE_VERSION VERSION_LESS 3.11)
-	# Using 'set_property' since 'set_target_property' cannot append.
-	set_property(TARGET OpenGL::GL APPEND PROPERTY INTERFACE_COMPILE_DEFINITIONS GL_SILENCE_DEPRECATION)
+        # Using 'set_property' since 'set_target_property' cannot append.
+        set_property(TARGET OpenGL::GL APPEND PROPERTY INTERFACE_COMPILE_DEFINITIONS GL_SILENCE_DEPRECATION)
 else()
-	target_compile_definitions(OpenGL::GL INTERFACE GL_SILENCE_DEPRECATION)
+        target_compile_definitions(OpenGL::GL INTERFACE GL_SILENCE_DEPRECATION)
 endif()
 
 ##
@@ -864,9 +869,9 @@ target_link_libraries(gplates-lib PUBLIC Qt6::Core Qt6::Gui Qt6::Network Qt6::Op
 # in '${CMAKE_CURRENT_BINARY_DIR}/<target-name>_autogen/include_$<CONFIG>' for multi-configuration generators.
 # So to cover all CMake versions we add all three include paths.
 target_include_directories(gplates-lib PUBLIC
-	${CMAKE_CURRENT_BINARY_DIR}
-	${CMAKE_CURRENT_BINARY_DIR}/gplates-lib_autogen/include
-	${CMAKE_CURRENT_BINARY_DIR}/gplates-lib_autogen/include_$<CONFIG>)
+        ${CMAKE_CURRENT_BINARY_DIR}
+        ${CMAKE_CURRENT_BINARY_DIR}/gplates-lib_autogen/include
+        ${CMAKE_CURRENT_BINARY_DIR}/gplates-lib_autogen/include_$<CONFIG>)
 # # target_include_directories(pygplates PUBLIC
 # 	${CMAKE_CURRENT_BINARY_DIR}
 # 	${CMAKE_CURRENT_BINARY_DIR}/gplates-lib_autogen/include
