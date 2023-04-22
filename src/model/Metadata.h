@@ -315,7 +315,8 @@ namespace GPlatesModel
 				QXmlStreamReader& reader)
 		{
 			set_dc_namespace(reader.readElementText());
-//			GPlatesUtils::XQuery::next_start_element(reader);
+			qDebug(" process_dc_namespace GPlatesUtils::XQuery::next_start_element(reader);");
+			// GPlatesUtils::XQuery::next_start_element(reader);
 		}
 		
 		void
@@ -323,7 +324,8 @@ namespace GPlatesModel
 				QXmlStreamReader& reader)
 		{
 			set_dc_title(reader.readElementText());
-//			GPlatesUtils::XQuery::next_start_element(reader);
+			qDebug("process_dc_title GPlatesUtils::XQuery::next_start_element(reader);");
+			// GPlatesUtils::XQuery::next_start_element(reader);
 		}
 		
 		void
@@ -331,7 +333,8 @@ namespace GPlatesModel
 				QXmlStreamReader& reader)
 		{
 			set_dc_bibliographicCitation(reader.readElementText());
-//			GPlatesUtils::XQuery::next_start_element(reader);
+			qDebug("process_dc_bibliographicCitation GPlatesUtils::XQuery::next_start_element(reader);");
+			// GPlatesUtils::XQuery::next_start_element(reader);
 		}
 		
 		void
@@ -339,7 +342,8 @@ namespace GPlatesModel
 				QXmlStreamReader& reader)
 		{
 			set_dc_description(reader.readElementText());
-//			GPlatesUtils::XQuery::next_start_element(reader);
+			qDebug("process_dc_description GPlatesUtils::XQuery::next_start_element(reader);");
+			// GPlatesUtils::XQuery::next_start_element(reader);
 		}
 		
 		void
@@ -347,7 +351,8 @@ namespace GPlatesModel
 				QXmlStreamReader& reader)
 		{
 			set_dc_contributor(reader.readElementText());
-//			GPlatesUtils::XQuery::next_start_element(reader);
+			qDebug("process_dc_contributor GPlatesUtils::XQuery::next_start_element(reader);");
+			// GPlatesUtils::XQuery::next_start_element(reader);
 		}
 
 		void 

@@ -13,6 +13,7 @@
         "ctime": "cpp",
         "cwchar": "cpp",
         "cwctype": "cpp",
-        "*.ipp": "cpp"
+        "*.ipp": "cpp",
+        "utility": "cpp"
     }
 }
