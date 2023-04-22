@@ -164,22 +164,27 @@ namespace GPlatesUtils
 		T&
 		instance()
 		{
+            qDebug("instance");
 #if defined( GPLATES_SINGLETON_THREADSAFE )
 			QMutexLocker locker;
 #endif
-
+            qDebug("instance");
 			if (!static_instance_ptr())
-			{
+            {
+                qDebug("no instance static_instance_ptr");
 				if (static_singleton_destroyed())
 				{
+	                qDebug("no instance static_singleton_destroyed");
 					static_singleton_destroyed() = false;
 
 					// Singleton has already been destroyed so either throw an exception or
 					// allow a new singleton instance to be created (by doing nothing).
 					LifetimePolicy<T>::on_dead_reference();
 				}
+                qDebug("create_instance");
 
-				static_instance_ptr() = CreationPolicy<T>::create_instance();
+                static_instance_ptr() = CreationPolicy<T>::create_instance();
+                qDebug("create_instance complete");
 
 				// Note that even though the singleton instance is scheduled for destruction
 				// (presumably at exit) it is still possible for derived singleton class 'T'
