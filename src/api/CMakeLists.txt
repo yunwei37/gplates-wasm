@@ -18,41 +18,41 @@ set(srcs
     CoReg.cc
     DeferredApiCall.h
     DeferredApiCallImpl.h
-    # PyApplication.cc
-    # PyColour.cc
-    # PyCoregistrationLayerProxy.cc
-    # PyCoregistrationLayerProxy.h
-    # PyFeature.cc
-    # PyFeature.h
-    # PyFeatureCollection.cc
-    # PyFeatureCollection.h
-    # PyFunctions.cc
-    # Python.cc
-    # PythonExecutionMonitor.cc
-    # PythonExecutionMonitor.h
-    # PythonExecutionThread.cc
-    # PythonExecutionThread.h
-    # PythonInterpreterLocker.cc
-    # PythonInterpreterLocker.h
-    # PythonInterpreterUnlocker.cc
-    # PythonInterpreterUnlocker.h
-    # PythonRunner.cc
-    # PythonRunner.h
-    # PythonUtils.cc
-    # PythonUtils.h
-    # PyTopologyTools.cc
-    # PyViewportWindow.cc
+    PyApplication.cc
+    PyColour.cc
+    PyCoregistrationLayerProxy.cc
+    PyCoregistrationLayerProxy.h
+    PyFeature.cc
+    PyFeature.h
+    PyFeatureCollection.cc
+    PyFeatureCollection.h
+    PyFunctions.cc
+    Python.cc
+    PythonExecutionMonitor.cc
+    PythonExecutionMonitor.h
+    PythonExecutionThread.cc
+    PythonExecutionThread.h
+    PythonInterpreterLocker.cc
+    PythonInterpreterLocker.h
+    PythonInterpreterUnlocker.cc
+    PythonInterpreterUnlocker.h
+    PythonRunner.cc
+    PythonRunner.h
+    PythonUtils.cc
+    PythonUtils.h
+    PyTopologyTools.cc
+    PyViewportWindow.cc
     Sleeper.cc
     Sleeper.h
 )
 
 # Add the source files to the gplates static library.
-# target_sources_util(gplates-lib PRIVATE ${srcs})
+target_sources_util(gplates-lib PRIVATE ${srcs})
 
-# # Add the source files to the pygplates extension module.
-# #
-# # Note this is the external Python library that is not embedded inside GPlates.
-# # All sources files compiled in pygplates need to be position independent and hence
-# # compiled differently (POSITION_INDEPENDENT_CODE target property is set on pygplates).
-# set(pygplates_srcs ${srcs})
-# # target_sources_util(pygplates PRIVATE ${pygplates_srcs})
+# Add the source files to the pygplates extension module.
+#
+# Note this is the external Python library that is not embedded inside GPlates.
+# All sources files compiled in pygplates need to be position independent and hence
+# compiled differently (POSITION_INDEPENDENT_CODE target property is set on pygplates).
+set(pygplates_srcs ${srcs})
+target_sources_util(pygplates PRIVATE ${pygplates_srcs})

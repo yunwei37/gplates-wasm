@@ -35,7 +35,6 @@
 #include <QTransform>
 #include <QVariant>
 #include <QVector>
-#include <QAction>
 
 #include "CanvasToolBarDockWidget.h"
 
@@ -96,7 +95,7 @@ namespace GPlatesQtWidgets
 		 *
 		 * The native look of our vertical QTabWidget on macOS is very different than Linux and Windows.
 		 * The native macOS look wasn't particularly good for a tool palette when using Qt4, and now it looks
-		 * even worse with Qt6. So we use a stylesheet to rectify that (for macOS only).
+		 * even worse with Qt5. So we use a stylesheet to rectify that (for macOS only).
 		 */
 #if defined(Q_OS_MACOS)
 		const QString MACOS_STYLESHEET = QString(
@@ -220,7 +219,7 @@ GPlatesQtWidgets::CanvasToolBarDockWidget::CanvasToolBarDockWidget(
 
 	// The native look of our vertical QTabWidget on macOS is very different than Linux and Windows.
 	// The native macOS look wasn't particularly good for a tool palette when using Qt4, and now it looks
-	// even worse with Qt6. So, for macOS only, we'll style it ourselves using a stylesheet. However we'll
+	// even worse with Qt5. So, for macOS only, we'll style it ourselves using a stylesheet. However we'll
 	// retain the native look for Linux and Windows (as before) since they look similar to each other and also
 	// look good, and this means all widgets across GPlates have a the unified (native) look (for Linux and Windows).
 #if defined(Q_OS_MACOS)

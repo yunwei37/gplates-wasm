@@ -38,7 +38,7 @@
 
 #include "DrawStyleAdapters.h"
 
-// #include "api/PythonInterpreterLocker.h"
+#include "api/PythonInterpreterLocker.h"
 
 #include "app-logic/UserPreferences.h"
 
@@ -210,7 +210,7 @@ namespace GPlatesGui
 		~DrawStyleManager()
 		{
 			// Deleting the styles also destroys Python objects.
-			// GPlatesApi::PythonInterpreterLocker interpreter_locker;
+			GPlatesApi::PythonInterpreterLocker interpreter_locker;
 			
 			save_user_defined_styles();
 			clear_container(d_styles);

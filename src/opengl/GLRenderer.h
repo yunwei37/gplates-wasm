@@ -202,7 +202,7 @@ namespace GPlatesOpenGL
 		 * In this case the QPainter is typically attached to the *same* framebuffer (viewport widget)
 		 * as this GLRenderer so that they both interleave drawing to the same target. In this case the
 		 * QPainter will be using an OpenGL paint engine (ie, QPaintEngine::OpenGL or QPaintEngine::OpenGL2).
-		 * An example is a QGraphicsView that has a QOpenGLWidget viewport - here the method
+		 * An example is a QGraphicsView that has a QGLWidget viewport - here the method
 		 * QGraphicsScene::drawBackground, that you override, passes an active QPainter that uses OpenGL.
 		 * In this case this method assumes the Qt paint engine is in the default OpenGL state
 		 * (aside from the modelview and projection matrices).

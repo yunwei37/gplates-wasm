@@ -24,7 +24,7 @@
  */
 
 #include <QDebug>
-#include <QRegularExpression>
+#include <QRegExp>
 #include <QSet>
 #include <QtGlobal>
 
@@ -134,7 +134,7 @@ GPlatesUtils::ConfigBundle::clear_prefix(
 	QStringList keys_to_remove = GPlatesUtils::match_prefix(d_map.keys(), prefix);
 	
 	// And remove each one.
-    for(QString key: keys_to_remove) {
+	Q_FOREACH(QString key, keys_to_remove) {
 		d_map.remove(key);
 		Q_EMIT key_value_updated(key);
 	}
@@ -204,7 +204,7 @@ GPlatesUtils::ConfigBundle::get_keyvalues_as_map(
 	QStringList keys = subkeys(prefix);
 	KeyValueMap map;
 	
-    for(QString subkey: keys) {
+	Q_FOREACH(QString subkey, keys) {
 		QString fullkey = GPlatesUtils::compose_keyname(prefix, subkey);
 		map.insert(subkey, get_value(fullkey));
 	}
@@ -218,7 +218,7 @@ GPlatesUtils::ConfigBundle::set_keyvalues_from_map(
 		const GPlatesUtils::ConfigBundle::KeyValueMap &keyvalues)
 {
 	clear_prefix(prefix);
-    for(QString subkey: keyvalues.keys()) {
+	Q_FOREACH(QString subkey, keyvalues.keys()) {
 		QString fullkey = GPlatesUtils::compose_keyname(prefix, subkey);
 		set_value(fullkey, keyvalues.value(subkey));
 	}

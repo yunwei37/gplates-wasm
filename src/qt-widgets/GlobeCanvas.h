@@ -40,7 +40,7 @@
 #include <QImage>
 #include <QPaintDevice>
 #include <QPainter>
-#include <QOpenGLFunctions>
+#include <QtOpenGL/qgl.h>
 
 #include "gui/ColourScheme.h"
 #include "gui/Globe.h"
@@ -86,7 +86,7 @@ namespace GPlatesViewOperations
 namespace GPlatesQtWidgets 
 {
 	class GlobeCanvas:
-			public QOpenGLWidget,
+			public QGLWidget,
 			public SceneView
 	{
 		Q_OBJECT
@@ -282,7 +282,7 @@ namespace GPlatesQtWidgets
 			/*bool should_emit_external_signal = true */);
 
 		/**
-		 * Returns the OpenGL context associated with this QOpenGLWidget.
+		 * Returns the OpenGL context associated with this QGLWidget.
 		 *
 		 * This also enables it to be shared across widgets.
 		 */
@@ -320,13 +320,13 @@ namespace GPlatesQtWidgets
 
 	protected:
 		/**
-		 * This is a virtual override of the function in QOpenGLWidget.
+		 * This is a virtual override of the function in QGLWidget.
 		 *
-		 * To quote the QOpenGLWidget documentation:
+		 * To quote the QGLWidget documentation:
 		 *
 		 * This virtual function is called once before the first call to paintGL() or
 		 * resizeGL(), and then once whenever the widget has been assigned a new
-		 * QOpenGLContext.  Reimplement it in a subclass.
+		 * QGLContext.  Reimplement it in a subclass.
 		 *
 		 * This function should set up any required OpenGL context rendering flags,
 		 * defining display lists, etc.
@@ -339,9 +339,9 @@ namespace GPlatesQtWidgets
 		initializeGL();
 
 		/**
-		 * This is a virtual override of the function in QOpenGLWidget.
+		 * This is a virtual override of the function in QGLWidget.
 		 *
-		 * To quote the QOpenGLWidget documentation:
+		 * To quote the QGLWidget documentation:
 		 *
 		 * This virtual function is called whenever the widget has been resized.  The new
 		 * size is passed in width and height.  Reimplement it in a subclass.
@@ -356,9 +356,9 @@ namespace GPlatesQtWidgets
 				int height);
 
 		/**
-		 * This is a virtual override of the function in QOpenGLWidget.
+		 * This is a virtual override of the function in QGLWidget.
 		 *
-		 * To quote the QOpenGLWidget documentation:
+		 * To quote the QGLWidget documentation:
 		 *
 		 * This virtual function is called whenever the widget needs to be painted.
 		 * Reimplement it in a subclass.
@@ -536,7 +536,7 @@ namespace GPlatesQtWidgets
 
 	private:
 		/**
-		 * Utility class to make the QOpenGLWidget's OpenGL context current in @a GlobeCanvas constructor.
+		 * Utility class to make the QGLWidget's OpenGL context current in @a GlobeCanvas constructor.
 		 *
 		 * This is so we can do OpenGL stuff in the @a GlobeCanvas constructor when normally
 		 * we'd have to wait until 'initializeGL()'.
@@ -561,7 +561,7 @@ namespace GPlatesQtWidgets
 
 		//! Mirrors an OpenGL context and provides a central place to manage low-level OpenGL objects.
 		GPlatesOpenGL::GLContext::non_null_ptr_type d_gl_context;
-		//! Makes the QOpenGLWidget's OpenGL context current in @a GlobeCanvas constructor so it can call OpenGL.
+		//! Makes the QGLWidget's OpenGL context current in @a GlobeCanvas constructor so it can call OpenGL.
 		MakeGLContextCurrent d_make_context_current;
 
 		/**

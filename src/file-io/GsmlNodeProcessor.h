@@ -34,7 +34,7 @@
 #include <QBuffer>
 #include <QFile>
 #include <QString>
-//#include <QXmlQuery>
+#include <QXmlQuery>
 
 #include "ArbitraryNodeProcessor.h"
 
@@ -65,7 +65,7 @@ namespace GPlatesFileIO
 		}
 
 	protected:
-//		QXmlQuery d_query;
+		QXmlQuery d_query;
 		QString d_query_str;
 		Handler d_handler;
 	};

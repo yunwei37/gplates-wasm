@@ -37,7 +37,7 @@
 #include <QString>
 #include <QVariant>
 
-//#include "api/PythonInterpreterLocker.h"
+#include "api/PythonInterpreterLocker.h"
 
 
 namespace GPlatesGui
@@ -179,128 +179,128 @@ namespace GPlatesGui
 	};
 
 
-//	namespace bp = boost::python ;
+	namespace bp = boost::python ;
 	
-//	class PythonCfgItem : public ConfigurationItem
-//	{
-//	public:
-//		PythonCfgItem()
-//		{ }
+	class PythonCfgItem : public ConfigurationItem
+	{
+	public:
+		PythonCfgItem()
+		{ }
 		
-//		const boost::python::object
-//		py_object() const
-//		{
-//			return d_py_obj;
-//		}
+		const boost::python::object
+		py_object() const
+		{
+			return d_py_obj;
+		}
 
-//		QString
-//		get_value() const
-//		{
-//			return d_value.toString();
-//		}
+		QString
+		get_value() const
+		{
+			return d_value.toString();
+		}
 
-//		virtual
-//		PythonCfgItem*
-//		clone() const = 0;
+		virtual
+		PythonCfgItem*
+		clone() const = 0;
 		
-//		virtual
-//		~PythonCfgItem();
+		virtual
+		~PythonCfgItem();
 
-//	protected:
-//		boost::python::object d_py_obj;
-//	};
+	protected:
+		boost::python::object d_py_obj;
+	};
 
 	
-//	class PythonCfgColor : public PythonCfgItem
-//	{
-//	public:
-//		PythonCfgColor(
-//				const QString& cfg_name,
-//				const QString& color_name) ;
+	class PythonCfgColor : public PythonCfgItem
+	{
+	public:
+		PythonCfgColor(
+				const QString& cfg_name,
+				const QString& color_name) ;
 
-//		PythonCfgColor(
-//				const QString& cfg_name,
-//				const Colour& color) ;
+		PythonCfgColor(
+				const QString& cfg_name,
+				const Colour& color) ;
 
-//		void
-//		set_value(
-//				const QVariant& value);
+		void
+		set_value(
+				const QVariant& value);
 
-//		PythonCfgColor*
-//		clone() const
-//		{
-//			return new PythonCfgColor(*this);
-//		}
-//	};
+		PythonCfgColor*
+		clone() const 
+		{
+			return new PythonCfgColor(*this);
+		}
+	};
 
 
-//	class PythonCfgPalette : public PythonCfgItem
-//	{
-//	public:
-//		PythonCfgPalette(
-//				const QString& cfg_name,
-//				const QString& palette_name);
+	class PythonCfgPalette : public PythonCfgItem
+	{
+	public:
+		PythonCfgPalette(
+				const QString& cfg_name,
+				const QString& palette_name);
 		
-//		PythonCfgPalette(
-//				const QString& cfg_name,
-//				const Palette* palette) ;
+		PythonCfgPalette(
+				const QString& cfg_name,
+				const Palette* palette) ;
 
-//		~PythonCfgPalette();
+		~PythonCfgPalette();
 
-//		void
-//		set_value(
-//				const QVariant& value);
+		void
+		set_value(
+				const QVariant& value);
 
-//		PythonCfgPalette*
-//		clone() const
-//		{
-//			return new PythonCfgPalette(*this);
-//		}
+		PythonCfgPalette*
+		clone() const 
+		{
+			return new PythonCfgPalette(*this);
+		}
 
-//		/**
-//		 * Returns true if palette corresponds to one of the builtin types, otherwise should be a CPT filename.
-//		 */
-//		bool
-//		is_built_in_palette() const;
+		/**
+		 * Returns true if palette corresponds to one of the builtin types, otherwise should be a CPT filename.
+		 */
+		bool
+		is_built_in_palette() const;
 
-//	private:
-//		boost::shared_ptr<Palette> d_palette;
-//	};
+	private:
+		boost::shared_ptr<Palette> d_palette;
+	};
 
 
-//	class PythonCfgString : public PythonCfgItem
-//	{
-//	public:
-//		PythonCfgString(
-//				const QString& cfg_name,
-//				const QString& str_value)
-//			{
-//				set_value(str_value);
-//			}
+	class PythonCfgString : public PythonCfgItem
+	{
+	public:
+		PythonCfgString(
+				const QString& cfg_name,
+				const QString& str_value) 
+			{
+				set_value(str_value);
+			}
 
-//		~PythonCfgString(){}
+		~PythonCfgString(){}
 
-//		void
-//		set_value(
-//				const QVariant& new_value)
-//		{
-//			d_value = new_value;
-//			QString new_str = d_value.toString().trimmed();
+		void
+		set_value(
+				const QVariant& new_value)
+		{
+			d_value = new_value;
+			QString new_str = d_value.toString().trimmed();
 
-//			// Previous Python object could get destroyed.
-//			GPlatesApi::PythonInterpreterLocker interpreter_locker;
+			// Previous Python object could get destroyed.
+			GPlatesApi::PythonInterpreterLocker interpreter_locker;
 
-//			d_py_obj = bp::object(new_str.toStdString());
-//		}
+			d_py_obj = bp::object(new_str.toStdString());
+		}
 
-//		PythonCfgString*
-//		clone() const
-//		{
-//			return new PythonCfgString(*this);
-//		}
+		PythonCfgString*
+		clone() const 
+		{
+			return new PythonCfgString(*this);
+		}
 
-//	private:
-//	};
+	private:
+	};
 }
 #endif    //GPLATES_GUI_PYTHON_CONFIGURATION_H
 

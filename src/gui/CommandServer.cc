@@ -214,10 +214,10 @@ boost::shared_ptr<GPlatesGui::Command>
 GPlatesGui::CommandServer::create_command(
 		const QString& request)
 {
-    QXmlStreamReader reader(request);
-    if(reader.readNextStartElement() && (QString("Request") == reader.name()))//assume the first element is "Request"
-    {
-        if(reader.readNextStartElement() && reader.name() == QString("Name"))
+	QXmlStreamReader reader(request);
+	if(reader.readNextStartElement() && ("Request" == reader.name()))//assume the first element is "Request" 
+	{
+		if(reader.readNextStartElement() && reader.name() == "Name")
 		{
 			QString name = reader.readElementText().simplified();
 			if(d_command_map.find(name) != d_command_map.end())
@@ -597,8 +597,8 @@ boost::shared_ptr<GPlatesGui::Command>
 GPlatesGui::CommandServer::create_get_begin_time_command(
 		QXmlStreamReader& reader)
 {
-    QString id;
-    if(reader.readNextStartElement() && (QString("FeatureID") == reader.name()))
+	QString id;
+	if(reader.readNextStartElement() && ("FeatureID" == reader.name()))
 	{
 		id = reader.readElementText().simplified();
 	}

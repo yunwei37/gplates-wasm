@@ -7,7 +7,7 @@
  *
  * See Josuttis99, Chapter 8 "STL Function Objects", and in particular, section
  * 8.2.4 "User-Defined Function Objects for Function Adapters", for more
- * information about @a std::__unary_function.
+ * information about @a std::unary_function.
  *
  * Most recent change:
  *   $Date: 2008-06-27 05:19:34 -0700 (Fri, 27 Jun 2008) $
@@ -33,7 +33,7 @@
 #ifndef GPLATES_MATHS_POLYLINEEQUIVALENCEPREDICATES_H
 #define GPLATES_MATHS_POLYLINEEQUIVALENCEPREDICATES_H
 
-#include <algorithm>  /* __unary_function */
+#include <algorithm>  /* unary_function */
 #include "PolylineOnSphere.h"
 
 namespace GPlatesMaths {
@@ -48,7 +48,7 @@ namespace GPlatesMaths {
 	 * of the polyline instance!
 	 */
 	class PolylineIsDirectedEquivalentRef:
-	 public std::__unary_function< PolylineOnSphere, bool > {
+	 public std::unary_function< PolylineOnSphere, bool > {
 
 	 public:
 
@@ -82,7 +82,7 @@ namespace GPlatesMaths {
 	 * of the polyline instance!
 	 */
 	class PolylineIsUndirectedEquivalentRef:
-	 public std::__unary_function< PolylineOnSphere, bool > {
+	 public std::unary_function< PolylineOnSphere, bool > {
 
 	 public:
 

@@ -524,7 +524,7 @@ namespace
 #endif
 
 		QSet<QString> good_filenames;
-        for(QString filename: unique_filenames)
+		Q_FOREACH(QString filename, unique_filenames)
 		{
 			if (QFile::exists(filename))
 			{

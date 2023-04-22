@@ -27,7 +27,7 @@
 #include <QMimeData>
 #include <QByteArray>
 #include <QDataStream>
-#include <QIODevice>
+
 #include "VisualLayersListModel.h"
 
 #include "VisualLayersProxy.h"

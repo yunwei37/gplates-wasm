@@ -25,7 +25,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include <QRegularExpression>
+#include <QRegExp>
 #include <QBrush>
 
 #include "app-logic/LogModel.h"	// for LogEntry types and the special Roles we define.
@@ -105,7 +105,7 @@ GPlatesGui::LogFilterModel::set_filter(
 	d_show_critical_messages = show_critical_messages;
 
 	// Sets the base class's filterRegExp() property as though
-	// QRegularExpression("text", Qt::CaseInsensitive, QRegularExpression::FixedString) were called.
+	// QRegExp("text", Qt::CaseInsensitive, QRegExp::FixedString) were called.
 	setFilterFixedString(filter_text);
 }
 
@@ -155,10 +155,10 @@ bool
 GPlatesGui::LogFilterModel::matches_text_filter(
 		const QString &row_text) const
 {
-    if (filterRegularExpression().pattern().isEmpty()) {
+	if (filterRegExp().isEmpty()) {
 		return true;
 	} else {
-        return row_text.contains(filterRegularExpression());
+		return row_text.contains(filterRegExp());
 	}
 }
 

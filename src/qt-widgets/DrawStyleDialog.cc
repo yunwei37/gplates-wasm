@@ -33,7 +33,7 @@
 #include "ReconstructionViewWidget.h"
 #include "DrawStyleDialog.h"
 
-// #include "PythonArgumentWidget.h"
+#include "PythonArgumentWidget.h"
 #include "QtWidgetUtils.h"
 #include "VisualLayersComboBox.h"
 #include "app-logic/PropertyExtractors.h"
@@ -891,18 +891,18 @@ GPlatesQtWidgets::DrawStyleDialog::build_config_panel(const GPlatesGui::Configur
 		
 	BOOST_FOREACH(const QString& item_name, cfg.all_cfg_item_names())
 	{
-//		const GPlatesGui::PythonCfgItem* item = dynamic_cast<const GPlatesGui::PythonCfgItem*>(cfg.get(item_name));
-//		QWidget* cfg_widget = create_cfg_widget(const_cast<GPlatesGui::PythonCfgItem*>(item));
-//		if(cfg_widget)
-//		{
-//			QObject::connect(
-//					cfg_widget,
-//					SIGNAL(configuration_changed()),
-//					this,
-//					SLOT(handle_configuration_changed()));
-//			formLayout->addRow(item_name + ":" , cfg_widget);
-//			d_cfg_widgets.push_back(cfg_widget);//save the pointer so that we can disconnect them later.
-//		}
+		const GPlatesGui::PythonCfgItem* item = dynamic_cast<const GPlatesGui::PythonCfgItem*>(cfg.get(item_name));
+		QWidget* cfg_widget = create_cfg_widget(const_cast<GPlatesGui::PythonCfgItem*>(item));
+		if(cfg_widget)
+		{
+			QObject::connect(
+					cfg_widget,
+					SIGNAL(configuration_changed()),
+					this,
+					SLOT(handle_configuration_changed()));
+			formLayout->addRow(item_name + ":" , cfg_widget);
+			d_cfg_widgets.push_back(cfg_widget);//save the pointer so that we can disconnect them later.
+		}
 	}
 }
 

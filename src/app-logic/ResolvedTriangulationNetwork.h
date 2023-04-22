@@ -845,7 +845,7 @@ namespace GPlatesAppLogic
 			 */
 			template <typename DataType>
 			class UncachedDataAccess :
-					public std::__unary_function<
+					public std::unary_function<
 							delaunay_point_2_type,
 							std::pair<DataType, bool> >
 			{
@@ -890,7 +890,7 @@ namespace GPlatesAppLogic
 			 */
 			template <class VertexHandleToDataMapType>
 			class CachedDataAccess :
-					public std::__unary_function<
+					public std::unary_function<
 							delaunay_point_2_type,
 							std::pair<typename VertexHandleToDataMapType::mapped_type, bool> >
 			{

@@ -28,7 +28,7 @@
 #ifndef GPLATES_MATHS_GREATCIRCLEARC_H
 #define GPLATES_MATHS_GREATCIRCLEARC_H
 
-#include <functional>  /* std::__unary_function */
+#include <functional>  /* std::unary_function */
 #include <utility>  /* std::pair */
 #include <vector>
 #include <boost/cstdint.hpp>
@@ -416,10 +416,10 @@ namespace GPlatesMaths
 	 *
 	 * See Josuttis99, Chapter 8 "STL Function Objects", and in particular section 8.2.4
 	 * "User-Defined Function Objects for Function Adapters", for more information about
-	 * @a std::__unary_function.
+	 * @a std::unary_function.
 	 */
-    struct ArcHasIndeterminateRotationAxis:
-                                             public std::function<bool(GreatCircleArc)>
+	struct ArcHasIndeterminateRotationAxis:
+			public std::unary_function<GreatCircleArc, bool>
 	{
 		ArcHasIndeterminateRotationAxis()
 		{  }

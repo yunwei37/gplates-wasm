@@ -26,7 +26,7 @@
 #include <boost/foreach.hpp>
 #include <QApplication>
 #include <QColorDialog>
-#include <QScreen>
+#include <QDesktopWidget>
 #include <QDragEnterEvent>
 #include <QDropEvent>
 #include <QFileInfo>

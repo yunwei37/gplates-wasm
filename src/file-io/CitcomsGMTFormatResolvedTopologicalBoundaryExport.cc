@@ -844,9 +844,8 @@ GPlatesFileIO::CitcomsGMTFormatResolvedTopologicalBoundaryExport::export_resolve
 	// a certain format.
 	//
 
-    // Used to write in GMT format.
-    QFileInfo outputFileInfo(output_file);
-    GMTFeatureExporter geom_exporter(outputFileInfo);
+	// Used to write in GMT format.
+	GMTFeatureExporter geom_exporter(output_file);
 
 	// Iterate through the resolved topologies and write to output.
 	for (const ResolvedTopology &resolved_topology : resolved_topologies)
@@ -903,9 +902,8 @@ GPlatesFileIO::CitcomsGMTFormatResolvedTopologicalBoundaryExport::export_sub_seg
 	// a certain format.
 	//
 
-    // Used to write in GMT format.
-    QFileInfo outputFileInfo(output_file);
-    GMTFeatureExporter geom_exporter(outputFileInfo);
+	// Used to write in GMT format.
+	GMTFeatureExporter geom_exporter(output_file);
 
 	// Iterate through the subsegment groups and write them out.
 	for (const SubSegmentGroup &sub_segment_group : sub_segments)

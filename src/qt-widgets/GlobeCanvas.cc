@@ -322,14 +322,14 @@ GPlatesQtWidgets::GlobeCanvas::GlobeCanvas(
 		GPlatesPresentation::ViewState &view_state,
 		GPlatesGui::ColourScheme::non_null_ptr_type colour_scheme,
 		QWidget *parent_):
-	QOpenGLWidget(
-//			GPlatesOpenGL::GLContext::get_qgl_format_to_create_context_with(),
+	QGLWidget(
+			GPlatesOpenGL::GLContext::get_qgl_format_to_create_context_with(),
 			parent_),
 	d_view_state(view_state),
 	d_gl_context(
 			GPlatesOpenGL::GLContext::create(
 					boost::shared_ptr<GPlatesOpenGL::GLContext::Impl>(
-							new GPlatesOpenGL::GLContextImpl::QOpenGLWidgetImpl(*this)))),
+							new GPlatesOpenGL::GLContextImpl::QGLWidgetImpl(*this)))),
 	d_make_context_current(*d_gl_context),
 	d_initialisedGL(false),
 	d_gl_visual_layers(
@@ -365,20 +365,20 @@ GPlatesQtWidgets::GlobeCanvas::GlobeCanvas(
 		GPlatesGui::Globe &existing_globe_,
 		GPlatesGui::ColourScheme::non_null_ptr_type colour_scheme_,
 		QWidget *parent_) :
-	QOpenGLWidget(
-//			GPlatesOpenGL::GLContext::get_qgl_format_to_create_context_with(),
+	QGLWidget(
+			GPlatesOpenGL::GLContext::get_qgl_format_to_create_context_with(),
 			parent_,
 			// Share texture objects, vertex buffer objects, etc...
 			existing_globe_canvas),
 	d_view_state(view_state_),
-    d_gl_context(context()->shareContext() != nullptr // Mirror the sharing of OpenGL context state (if sharing)...
+	d_gl_context(isSharing() // Mirror the sharing of OpenGL context state (if sharing)...
 			? GPlatesOpenGL::GLContext::create(
 					boost::shared_ptr<GPlatesOpenGL::GLContext::Impl>(
-							new GPlatesOpenGL::GLContextImpl::QOpenGLWidgetImpl(*this)),
+							new GPlatesOpenGL::GLContextImpl::QGLWidgetImpl(*this)),
 					*existing_globe_canvas->d_gl_context)
 			: GPlatesOpenGL::GLContext::create(
 					boost::shared_ptr<GPlatesOpenGL::GLContext::Impl>(
-							new GPlatesOpenGL::GLContextImpl::QOpenGLWidgetImpl(*this)))),
+							new GPlatesOpenGL::GLContextImpl::QGLWidgetImpl(*this)))),
 	d_make_context_current(*d_gl_context),
 	d_initialisedGL(false),
 	d_gl_visual_layers(
@@ -402,9 +402,9 @@ GPlatesQtWidgets::GlobeCanvas::GlobeCanvas(
 	d_velocity_legend_overlay(
 			new GPlatesGui::VelocityLegendOverlay())
 {
-    if (!context()->shareContext() != nullptr)
+	if (!isSharing())
 	{
-		qWarning() << "Unable to share an OpenGL context between QOpenGLWidgets.";
+		qWarning() << "Unable to share an OpenGL context between QGLWidgets.";
 	}
 
 	init();
@@ -421,13 +421,13 @@ GPlatesQtWidgets::GlobeCanvas::init()
 	// Since we're using a QPainter inside 'paintEvent()' or more specifically 'paintGL()'
 	// (which is called from 'paintEvent()') then we turn off automatic swapping of the OpenGL
 	// front and back buffers after each 'paintGL()' call. This is because QPainter::end(),
-	// or QPainter's destructor, automatically calls QOpenGLWidget::swapBuffers() if auto buffer swap
-	// is enabled - and this results in two calls to QOpenGLWidget::swapBuffers() - one from QPainter
+	// or QPainter's destructor, automatically calls QGLWidget::swapBuffers() if auto buffer swap
+	// is enabled - and this results in two calls to QGLWidget::swapBuffers() - one from QPainter
 	// and one from 'paintEvent()'. So we disable auto buffer swapping and explicitly call it ourself.
 	//
 	// Also we don't want to swap buffers when we're just rendering to a QImage (using OpenGL)
-	// and not rendering to the QOpenGLWidget itself, otherwise the widget will have the wrong content.
-//	setAutoBufferSwap(false);
+	// and not rendering to the QGLWidget itself, otherwise the widget will have the wrong content.
+	setAutoBufferSwap(false);
 
 	// Don't fill the background - we already clear the background using OpenGL in 'render_scene()' anyway.
 	//
@@ -631,9 +631,9 @@ void
 GPlatesQtWidgets::GlobeCanvas::initializeGL_if_necessary() 
 {
 	// Return early if we've already initialised OpenGL.
-	// This is now necessary because it's not only 'paintEvent()' and other QOpenGLWidget methods
+	// This is now necessary because it's not only 'paintEvent()' and other QGLWidget methods
 	// that call our 'initializeGL()' method - we also now it when a client wants to render the
-	// scene to an image (instead of render/update the QOpenGLWidget itself).
+	// scene to an image (instead of render/update the QGLWidget itself).
 	if (d_initialisedGL)
 	{
 		return;
@@ -656,7 +656,7 @@ GPlatesQtWidgets::GlobeCanvas::initializeGL()
 	// Create the off-screen context that's used when rendering OpenGL outside the paint event.
 	d_gl_off_screen_context =
 			GPlatesOpenGL::GLOffScreenContext::create(
-					GPlatesOpenGL::GLOffScreenContext::QOpenGLWidgetContext(this, d_gl_context));
+					GPlatesOpenGL::GLOffScreenContext::QGLWidgetContext(this, d_gl_context));
 
 	//
 	// Set up the initial model-view transform.
@@ -766,7 +766,7 @@ GPlatesQtWidgets::GlobeCanvas::render_to_qimage(
 	// main/default framebuffer (which is intimately tied to the windowing system).
 	// Using an off-screen render target appears to avoid this issue.
 	//
-	// Set the off-screen render target to the size of the QOpenGLWidget main framebuffer.
+	// Set the off-screen render target to the size of the QGLWidget main framebuffer.
 	// This is because we use QPainter to render text and it sets itself up using the dimensions
 	// of the main framebuffer - if we change the dimensions then the text is rendered incorrectly.
 	//
@@ -986,7 +986,7 @@ GPlatesQtWidgets::GlobeCanvas::render_opengl_feedback_to_paint_device(
 	// main/default framebuffer (which is intimately tied to the windowing system).
 	// Using an off-screen render target appears to avoid this issue.
 	//
-	// Set the off-screen render target to the size of the QOpenGLWidget main framebuffer.
+	// Set the off-screen render target to the size of the QGLWidget main framebuffer.
 	// This is because we use QPainter to render text and it sets itself up using the dimensions
 	// of the main framebuffer - actually that doesn't apply when painting to a device other than
 	// the main framebuffer (in our case the feedback paint device, eg, SVG) - but we'll leave the
@@ -1069,8 +1069,8 @@ GPlatesQtWidgets::GlobeCanvas::render_scene(
 	//
 	// Note that we clear the colour to (0,0,0,1) and not (0,0,0,0) because we want any parts of
 	// the scene, that are not rendered, to have *opaque* alpha (=1). This appears to be needed on
-	// Mac with Qt6 (alpha=0 is fine on Qt6 Windows/Ubuntu, and on Qt4 for all platforms). Perhaps because
-	// QOpenGLWidget rendering (on Qt6 Mac) is first done to a framebuffer object which is then blended into the
+	// Mac with Qt5 (alpha=0 is fine on Qt5 Windows/Ubuntu, and on Qt4 for all platforms). Perhaps because
+	// QGLWidget rendering (on Qt5 Mac) is first done to a framebuffer object which is then blended into the
 	// window framebuffer (where having a source alpha of zero would result in the black background not showing).
 	// Or, more likely, maybe a framebuffer object is used on all platforms but the window framebuffer is
 	// white on Mac but already black on Windows/Ubuntu.
@@ -1143,11 +1143,11 @@ GPlatesQtWidgets::GlobeCanvas::paintEvent(
 // This paintEvent() method should be enabled, and the paintGL method disabled, when we wish to use Qt overpainting
 //  ( http://doc.trolltech.com/4.3/opengl-overpainting.html )
 
-	QOpenGLWidget::paintEvent(paint_event);
+	QGLWidget::paintEvent(paint_event);
 
 	// Explicitly swap the OpenGL front and back buffers.
 	// Note that we have already disabled auto buffer swapping because otherwise both the QPainter
-	// in 'paintGL()' and 'QOpenGLWidget::paintEvent()' will call 'QOpenGLWidget::swapBuffers()'
+	// in 'paintGL()' and 'QGLWidget::paintEvent()' will call 'QGLWidget::swapBuffers()'
 	// essentially canceling each other out (or causing flickering).
 	if (doubleBuffer() && !autoBufferSwap())
 	{
@@ -1316,7 +1316,7 @@ GPlatesQtWidgets::GlobeCanvas::keyPressEvent(
 			break;
 
 		default:
-			QOpenGLWidget::keyPressEvent(key_event);
+			QGLWidget::keyPressEvent(key_event);
 	}
 }
 

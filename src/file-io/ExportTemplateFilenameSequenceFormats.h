@@ -31,7 +31,7 @@
 #include <boost/optional.hpp>
 #include <QDateTime>
 #include <QString>
-#include <QRegularExpression>
+#include <QRegExp>
 
 #include "global/AssertionFailureException.h"
 #include "model/types.h"
@@ -425,12 +425,12 @@ namespace GPlatesFileIO
 
 			//! Returns regular expression used to match reconstruction time printf-style.
 			static
-			const QRegularExpression &
+			const QRegExp &
 			get_full_regular_expression();
 
 			//! Returns regular expression used to match reconstruction time printf-style integer.
 			static
-			const QRegularExpression &
+			const QRegExp &
 			get_integer_regular_expression();
 		};
 

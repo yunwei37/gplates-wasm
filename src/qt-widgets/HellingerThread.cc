@@ -34,12 +34,11 @@
 #include "global/python.h"
 
 #include <QDebug>
-#include <QFile>
 #include <QThread>
 
 
-//#include "api/PythonInterpreterLocker.h"
-//#include "api/PythonUtils.h"
+#include "api/PythonInterpreterLocker.h"
+#include "api/PythonUtils.h"
 
 #include "global/CompilerWarnings.h"
 
@@ -78,142 +77,139 @@ void
 GPlatesQtWidgets::HellingerThread::calculate_two_way_fit()
 {
 	QString temp_file = d_path_for_temporary_files + d_temp_pick_file;
-    qWarning("not support python\n");
-//	GPlatesApi::PythonInterpreterLocker interpreter_locker;
 
-//	// Retrieve the main module.
-//	boost::python::object main = boost::python::import("__main__");
+	GPlatesApi::PythonInterpreterLocker interpreter_locker;
 
-//	boost::python::object global(main.attr("__dict__"));
-//	boost::python::object ignored = boost::python::exec_file(d_python_file.toStdString().c_str(),global, global);
-//	boost::python::object pythonCode = global["calculate_pole_2_way"];
+	// Retrieve the main module.
+	boost::python::object main = boost::python::import("__main__");
 
-//	HellingerPoleEstimate estimate_12 = d_hellinger_model_ptr->get_initial_guess_12();
+	boost::python::object global(main.attr("__dict__"));
+	boost::python::object ignored = boost::python::exec_file(d_python_file.toStdString().c_str(),global, global);
+	boost::python::object pythonCode = global["calculate_pole_2_way"];
 
-//	boost::python::extract<std::string>(pythonCode(
-//											temp_file.toStdString().c_str(),
-//											estimate_12.d_lat,
-//											estimate_12.d_lon,
-//											estimate_12.d_angle,
-//											d_hellinger_model_ptr->get_search_radius(),
-//											d_hellinger_model_ptr->get_confidence_level(),
-//											d_hellinger_model_ptr->get_grid_iterations(),
-//											d_hellinger_model_ptr->get_grid_search(),
-//											d_hellinger_model_ptr->get_use_amoeba_tolerance(),
-//											d_hellinger_model_ptr->get_amoeba_tolerance(),
-//											d_hellinger_model_ptr->get_use_amoeba_iterations(),
-//											d_hellinger_model_ptr->get_amoeba_iterations(),
-//											d_output_path.toStdString().c_str(),
-//											d_results_filename_root.toStdString().c_str(),
-//											d_path_for_temporary_files.toStdString().c_str()));
+	HellingerPoleEstimate estimate_12 = d_hellinger_model_ptr->get_initial_guess_12();
+
+	boost::python::extract<std::string>(pythonCode(
+											temp_file.toStdString().c_str(),
+											estimate_12.d_lat,
+											estimate_12.d_lon,
+											estimate_12.d_angle,
+											d_hellinger_model_ptr->get_search_radius(),
+											d_hellinger_model_ptr->get_confidence_level(),
+											d_hellinger_model_ptr->get_grid_iterations(),
+											d_hellinger_model_ptr->get_grid_search(),
+											d_hellinger_model_ptr->get_use_amoeba_tolerance(),
+											d_hellinger_model_ptr->get_amoeba_tolerance(),
+											d_hellinger_model_ptr->get_use_amoeba_iterations(),
+											d_hellinger_model_ptr->get_amoeba_iterations(),
+											d_output_path.toStdString().c_str(),
+											d_results_filename_root.toStdString().c_str(),
+											d_path_for_temporary_files.toStdString().c_str()));
 }
 
 void
 GPlatesQtWidgets::HellingerThread::calculate_three_way_fit()
 {
 	QString pick_file = d_path_for_temporary_files + d_temp_pick_file;
-    qWarning("not support python\n");
 
-//	GPlatesApi::PythonInterpreterLocker interpreter_locker;
+	GPlatesApi::PythonInterpreterLocker interpreter_locker;
 
-//	// Retrieve the main module.
-//	boost::python::object main = boost::python::import("__main__");
+	// Retrieve the main module.
+	boost::python::object main = boost::python::import("__main__");
 
-//	boost::python::object global(main.attr("__dict__"));
-//	boost::python::object ignored = boost::python::exec_file(d_python_file.toStdString().c_str(),global, global);
-//	boost::python::object pythonCode = global["calculate_pole_3_way"];
+	boost::python::object global(main.attr("__dict__"));
+	boost::python::object ignored = boost::python::exec_file(d_python_file.toStdString().c_str(),global, global);
+	boost::python::object pythonCode = global["calculate_pole_3_way"];
 
-//	HellingerPoleEstimate estimate_12 = d_hellinger_model_ptr->get_initial_guess_12();
-//	HellingerPoleEstimate estimate_13 = d_hellinger_model_ptr->get_initial_guess_13();
+	HellingerPoleEstimate estimate_12 = d_hellinger_model_ptr->get_initial_guess_12();
+	HellingerPoleEstimate estimate_13 = d_hellinger_model_ptr->get_initial_guess_13();
 
-//	boost::python::extract<std::string>(pythonCode(
-//											pick_file.toStdString().c_str(),
-//											estimate_12.d_lat,
-//											estimate_12.d_lon,
-//											estimate_12.d_angle,
-//											estimate_13.d_lat,
-//											estimate_13.d_lon,
-//											estimate_13.d_angle,
-//											d_hellinger_model_ptr->get_search_radius(),
-//											d_hellinger_model_ptr->get_confidence_level(),
-//											d_hellinger_model_ptr->get_use_amoeba_tolerance(),
-//											d_hellinger_model_ptr->get_amoeba_tolerance(),
-//											d_hellinger_model_ptr->get_use_amoeba_iterations(),
-//											d_hellinger_model_ptr->get_amoeba_iterations(),
-//											d_output_path.toStdString(),
-//											d_results_filename_root.toStdString(),
-//											d_path_for_temporary_files.toStdString()));
+	boost::python::extract<std::string>(pythonCode(
+											pick_file.toStdString().c_str(),
+											estimate_12.d_lat,
+											estimate_12.d_lon,
+											estimate_12.d_angle,
+											estimate_13.d_lat,
+											estimate_13.d_lon,
+											estimate_13.d_angle,
+											d_hellinger_model_ptr->get_search_radius(),
+											d_hellinger_model_ptr->get_confidence_level(),
+											d_hellinger_model_ptr->get_use_amoeba_tolerance(),
+											d_hellinger_model_ptr->get_amoeba_tolerance(),
+											d_hellinger_model_ptr->get_use_amoeba_iterations(),
+											d_hellinger_model_ptr->get_amoeba_iterations(),
+											d_output_path.toStdString(),
+											d_results_filename_root.toStdString(),
+											d_path_for_temporary_files.toStdString()));
 }
 
 void
 GPlatesQtWidgets::HellingerThread::calculate_two_way_uncertainties()
 {
 	QString pick_file = d_path_for_temporary_files + d_temp_pick_file;
-    qWarning("not support python\n");
 
-//	GPlatesApi::PythonInterpreterLocker interpreter_locker;
+	GPlatesApi::PythonInterpreterLocker interpreter_locker;
 
-//	boost::python::object main = boost::python::import("__main__");
-//	boost::python::object global(main.attr("__dict__"));
-//	boost::python::object ignored = boost::python::exec_file(d_python_file.toStdString().c_str(),global, global);
-//	boost::python::object pythonCode = global["calculate_uncertainty_2_way"];
+	boost::python::object main = boost::python::import("__main__");
+	boost::python::object global(main.attr("__dict__"));
+	boost::python::object ignored = boost::python::exec_file(d_python_file.toStdString().c_str(),global, global);
+	boost::python::object pythonCode = global["calculate_uncertainty_2_way"];
 
-//	HellingerPoleEstimate estimate_12 = d_hellinger_model_ptr->get_initial_guess_12();
+	HellingerPoleEstimate estimate_12 = d_hellinger_model_ptr->get_initial_guess_12();
 
-//	boost::python::extract<std::string>(pythonCode(
-//											pick_file.toStdString().c_str(),
-//											estimate_12.d_lat,
-//											estimate_12.d_lon,
-//											estimate_12.d_angle,
-//											d_hellinger_model_ptr->get_search_radius(),
-//											d_hellinger_model_ptr->get_confidence_level(),
-//											d_hellinger_model_ptr->get_grid_iterations(),
-//											d_hellinger_model_ptr->get_grid_search(),
-//											d_hellinger_model_ptr->get_use_amoeba_tolerance(),
-//											d_hellinger_model_ptr->get_amoeba_tolerance(),
-//											d_hellinger_model_ptr->get_use_amoeba_iterations(),
-//											d_hellinger_model_ptr->get_amoeba_iterations(),
-//											d_output_path.toStdString(),
-//											d_results_filename_root.toStdString(),
-//											d_path_for_temporary_files.toStdString()));
+	boost::python::extract<std::string>(pythonCode(
+											pick_file.toStdString().c_str(),
+											estimate_12.d_lat,
+											estimate_12.d_lon,
+											estimate_12.d_angle,
+											d_hellinger_model_ptr->get_search_radius(),
+											d_hellinger_model_ptr->get_confidence_level(),
+											d_hellinger_model_ptr->get_grid_iterations(),
+											d_hellinger_model_ptr->get_grid_search(),
+											d_hellinger_model_ptr->get_use_amoeba_tolerance(),
+											d_hellinger_model_ptr->get_amoeba_tolerance(),
+											d_hellinger_model_ptr->get_use_amoeba_iterations(),
+											d_hellinger_model_ptr->get_amoeba_iterations(),
+											d_output_path.toStdString(),
+											d_results_filename_root.toStdString(),
+											d_path_for_temporary_files.toStdString()));
 }
 
 void
 GPlatesQtWidgets::HellingerThread::calculate_three_way_uncertainties()
 {
 	qDebug() << "calculate_three_way_uncertainties";
-    qWarning("not support python\n");
 	QString pick_file = d_path_for_temporary_files + d_temp_pick_file;
 
-//	GPlatesApi::PythonInterpreterLocker interpreter_locker;
+	GPlatesApi::PythonInterpreterLocker interpreter_locker;
 
-//	// Retrieve the main module.
-//	boost::python::object main = boost::python::import("__main__");
+	// Retrieve the main module.
+	boost::python::object main = boost::python::import("__main__");
 
-//	boost::python::object global(main.attr("__dict__"));
-//	boost::python::object ignored = boost::python::exec_file(d_python_file.toStdString().c_str(),global, global);
-//	boost::python::object pythonCode = global["calculate_uncertainty_3_way"];
+	boost::python::object global(main.attr("__dict__"));
+	boost::python::object ignored = boost::python::exec_file(d_python_file.toStdString().c_str(),global, global);
+	boost::python::object pythonCode = global["calculate_uncertainty_3_way"];
 
-//	HellingerPoleEstimate estimate_12 = d_hellinger_model_ptr->get_initial_guess_12();
-//	HellingerPoleEstimate estimate_13 = d_hellinger_model_ptr->get_initial_guess_13();
+	HellingerPoleEstimate estimate_12 = d_hellinger_model_ptr->get_initial_guess_12();
+	HellingerPoleEstimate estimate_13 = d_hellinger_model_ptr->get_initial_guess_13();
 
-//	boost::python::extract<std::string>(pythonCode(
-//											pick_file.toStdString().c_str(),
-//											estimate_12.d_lat,
-//											estimate_12.d_lon,
-//											estimate_12.d_angle,
-//											estimate_13.d_lat,
-//											estimate_13.d_lon,
-//											estimate_13.d_angle,
-//											d_hellinger_model_ptr->get_search_radius(),
-//											d_hellinger_model_ptr->get_confidence_level(),
-//											d_hellinger_model_ptr->get_use_amoeba_tolerance(),
-//											d_hellinger_model_ptr->get_amoeba_tolerance(),
-//											d_hellinger_model_ptr->get_use_amoeba_iterations(),
-//											d_hellinger_model_ptr->get_amoeba_iterations(),
-//											d_output_path.toStdString(),
-//											d_results_filename_root.toStdString(),
-//											d_path_for_temporary_files.toStdString()));
+	boost::python::extract<std::string>(pythonCode(
+											pick_file.toStdString().c_str(),
+											estimate_12.d_lat,
+											estimate_12.d_lon,
+											estimate_12.d_angle,
+											estimate_13.d_lat,
+											estimate_13.d_lon,
+											estimate_13.d_angle,
+											d_hellinger_model_ptr->get_search_radius(),
+											d_hellinger_model_ptr->get_confidence_level(),
+											d_hellinger_model_ptr->get_use_amoeba_tolerance(),
+											d_hellinger_model_ptr->get_amoeba_tolerance(),
+											d_hellinger_model_ptr->get_use_amoeba_iterations(),
+											d_hellinger_model_ptr->get_amoeba_iterations(),
+											d_output_path.toStdString(),
+											d_results_filename_root.toStdString(),
+											d_path_for_temporary_files.toStdString()));
 }
 
 void
@@ -263,12 +259,12 @@ GPlatesQtWidgets::HellingerThread::run()
 			return;
 		}
 	}
-//	catch(const boost::python::error_already_set &)
-//	{
-//		qWarning() << "Python error: " << GPlatesApi::PythonUtils::get_error_message();
-//		d_thread_failed = true;
+	catch(const boost::python::error_already_set &)
+	{
+		qWarning() << "Python error: " << GPlatesApi::PythonUtils::get_error_message();
+		d_thread_failed = true;
 
-//	}
+	}
 	catch(const std::exception &e)
 	{
 		qWarning() << "Caught exception " << e.what() << "from HellingerThread::run()";

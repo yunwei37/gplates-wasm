@@ -24,7 +24,7 @@
  */
 
 #include <QLocale>
-#include <QRegularExpression>
+#include <QRegExp>
 #include <QTextStream>
 
 #include "DeformationExport.h"
@@ -150,8 +150,8 @@ GPlatesFileIO::DeformationExport::export_deformation_to_gpml_format(
 	if (export_single_output_file)
 	{
 		GpmlFormatDeformationExport::export_deformation(
-                grouped_deformed_feature_geometry_seq,
-            QFileInfo(filename),
+				grouped_deformed_feature_geometry_seq,
+				filename,
 				model,
 				include_principal_strain,
 				include_dilatation_strain,
@@ -183,8 +183,8 @@ GPlatesFileIO::DeformationExport::export_deformation_to_gpml_format(
 			++grouped_features_iter, ++output_filename_iter)
 		{
 			GpmlFormatDeformationExport::export_deformation(
-                    grouped_features_iter->feature_geometry_groups,
-                QFileInfo(*output_filename_iter),
+					grouped_features_iter->feature_geometry_groups,
+					*output_filename_iter,
 					model,
 					include_principal_strain,
 					include_dilatation_strain,
@@ -233,8 +233,8 @@ GPlatesFileIO::DeformationExport::export_deformation_to_gmt_format(
 	if (export_single_output_file)
 	{
 		GMTFormatDeformationExport::export_deformation(
-                grouped_deformed_feature_geometry_seq,
-            QFileInfo(filename),
+				grouped_deformed_feature_geometry_seq,
+				filename,
 				referenced_files,
 				reconstruction_anchor_plate_id,
 				reconstruction_time,
@@ -269,8 +269,8 @@ GPlatesFileIO::DeformationExport::export_deformation_to_gmt_format(
 			++grouped_features_iter, ++output_filename_iter)
 		{
 			GMTFormatDeformationExport::export_deformation(
-                    grouped_features_iter->feature_geometry_groups,
-                QFileInfo(*output_filename_iter),
+					grouped_features_iter->feature_geometry_groups,
+					*output_filename_iter,
 					referenced_files,
 					reconstruction_anchor_plate_id,
 					reconstruction_time,

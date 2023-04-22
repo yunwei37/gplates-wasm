@@ -128,9 +128,9 @@ namespace GPlatesScribe
 		 * This ensures that writing to an XML file using one locale and reading it using another
 		 * will not cause stream synchronization problems.
 		 *
-		 * Update: In Qt6, QString::toInt(), QString::toDouble(), etc, now only use the "C" locale to
+		 * Update: In Qt5, QString::toInt(), QString::toDouble(), etc, now only use the "C" locale to
 		 *         interpret the string, whereas Qt4 first used the system locale and fell back to "C" locale.
-		 *         Even though we're now using Qt6 we'll stick to directly using the "C" locale to be sure.
+		 *         Even though we're now using Qt5 we'll stick to directly using the "C" locale to be sure.
 		 */
 		static const QLocale C_LOCALE;
 

@@ -26,33 +26,33 @@
 #include <QByteArray>
 #include <QBuffer>
 #include <QDebug>
-//#include <QXmlQuery>
-//#include <QXmlSerializer>
+#include <QXmlQuery>
+#include <QXmlSerializer>
 
 #include <boost/foreach.hpp>
 
 #include "GsmlNodeProcessor.h"
-// #include "utils/XQueryUtils.h"
+#include "utils/XQueryUtils.h"
 
 void
 GPlatesFileIO::GsmlNodeProcessor::execute(
 		QBuffer& xml_data)
 {
-//	std::vector<QByteArray> results =
-//		GPlatesUtils::XQuery::evaluate_query(
-//				xml_data,
-//				d_query_str);
+	std::vector<QByteArray> results = 
+		GPlatesUtils::XQuery::evaluate_query(
+				xml_data,
+				d_query_str);
 
-//	BOOST_FOREACH(QByteArray& data, results)
-//	{
-//		QBuffer buffer(&data);
-//		buffer.open(QIODevice::ReadWrite | QIODevice::Text);
-//		if(!buffer.isOpen())
-//		{
-//			qWarning() << "Cannot open buffer for output.";
-//			continue;
-//		}
-//		d_handler(buffer);
-//		buffer.close();
-//	}
+	BOOST_FOREACH(QByteArray& data, results)
+	{
+		QBuffer buffer(&data);
+		buffer.open(QIODevice::ReadWrite | QIODevice::Text);
+		if(!buffer.isOpen())
+		{
+			qWarning() << "Cannot open buffer for output.";
+			continue;
+		}
+		d_handler(buffer);
+		buffer.close();
+	}
 }

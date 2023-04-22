@@ -120,7 +120,7 @@ GPlatesGui::SessionMenu::regenerate_menu()
 		// There are no sessions to restore; display one disabled "label" menu
 		// item indicating the fact, and hide all other menu items.
 		d_no_sessions_action->setVisible(true);
-        for(QAction *act: d_recent_session_actions) {
+		Q_FOREACH(QAction *act, d_recent_session_actions) {
 			act->setVisible(false);
 		}
 

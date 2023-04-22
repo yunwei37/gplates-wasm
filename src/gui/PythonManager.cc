@@ -79,7 +79,7 @@ GPlatesGui::PythonManager::PythonManager() :
 	d_show_python_init_fail_dlg = user_pref.get_value("python/show_python_init_fail_dialog").toBool();
 	d_python_home = user_pref.get_value("python/python_home").toString();
 
-	QRegularExpression rx("^\\d.\\d"); // Match d.d
+	QRegExp rx("^\\d.\\d"); // Match d.d
 	rx.indexIn(QString(Py_GetVersion()));
 	d_python_version = rx.cap();
 	//qDebug() << "Python Version: " << d_python_version;
@@ -262,7 +262,7 @@ GPlatesGui::PythonManager::init_python_interpreter(
 	the main() function of the program. This is used by Py_GetPath() and some other functions 
 	below to find the Python run-time libraries relative to the interpreter executable. 
 	The default value is 'python'. The argument should point to a zero-terminated character 
-	string in static storage whose contents will not change for the duration of the programï¿½s 
+	string in static storage whose contents will not change for the duration of the program’s 
 	execution. No code in the Python interpreter will change the contents of this storage.
 	*/
 #if PY_MAJOR_VERSION >= 3

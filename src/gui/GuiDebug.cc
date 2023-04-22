@@ -131,7 +131,7 @@ namespace
 			QString prefix = "* ",
 			QString indentation = "")
 	{
-        for(QAction *action: menu->actions()) {
+		Q_FOREACH(QAction *action, menu->actions()) {
 			QString shortcut = "";
 			if ( ! action->shortcut().isEmpty()) {
 				shortcut = QString(" [ %1 ]").arg(action->shortcut().toString());
@@ -310,7 +310,7 @@ GPlatesGui::GuiDebug::debug_system_paths()
 	qDebug() << "QStandardPaths::PicturesLocation ==" << QStandardPaths::writableLocation(QStandardPaths::PicturesLocation);
 	qDebug() << "QStandardPaths::TempLocation ==" << QStandardPaths::writableLocation(QStandardPaths::TempLocation);
 	qDebug() << "QStandardPaths::HomeLocation ==" << QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
-    qDebug() << "QStandardPaths::DataLocation ==" << QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+	qDebug() << "QStandardPaths::DataLocation ==" << QStandardPaths::writableLocation(QStandardPaths::DataLocation);
 	qDebug() << "QStandardPaths::CacheLocation ==" << QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
 }
 

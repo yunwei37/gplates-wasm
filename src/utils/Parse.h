@@ -97,7 +97,7 @@ namespace GPlatesUtils
 			bool ok;
 
 			// Parse using the QString.
-			// Locale-based "base" encoding does not make sense, and was removed in Qt6.
+			// Locale-based "base" encoding does not make sense, and was removed in Qt5.
 			T result = (s.*fn)(&ok, base);
 			if (ok)
 			{
@@ -147,7 +147,7 @@ namespace GPlatesUtils
 		operator()(
 				const QString &s) const
 		{
-			// Locale-based "base" encoding does not make sense, and was removed in Qt6.
+			// Locale-based "base" encoding does not make sense, and was removed in Qt5.
 			// Use QLocale for base 10, otherwise use QString.
 			if (d_base == 10)
 			{
@@ -178,7 +178,7 @@ namespace GPlatesUtils
 		operator()(
 				const QString &s) const
 		{
-			// Locale-based "base" encoding does not make sense, and was removed in Qt6.
+			// Locale-based "base" encoding does not make sense, and was removed in Qt5.
 			// Use QLocale for base 10, otherwise use QString.
 			if (d_base == 10)
 			{

@@ -36,7 +36,7 @@
 
 #include <QPalette>
 #include <QtCore/QVariant>
-#include <QAction>
+#include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QHBoxLayout>
@@ -78,17 +78,17 @@ namespace GPlatesQtWidgets
 	public:
 		explicit
 		PythonArgDefaultWidget(
-//				GPlatesGui::PythonCfgItem* cfg_item,
+				GPlatesGui::PythonCfgItem* cfg_item,
 				QWidget *parent_ = NULL) :
 		PythonArgumentWidget(parent_),
-//		d_cfg_item(cfg_item)
+		d_cfg_item(cfg_item)
 		{
 			QHBoxLayout*hboxLayout = new QHBoxLayout(this);
 			hboxLayout->setSpacing(2);
 			hboxLayout->setContentsMargins(1, 1, 1, 1);
 			QLineEdit* line_edit = new QLineEdit(this);
 			hboxLayout->addWidget(line_edit);
-//			line_edit->setText(d_cfg_item->get_value());
+			line_edit->setText(d_cfg_item->get_value());
 
 			QObject::connect(
 					line_edit,
@@ -120,7 +120,7 @@ namespace GPlatesQtWidgets
 
 
 	private:
-//		GPlatesGui::PythonCfgItem*  d_cfg_item;
+		GPlatesGui::PythonCfgItem*  d_cfg_item;
 	};
 
 	class PythonArgColorWidget : 
@@ -131,10 +131,10 @@ namespace GPlatesQtWidgets
 	public:
 		explicit
 		PythonArgColorWidget(
-//				GPlatesGui::PythonCfgItem* cfg_item,
+				GPlatesGui::PythonCfgItem* cfg_item,
 				QWidget *parent_ = NULL) :
 			PythonArgumentWidget(parent_),
-//			d_cfg_item(cfg_item)
+			d_cfg_item(cfg_item)
 		{
 			hboxLayout = new QHBoxLayout(this);
 			hboxLayout->setSpacing(2);
@@ -192,7 +192,7 @@ namespace GPlatesQtWidgets
 		QHBoxLayout* hboxLayout;
 		QLineEdit *color_name;
 		QPushButton* choose_button;
-//		GPlatesGui::PythonCfgItem*  d_cfg_item;
+		GPlatesGui::PythonCfgItem*  d_cfg_item;
 	};
 
 	class PythonArgPaletteWidget : 
@@ -203,18 +203,18 @@ namespace GPlatesQtWidgets
 	public:
 		explicit
 		PythonArgPaletteWidget(
-//				GPlatesGui::PythonCfgItem* cfg_item,
+				GPlatesGui::PythonCfgItem* cfg_item,
 				QWidget *parent_ = NULL) :
 			PythonArgumentWidget(parent_),
-//			d_cfg_item(cfg_item)
+			d_cfg_item(cfg_item)
 		{
 			hboxLayout = new QHBoxLayout(this);
 			hboxLayout->setSpacing(2);
 			hboxLayout->setContentsMargins(1, 1, 1, 1);
 			hboxLayout->setObjectName(QString::fromUtf8("hboxLayout"));
 			
-            line_edit = new QLineEdit(this);
-            choose_button = new QPushButton("Open...",this);
+			line_edit = new QLineEdit(this);
+			choose_button = new QPushButton("Open...",this);
 			reload_button = new QPushButton("Reload",this);
 
 			line_edit->setText(d_cfg_item->get_value());

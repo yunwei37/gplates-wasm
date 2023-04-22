@@ -44,16 +44,16 @@ GPlatesModel::FeatureCollectionMetadata::FeatureCollectionMetadata(
 	elem->write_to(writer);
 	QXmlStreamReader reader(buf);
 
-//	GPlatesUtils::XQuery::next_start_element(reader);
+	GPlatesUtils::XQuery::next_start_element(reader);
 
-//	if(qualified_name(reader) != "gpml:metadata")
-//	{
-//		qWarning() << QString("Expecting xml element gpml:metadata, but got %1.").arg(
-//			qualified_name(reader));
-//		return;
-//	}
+	if(qualified_name(reader) != "gpml:metadata")
+	{
+		qWarning() << QString("Expecting xml element gpml:metadata, but got %1.").arg(
+			qualified_name(reader));
+		return;
+	}
 	
-//	GPlatesUtils::XQuery::next_start_element(reader);
+	GPlatesUtils::XQuery::next_start_element(reader);
 	if(qualified_name(reader) != "gpml:GpmlMetadata")
 	{
 		qWarning() << QString("Expecting xml element gpml:GpmlMetadata, but got %1.").arg(
@@ -70,28 +70,27 @@ void
 GPlatesModel::FeatureCollectionMetadata::process_complex_xml_element(
 		QXmlStreamReader& reader)
 {
-    qWarning("unsupport process_complex_xml_element");
-//	GPlatesUtils::XQuery::next_start_element(reader);
-//	while(!reader.atEnd())
-//	{
-//		if(!reader.isStartElement())
-//		{
-//			GPlatesUtils::XQuery::next_start_element(reader);
-//			continue;
-//		}
-//		//qWarning() << "processing " << qualified_name(reader);
-//		XMLFuncMap::iterator it = d_xml_func_map.find(qualified_name(reader));
-//		if(it != d_xml_func_map.end())
-//		{
-//			(this->*(it->second))(reader);
-//		}
-//		else
-//		{
-//			qWarning() <<  "Unrecognised element: " <<  qualified_name(reader);
-//			GPlatesUtils::XQuery::next_start_element(reader);
-//			continue;
-//		}
-//	}
+	GPlatesUtils::XQuery::next_start_element(reader);
+	while(!reader.atEnd())
+	{
+		if(!reader.isStartElement())
+		{
+			GPlatesUtils::XQuery::next_start_element(reader);
+			continue;
+		}
+		//qWarning() << "processing " << qualified_name(reader);
+		XMLFuncMap::iterator it = d_xml_func_map.find(qualified_name(reader));
+		if(it != d_xml_func_map.end())
+		{
+			(this->*(it->second))(reader);
+		}
+		else
+		{
+			qWarning() <<  "Unrecognised element: " <<  qualified_name(reader);
+			GPlatesUtils::XQuery::next_start_element(reader);
+			continue;
+		}
+	}
 }
 
 
@@ -100,8 +99,7 @@ GPlatesModel::FeatureCollectionMetadata::process_dc_creator(
 		QXmlStreamReader& reader)
 {
 	set_dc_creator(reader.readElementText());
-    qWarning("unsupport process_dc_creator");
-    //GPlatesUtils::XQuery::next_start_element(reader);
+	GPlatesUtils::XQuery::next_start_element(reader);
 }
 
 
@@ -109,12 +107,11 @@ void
 GPlatesModel::FeatureCollectionMetadata::process_dc_rights(
 		QXmlStreamReader& reader)
 {
-    qWarning("unsupport process_dc_rights");
-//	GPlatesUtils::XQuery::next_start_element(reader);
-//	set_data("dc:license", reader, &FeatureCollectionMetadata::set_dc_rights_license);
-//	GPlatesUtils::XQuery::next_start_element(reader);
-//	set_data("dc:url", reader, &FeatureCollectionMetadata::set_dc_rights_url);
-//	while(!GPlatesUtils::XQuery::next_start_element(reader)){}
+	GPlatesUtils::XQuery::next_start_element(reader);
+	set_data("dc:license", reader, &FeatureCollectionMetadata::set_dc_rights_license);
+	GPlatesUtils::XQuery::next_start_element(reader);
+	set_data("dc:url", reader, &FeatureCollectionMetadata::set_dc_rights_url);
+	while(!GPlatesUtils::XQuery::next_start_element(reader)){}
 }
 
 
@@ -122,14 +119,13 @@ void
 GPlatesModel::FeatureCollectionMetadata::process_dc_date(
 		QXmlStreamReader& reader)
 {
-    qWarning("unsupport process_dc_date");
-//	GPlatesUtils::XQuery::next_start_element(reader);
-//	set_data("dc:created", reader, &FeatureCollectionMetadata::set_dc_date_created);
-//	while(GPlatesUtils::XQuery::next_start_element(reader) && (qualified_name(reader) == "dc:modified"))
-//	{
-//		set_data("dc:modified", reader, &FeatureCollectionMetadata::set_dc_date_modified);
-//	}
-//	while(!GPlatesUtils::XQuery::next_start_element(reader)){}
+	GPlatesUtils::XQuery::next_start_element(reader);
+	set_data("dc:created", reader, &FeatureCollectionMetadata::set_dc_date_created);
+	while(GPlatesUtils::XQuery::next_start_element(reader) && (qualified_name(reader) == "dc:modified"))
+	{
+		set_data("dc:modified", reader, &FeatureCollectionMetadata::set_dc_date_modified);
+	}
+	while(!GPlatesUtils::XQuery::next_start_element(reader)){}
 }
 
 
@@ -137,9 +133,8 @@ void
 GPlatesModel::FeatureCollectionMetadata::process_gpml_meta(
 		QXmlStreamReader& reader)
 {
-    qWarning("unsupport process_gpml_meta");
 	QXmlStreamAttributes attr =	reader.attributes(); 
-	QStringView name =attr.value("name");
+	QStringRef name =attr.value("name");
 	
 	FuncMap::iterator it = d_meta_func.find(name.toString());
 	if(it != d_meta_func.end())
@@ -150,7 +145,7 @@ GPlatesModel::FeatureCollectionMetadata::process_gpml_meta(
 	{
 		qWarning() << "Unexpected attribute name: " << name.toString();
 	}
-//	GPlatesUtils::XQuery::next_start_element(reader);
+	GPlatesUtils::XQuery::next_start_element(reader);
 }
 
 
@@ -158,10 +153,9 @@ void
 GPlatesModel::FeatureCollectionMetadata::process_dc_coverage(
 		QXmlStreamReader& reader)
 {
-     qWarning("unsupport process_dc_coverage");
-//	GPlatesUtils::XQuery::next_start_element(reader);
-//	set_data("dc:temporal", reader, &FeatureCollectionMetadata::set_dc_coverage_temporal);
-//	while(!GPlatesUtils::XQuery::next_start_element(reader)){}
+	GPlatesUtils::XQuery::next_start_element(reader);
+	set_data("dc:temporal", reader, &FeatureCollectionMetadata::set_dc_coverage_temporal);
+	while(!GPlatesUtils::XQuery::next_start_element(reader)){}
 }
 
 
@@ -453,9 +447,9 @@ GPlatesModel::create_metadata_from_gpml(
 		QXmlStreamWriter writer(&buf);
 		(*child.second)->write_to(writer);
 		QXmlStreamReader reader(buf);
-//		GPlatesUtils::XQuery::next_start_element(reader);
+		GPlatesUtils::XQuery::next_start_element(reader);
 		QXmlStreamAttributes attr =	reader.attributes(); 
-		QStringView name =attr.value("name");
+		QStringRef name =attr.value("name");
 		QString value = reader.readElementText();
 		metadata.push_back(
 				boost::shared_ptr<Metadata>(

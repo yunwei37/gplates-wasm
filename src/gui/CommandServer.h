@@ -35,7 +35,7 @@
 #include <QTcpSocket>
 #include <QTimer>
 #include <QStringList>
-#include <QRegularExpression>
+#include <QRegExp>
 #include <QXmlStreamReader>
 
 #include "app-logic/ApplicationState.h"

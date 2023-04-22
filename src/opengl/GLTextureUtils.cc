@@ -31,7 +31,7 @@
  */
 #include <GL/glew.h>
 #include <opengl/OpenGL.h>
-#include <QOpenGLWidget>
+#include <QGLWidget>
 #include <QImage>
 #include <QMatrix>
 
