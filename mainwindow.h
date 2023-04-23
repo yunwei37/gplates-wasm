@@ -6,6 +6,7 @@
 
 #include <QMainWindow>
 #include <QLabel>
+#include <QPlainTextEdit>
 #include <cassert>
 #include <streambuf>
 QT_BEGIN_NAMESPACE
@@ -19,9 +20,9 @@ QT_END_NAMESPACE
 class OutputLabelStreamBuffer : public std::streambuf
 {
 public:
-    void setOutputLabel(QLabel *label)
+    void setOutputLabel(QPlainTextEdit *label)
     {
-        outputLabel = label;
+        outputTextEdit = label;
     }
     int overflow(int c) override
     {
@@ -30,9 +31,9 @@ public:
             char ch = static_cast<char>(c);
             if (ch == '\n')
             {
-                assert(outputLabel);
+                assert(outputTextEdit);
                 buffer.push_back(ch);
-                outputLabel->setText(buffer);
+                outputTextEdit->setPlainText(buffer);
             }
             else
             {
@@ -43,7 +44,7 @@ public:
     }
 
 private:
-    QLabel *outputLabel;
+    QPlainTextEdit  *outputTextEdit;
     QString buffer;
 };
 
@@ -56,6 +57,7 @@ public:
     MainWindow();
 
     void loadFile(const QString &fileName);
+    void loadFileContent(const QString &fileName, const QString &fileContent);
 
 protected:
     void closeEvent(QCloseEvent *event) override;
@@ -84,7 +86,7 @@ private:
     QString strippedName(const QString &fullFileName);
 
     QPlainTextEdit *textEdit;
-    QLabel *outputLabel;
+    QPlainTextEdit  *outputTextEdit;
     QString curFile;
     OutputLabelStreamBuffer outputStreamBuffer;
 };

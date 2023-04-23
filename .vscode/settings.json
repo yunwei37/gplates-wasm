@@ -16,6 +16,8 @@
         "*.ipp": "cpp",
         "utility": "cpp",
         "iostream": "cpp",
-        "streambuf": "cpp"
+        "streambuf": "cpp",
+        "fstream": "cpp",
+        "xlocmes": "cpp"
     }
 }

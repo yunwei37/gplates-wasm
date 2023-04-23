@@ -15,7 +15,7 @@
 //! [1]
 MainWindow::MainWindow()
     : textEdit(new QPlainTextEdit),
-      outputLabel(new QLabel)
+      outputTextEdit(new QPlainTextEdit)
 //! [1] //! [2]
 {
     // Initialize Qt resources that exist in the static 'qt-resources' library.
@@ -38,21 +38,23 @@ MainWindow::MainWindow()
     QWidget *centralWidget = new QWidget(this);
     setCentralWidget(centralWidget);
 
-    // 使用 QHBoxLayout 将 textEdit 和 outputLabel 水平排列
+    // 使用 QHBoxLayout 将 textEdit 和 outputTextEdit 水平排列
     QHBoxLayout *layout = new QHBoxLayout;
     layout->addWidget(textEdit);
-    layout->addWidget(outputLabel);
+    layout->addWidget(outputTextEdit);
 
-    // 设置比例因子，使 outputLabel 的宽度占三分之二
+    // 设置比例因子，使 outputTextEdit 的宽度占三分之二
     layout->setStretch(0, 1); // textEdit 的比例因子设为 1
-    layout->setStretch(1, 2); // outputLabel 的比例因子设为 2
+    layout->setStretch(1, 2); // outputTextEdit 的比例因子设为 2
 
     centralWidget->setLayout(layout);
 
-    // 为 outputLabel 添加边框样式
-    outputLabel->setStyleSheet("border: 1px solid black;");
-    outputLabel->setAlignment(Qt::AlignTop | Qt::AlignLeft);
-    outputStreamBuffer.setOutputLabel(outputLabel);
+    // 设置 outputTextEdit 为只读模式
+    outputTextEdit->setReadOnly(true);
+
+    // 为 outputTextEdit 添加边框间隔
+    outputTextEdit->setContentsMargins(5, 5, 5, 5);
+    outputStreamBuffer.setOutputLabel(outputTextEdit);
 
     createActions();
     createStatusBar();
@@ -73,7 +75,7 @@ MainWindow::MainWindow()
     qDebug() << QString("Hello from qDebug()");
     std::streambuf *oldCoutBuffer = std::cout.rdbuf();
     std::cout.rdbuf(&outputStreamBuffer);
-    std::cout << "begin..." << std::endl;
+    std::cout << "begin with Qt and GPlates" << std::endl;
 }
 //! [2]
 
@@ -165,13 +167,19 @@ void MainWindow::newFile()
 
 //! [7]
 void MainWindow::open()
-//! [7] //! [8]
 {
     if (maybeSave())
     {
-        QString fileName = QFileDialog::getOpenFileName(this);
-        if (!fileName.isEmpty())
-            loadFile(fileName);
+        QFileDialog::getOpenFileContent(QString(), [this](const QString &fileName, const QByteArray &fileContent)
+                                        {
+            if (!fileName.isEmpty())
+            {
+                // 将 QByteArray 转换为 QString
+                QString content = QString::fromUtf8(fileContent);
+
+                // 加载文件内容
+                loadFileContent(fileName, content);
+            } });
     }
 }
 //! [8]
@@ -316,7 +324,7 @@ void MainWindow::createActions()
 
     QAction *aboutQtAct = helpMenu->addAction(tr("About &Qt"), qApp, &QApplication::aboutQt);
     aboutQtAct->setStatusTip(tr("Show the Qt library's About box"));
-//! [22]
+    //! [22]
 
     QMenu *testMenu = menuBar()->addMenu(tr("&Reconstruction"));
     QAction *testAct = testMenu->addAction(tr("&reconstruction"), this, &MainWindow::reconstruction);
@@ -418,7 +426,33 @@ void MainWindow::loadFile(const QString &fileName)
     setCurrentFile(fileName);
     statusBar()->showMessage(tr("File loaded"), 2000);
 }
+
 //! [43]
+void MainWindow::loadFileContent(const QString &fileName, const QString &fileContent)
+{
+    // 检查文件内容是否为空
+    if (fileContent.isEmpty())
+    {
+        QMessageBox::warning(this, tr("Application"),
+                             tr("Cannot read file %1.")
+                                 .arg(QDir::toNativeSeparators(fileName)));
+        return;
+    }
+
+#ifndef QT_NO_CURSOR
+    QGuiApplication::setOverrideCursor(Qt::WaitCursor);
+#endif
+
+    // 直接使用 fileContent 设置 textEdit 内容
+    textEdit->setPlainText(fileContent);
+
+#ifndef QT_NO_CURSOR
+    QGuiApplication::restoreOverrideCursor();
+#endif
+
+    setCurrentFile(fileName);
+    statusBar()->showMessage(tr("File loaded"), 2000);
+}
 
 //! [44]
 bool MainWindow::saveFile(const QString &fileName)
