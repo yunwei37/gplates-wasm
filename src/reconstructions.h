@@ -22,6 +22,12 @@ void output_reconstructions(
     GPlatesModel::FeatureCollectionHandle::weak_ref isochrons,
     GPlatesModel::FeatureCollectionHandle::weak_ref total_recon_seqs);
 
+void
+output_reconstructions_with_times(
+		GPlatesModel::FeatureCollectionHandle::weak_ref isochrons,
+        GPlatesModel::FeatureCollectionHandle::weak_ref total_recon_seqs,
+        QVector<double> recon_times_to_test);
+
 const std::pair<GPlatesModel::FeatureCollectionHandle::weak_ref,
                 GPlatesModel::FeatureCollectionHandle::weak_ref>
 populate_feature_store(

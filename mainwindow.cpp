@@ -9,11 +9,16 @@
 #include <QCoreApplication>
 #include <QElapsedTimer>
 #include <QDebug>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QDoubleSpinBox>
 
 #include "src/reconstructions.h"
 
 #include "mainwindow.h"
 //! [0]
+
+static const double recon_times_to_test[] = { 0.0, 10.0, 20.0, 80.0, 83.5, 85.0, 90.0 };
 
 //! [1]
 MainWindow::MainWindow()
@@ -39,6 +44,38 @@ MainWindow::MainWindow()
     Q_INIT_RESOURCE(gpgim);
     Q_INIT_RESOURCE(qt_widgets);
 
+    // 创建一个 QListWidget 用于存储用户输入的数值
+    reconTimesListWidget = new QListWidget(this);
+
+    // 添加默认值到 reconTimesListWidget
+    for (double value : recon_times_to_test) {
+        QListWidgetItem *item = new QListWidgetItem;
+        item->setData(Qt::EditRole, value);
+        item->setFlags(item->flags() | Qt::ItemIsEditable);
+        reconTimesListWidget->addItem(item);
+    }
+
+    // 创建 QPushButton 以恢复默认值
+    restoreTimesListsDefaultsButton = new QPushButton("reset", this);
+    connect(restoreTimesListsDefaultsButton, &QPushButton::clicked, this, &MainWindow::restoreReconTimesDefaultValues);
+    // 创建 QPushButton 以添加值
+    addTimesValueButton = new QPushButton("add time", this);
+    connect(addTimesValueButton, &QPushButton::clicked, this, &MainWindow::addReconTimesValue);
+
+    // 创建 QPushButton 以删除选定的值
+    deleteTimesValueButton = new QPushButton("delete time", this);
+    connect(deleteTimesValueButton, &QPushButton::clicked, this, &MainWindow::deleteReconTimesValue);
+
+    // 创建布局并添加 QListWidget 和 QPushButton
+    QHBoxLayout *reconTimesLayout = new QHBoxLayout;
+    reconTimesLayout->addWidget(reconTimesListWidget);
+
+    QVBoxLayout *listButtonLayout = new QVBoxLayout;
+    listButtonLayout->addWidget(restoreTimesListsDefaultsButton);
+    listButtonLayout->addWidget(addTimesValueButton);
+    listButtonLayout->addWidget(deleteTimesValueButton);
+    reconTimesLayout->addLayout(listButtonLayout);
+
     // 创建一个 QWidget 作为中心窗口部件
     // 使用 QHBoxLayout 将 textEdit 和 outputTextEdit 水平排列
     QWidget *centralWidget = new QWidget(this);
@@ -51,6 +88,7 @@ MainWindow::MainWindow()
 
     // 创建 QVBoxLayout，将 outputLabel 和 outputTextEdit 垂直排列
     QVBoxLayout *outputLayout = new QVBoxLayout;
+    outputLayout->addLayout(reconTimesLayout);
     outputLayout->addWidget(outputLabel);
     outputLayout->addWidget(outputTextEdit);
 
@@ -94,7 +132,33 @@ MainWindow::MainWindow()
     std::cout.rdbuf(&outputStreamBuffer);
     std::cout << "begin with Qt and GPlates" << std::endl;
 }
-//! [2]
+
+void MainWindow::addReconTimesValue()
+{
+    QListWidgetItem *item = new QListWidgetItem;
+    item->setData(Qt::EditRole, 0.0);
+    item->setFlags(item->flags() | Qt::ItemIsEditable);
+    reconTimesListWidget->addItem(item);
+}
+
+void MainWindow::deleteReconTimesValue()
+{
+    QListWidgetItem *item = reconTimesListWidget->currentItem();
+    if (item) {
+        delete reconTimesListWidget->takeItem(reconTimesListWidget->row(item));
+    }
+}
+
+void MainWindow::restoreReconTimesDefaultValues()
+{
+    reconTimesListWidget->clear();
+    for (double value : recon_times_to_test) {
+        QListWidgetItem *item = new QListWidgetItem;
+        item->setData(Qt::EditRole, value);
+        item->setFlags(item->flags() | Qt::ItemIsEditable);
+        reconTimesListWidget->addItem(item);
+    }
+}
 
 void MainWindow::open_and_read_gpml()
 {
@@ -170,7 +234,15 @@ void MainWindow::reconstruction()
     GPlatesModel::FeatureCollectionHandle::weak_ref total_recon_seqs =
         isochrons_and_total_recon_seqs.second;
 
-    ::output_reconstructions(isochrons, total_recon_seqs);
+    QVector<double> userValues;
+    for (int i = 0; i < reconTimesListWidget->count(); ++i) {
+        double value = reconTimesListWidget->item(i)->data(Qt::EditRole).toDouble();
+        userValues.push_back(value);
+    }
+
+    // 使用 userValues 调用函数
+    output_reconstructions_with_times(isochrons, total_recon_seqs, userValues);
+
     ::output_as_gpml(isochrons);
     std::cout  << std::endl;
     // Calculate the elapsed time
@@ -551,6 +623,7 @@ void MainWindow::setCurrentFile(const QString &fileName)
         shownName = "untitled.txt";
     setWindowFilePath(shownName);
 }
+
 //! [47]
 
 //! [48]
@@ -559,6 +632,7 @@ QString MainWindow::strippedName(const QString &fullFileName)
 {
     return QFileInfo(fullFileName).fileName();
 }
+
 //! [49]
 #ifndef QT_NO_SESSIONMANAGER
 void MainWindow::commitData(QSessionManager &manager)
@@ -575,4 +649,5 @@ void MainWindow::commitData(QSessionManager &manager)
             save();
     }
 }
+
 #endif

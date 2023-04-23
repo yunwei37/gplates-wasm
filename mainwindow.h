@@ -9,6 +9,9 @@
 #include <QPlainTextEdit>
 #include <cassert>
 #include <streambuf>
+#include <QListWidget>
+#include <QPushButton>
+
 QT_BEGIN_NAMESPACE
 class QAction;
 class QMenu;
@@ -73,6 +76,14 @@ private slots:
     bool saveAs();
     void about();
     void documentWasModified();
+
+    // reconstruction times
+    void restoreDefaultValues();
+    void addValue();
+    void deleteValue();
+
+    void open_and_read_gpml();
+    void reconstruction();
 #ifndef QT_NO_SESSIONMANAGER
     void commitData(QSessionManager &);
 #endif
@@ -85,8 +96,6 @@ private:
     bool maybeSave();
     bool saveFile(const QString &fileName);
     void setCurrentFile(const QString &fileName);
-    void open_and_read_gpml();
-    void reconstruction();
     QString strippedName(const QString &fullFileName);
 
     QPlainTextEdit *textEdit;
@@ -95,6 +104,13 @@ private:
     OutputLabelStreamBuffer outputStreamBuffer;
     QLabel *inputLabel;
     QLabel *outputLabel;
+
+     // reconstruction lists
+    QListWidget *reconTimesListWidget;
+     // reconstruction times control
+    QPushButton *restoreDefaultsButton;
+    QPushButton *addValueButton;
+    QPushButton *deleteValueButton;
 };
 //! [0]
 

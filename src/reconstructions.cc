@@ -362,13 +362,11 @@ output_as_gpml(
 	}
 }
 
-
 void
 output_reconstructions(
 		GPlatesModel::FeatureCollectionHandle::weak_ref isochrons,
-		GPlatesModel::FeatureCollectionHandle::weak_ref total_recon_seqs)
-{
-	static const double recon_times_to_test[] = {
+		GPlatesModel::FeatureCollectionHandle::weak_ref total_recon_seqs) {
+    QVector<double> recon_times_to_test = {
 		0.0,
 		10.0,
 		20.0,
@@ -377,8 +375,16 @@ output_reconstructions(
 		85.0,
 		90.0
 	};
-	static const unsigned num_recon_times_to_test =
-			sizeof(recon_times_to_test) / sizeof(recon_times_to_test[0]);
+    output_reconstructions_with_times(isochrons, total_recon_seqs, recon_times_to_test);
+}
+
+void
+output_reconstructions_with_times(
+		GPlatesModel::FeatureCollectionHandle::weak_ref isochrons,
+		GPlatesModel::FeatureCollectionHandle::weak_ref total_recon_seqs, 
+        QVector<double> recon_times_to_test)
+{
+    static const unsigned num_recon_times_to_test = recon_times_to_test.size();
 
 	GPlatesAppLogic::ReconstructionGraphBuilder graph_builder;
 	GPlatesAppLogic::ReconstructionGraphPopulator rgp(graph_builder);
