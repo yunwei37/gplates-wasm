@@ -25,7 +25,7 @@ MainWindow::MainWindow()
     : textEdit(new QPlainTextEdit),
       outputTextEdit(new QPlainTextEdit),
     inputLabel(new QLabel("source input")),
-    outputLabel(new QLabel("Gplates console")) //! [1] //! [2]
+    outputLabel(new QLabel("Gplates reconstruction (use the Slider to add time checkpoint)")) //! [1] //! [2]
 //! [1] //! [2]
 {
     // Initialize Qt resources that exist in the static 'qt-resources' library.
@@ -46,7 +46,8 @@ MainWindow::MainWindow()
 
     // 创建一个 QListWidget 用于存储用户输入的数值
     reconTimesListWidget = new QListWidget(this);
-
+    // 设置 QListWidget 的高度
+    reconTimesListWidget->setFixedHeight(150);
     // 添加默认值到 reconTimesListWidget
     for (double value : recon_times_to_test) {
         QListWidgetItem *item = new QListWidgetItem;
@@ -66,14 +67,25 @@ MainWindow::MainWindow()
     deleteTimesValueButton = new QPushButton("delete time", this);
     connect(deleteTimesValueButton, &QPushButton::clicked, this, &MainWindow::deleteReconTimesValue);
 
+    startReconstructionButton = new QPushButton("reconstruction", this);
+    connect(startReconstructionButton, &QPushButton::clicked, this, &MainWindow::reconstruction);
+
+    // 创建 QSlider 以选择值
+    valueSlider = new QSlider(Qt::Horizontal, this);
+    valueSlider->setRange(0, 100);
+    valueSlider->setValue(0);
+
+
     // 创建布局并添加 QListWidget 和 QPushButton
     QHBoxLayout *reconTimesLayout = new QHBoxLayout;
     reconTimesLayout->addWidget(reconTimesListWidget);
 
     QVBoxLayout *listButtonLayout = new QVBoxLayout;
-    listButtonLayout->addWidget(restoreTimesListsDefaultsButton);
+    listButtonLayout->addWidget(valueSlider);
     listButtonLayout->addWidget(addTimesValueButton);
     listButtonLayout->addWidget(deleteTimesValueButton);
+    listButtonLayout->addWidget(restoreTimesListsDefaultsButton);
+    listButtonLayout->addWidget(startReconstructionButton);
     reconTimesLayout->addLayout(listButtonLayout);
 
     // 创建一个 QWidget 作为中心窗口部件
@@ -92,11 +104,11 @@ MainWindow::MainWindow()
     outputLayout->addWidget(outputLabel);
     outputLayout->addWidget(outputTextEdit);
 
+
     // 使用 QHBoxLayout 将 inputLayout 和 outputLayout 水平排列
     QHBoxLayout *layout = new QHBoxLayout;
     layout->addLayout(inputLayout);
     layout->addLayout(outputLayout);
-
 
     // 设置比例因子，使 outputTextEdit 的宽度占三分之二
     layout->setStretch(0, 1); // textEdit 的比例因子设为 1
@@ -135,8 +147,9 @@ MainWindow::MainWindow()
 
 void MainWindow::addReconTimesValue()
 {
+    double sliderValue = valueSlider->value();
     QListWidgetItem *item = new QListWidgetItem;
-    item->setData(Qt::EditRole, 0.0);
+    item->setData(Qt::EditRole, sliderValue);
     item->setFlags(item->flags() | Qt::ItemIsEditable);
     reconTimesListWidget->addItem(item);
 }

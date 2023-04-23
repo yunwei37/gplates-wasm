@@ -11,6 +11,7 @@
 #include <streambuf>
 #include <QListWidget>
 #include <QPushButton>
+#include <QSlider>
 
 QT_BEGIN_NAMESPACE
 class QAction;
@@ -78,11 +79,13 @@ private slots:
     void documentWasModified();
 
     // reconstruction times
-    void restoreDefaultValues();
-    void addValue();
-    void deleteValue();
+    void restoreReconTimesDefaultValues();
+    void addReconTimesValue();
+    void deleteReconTimesValue();
 
+    // read gpml data
     void open_and_read_gpml();
+    // reconstruction with gpml
     void reconstruction();
 #ifndef QT_NO_SESSIONMANAGER
     void commitData(QSessionManager &);
@@ -107,10 +110,13 @@ private:
 
      // reconstruction lists
     QListWidget *reconTimesListWidget;
+
      // reconstruction times control
-    QPushButton *restoreDefaultsButton;
-    QPushButton *addValueButton;
-    QPushButton *deleteValueButton;
+    QPushButton *restoreTimesListsDefaultsButton;
+    QPushButton *addTimesValueButton;
+    QPushButton *deleteTimesValueButton;
+    QPushButton *startReconstructionButton;
+    QSlider *valueSlider;
 };
 //! [0]
 
