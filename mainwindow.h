@@ -5,13 +5,47 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-
+#include <QLabel>
+#include <cassert>
+#include <streambuf>
 QT_BEGIN_NAMESPACE
 class QAction;
 class QMenu;
 class QPlainTextEdit;
 class QSessionManager;
 QT_END_NAMESPACE
+
+
+class OutputLabelStreamBuffer : public std::streambuf
+{
+public:
+    void setOutputLabel(QLabel *label)
+    {
+        outputLabel = label;
+    }
+    int overflow(int c) override
+    {
+        if (c != EOF)
+        {
+            char ch = static_cast<char>(c);
+            if (ch == '\n')
+            {
+                assert(outputLabel);
+                buffer.push_back(ch);
+                outputLabel->setText(buffer);
+            }
+            else
+            {
+                buffer.push_back(ch);
+            }
+        }
+        return c;
+    }
+
+private:
+    QLabel *outputLabel;
+    QString buffer;
+};
 
 //! [0]
 class MainWindow : public QMainWindow
@@ -45,10 +79,14 @@ private:
     bool maybeSave();
     bool saveFile(const QString &fileName);
     void setCurrentFile(const QString &fileName);
+    void open_and_read_gpml(const QString &filename);
+    void reconstruction();
     QString strippedName(const QString &fullFileName);
 
     QPlainTextEdit *textEdit;
+    QLabel *outputLabel;
     QString curFile;
+    OutputLabelStreamBuffer outputStreamBuffer;
 };
 //! [0]
 

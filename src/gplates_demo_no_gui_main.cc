@@ -47,7 +47,7 @@ EM_JS(void, append_output_text, (const char *text), {
     element.innerHTML += UTF8ToString(text) + "<br />";
 });
 
-class HtmlStreamBuffer : public std::streambuf {
+class OutputLabelStreamBuffer : public std::streambuf {
 public:
     int overflow(int c) override {
         if (c != EOF) {
@@ -87,7 +87,7 @@ main()
 	Q_INIT_RESOURCE(qt_widgets);
 
     qDebug() << QString("Hello from qDebug()");
-	HtmlStreamBuffer htmlStreamBuffer;
+	OutputLabelStreamBuffer htmlStreamBuffer;
     std::streambuf *oldCoutBuffer = std::cout.rdbuf();
     std::cout.rdbuf(&htmlStreamBuffer);
 	std::cout << "begin..." << std::endl;
