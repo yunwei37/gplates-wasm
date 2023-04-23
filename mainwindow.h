@@ -24,6 +24,10 @@ public:
     {
         outputTextEdit = label;
     }
+    void clear()
+    {
+        buffer.clear();
+    }
     int overflow(int c) override
     {
         if (c != EOF)
@@ -81,7 +85,7 @@ private:
     bool maybeSave();
     bool saveFile(const QString &fileName);
     void setCurrentFile(const QString &fileName);
-    void open_and_read_gpml(const QString &filename);
+    void open_and_read_gpml();
     void reconstruction();
     QString strippedName(const QString &fullFileName);
 
@@ -89,6 +93,8 @@ private:
     QPlainTextEdit  *outputTextEdit;
     QString curFile;
     OutputLabelStreamBuffer outputStreamBuffer;
+    QLabel *inputLabel;
+    QLabel *outputLabel;
 };
 //! [0]
 

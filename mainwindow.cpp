@@ -6,6 +6,9 @@
 #include <QtXml/QDomDocument>
 #include <iostream>
 #include <streambuf>
+#include <QCoreApplication>
+#include <QElapsedTimer>
+#include <QDebug>
 
 #include "src/reconstructions.h"
 
@@ -15,7 +18,9 @@
 //! [1]
 MainWindow::MainWindow()
     : textEdit(new QPlainTextEdit),
-      outputTextEdit(new QPlainTextEdit)
+      outputTextEdit(new QPlainTextEdit),
+    inputLabel(new QLabel("source input")),
+    outputLabel(new QLabel("Gplates console")) //! [1] //! [2]
 //! [1] //! [2]
 {
     // Initialize Qt resources that exist in the static 'qt-resources' library.
@@ -35,13 +40,25 @@ MainWindow::MainWindow()
     Q_INIT_RESOURCE(qt_widgets);
 
     // 创建一个 QWidget 作为中心窗口部件
+    // 使用 QHBoxLayout 将 textEdit 和 outputTextEdit 水平排列
     QWidget *centralWidget = new QWidget(this);
     setCentralWidget(centralWidget);
 
-    // 使用 QHBoxLayout 将 textEdit 和 outputTextEdit 水平排列
+    // 创建 QVBoxLayout，将 inputLabel 和 textEdit 垂直排列
+    QVBoxLayout *inputLayout = new QVBoxLayout;
+    inputLayout->addWidget(inputLabel);
+    inputLayout->addWidget(textEdit);
+
+    // 创建 QVBoxLayout，将 outputLabel 和 outputTextEdit 垂直排列
+    QVBoxLayout *outputLayout = new QVBoxLayout;
+    outputLayout->addWidget(outputLabel);
+    outputLayout->addWidget(outputTextEdit);
+
+    // 使用 QHBoxLayout 将 inputLayout 和 outputLayout 水平排列
     QHBoxLayout *layout = new QHBoxLayout;
-    layout->addWidget(textEdit);
-    layout->addWidget(outputTextEdit);
+    layout->addLayout(inputLayout);
+    layout->addLayout(outputLayout);
+
 
     // 设置比例因子，使 outputTextEdit 的宽度占三分之二
     layout->setStretch(0, 1); // textEdit 的比例因子设为 1
@@ -69,7 +86,7 @@ MainWindow::MainWindow()
             this, &MainWindow::commitData);
 #endif
 
-    setCurrentFile(QString());
+    setCurrentFile(":/gpgim/deformation_test_src_net_3triangles.gpml");
     setUnifiedTitleAndToolBarOnMac(true);
 
     qDebug() << QString("Hello from qDebug()");
@@ -79,42 +96,62 @@ MainWindow::MainWindow()
 }
 //! [2]
 
-void MainWindow::open_and_read_gpml(const QString &filename)
+void MainWindow::open_and_read_gpml()
 {
+    auto TEMP_GPML_FILE_PATH = "tmp_gpml_file.gpml";
+    outputStreamBuffer.clear();
+    QString filename = TEMP_GPML_FILE_PATH;
+    saveFile(TEMP_GPML_FILE_PATH);
+
     qDebug() << "Attempting to read \"" << filename << "\".";
     std::cout << "read structural types from a GPML file." << std::endl;
-    GPlatesModel::Gpgim::instance();
-    // Used to read structural types from a GPML file.
-    GPlatesFileIO::GpmlPropertyStructuralTypeReader::non_null_ptr_to_const_type gpml_structural_type_reader =
-        GPlatesFileIO::GpmlPropertyStructuralTypeReader::create();
-    std::cout << "create a new GpmlPropertyStructuralType" << std::endl;
+    try {
+        GPlatesModel::Gpgim::instance();
+        // Used to read structural types from a GPML file.
+        GPlatesFileIO::GpmlPropertyStructuralTypeReader::non_null_ptr_to_const_type gpml_structural_type_reader =
+            GPlatesFileIO::GpmlPropertyStructuralTypeReader::create();
+        std::cout << "create a new GpmlPropertyStructuralType" << std::endl;
 
-    GPlatesFileIO::FileInfo fileinfo(filename);
-    GPlatesModel::ModelInterface new_model;
-    GPlatesFileIO::ReadErrorAccumulation accum;
-    bool contains_unsaved_changes;
+        GPlatesFileIO::FileInfo fileinfo(filename);
+        if (!file_exists(fileinfo)) {
+            std::cout << "cannot open a GPML file in " << filename.toStdString() << std::endl;
+        }
+        GPlatesModel::ModelInterface new_model;
+        GPlatesFileIO::ReadErrorAccumulation accum;
+        bool contains_unsaved_changes;
 
-    // Create a file with an empty feature collection.
-    GPlatesFileIO::File::non_null_ptr_type file = GPlatesFileIO::File::create_file(fileinfo);
+        // Create a file with an empty feature collection.
+        GPlatesFileIO::File::non_null_ptr_type file = GPlatesFileIO::File::create_file(fileinfo);
 
-    // Read new features from the file into the empty feature collection.
-    GPlatesFileIO::GpmlReader::read_file(
-        file->get_reference(),
-        gpml_structural_type_reader,
-        accum,
-        contains_unsaved_changes);
+        // Read new features from the file into the empty feature collection.
+        GPlatesFileIO::GpmlReader::read_file(
+            file->get_reference(),
+            gpml_structural_type_reader,
+            accum,
+            contains_unsaved_changes);
 
-    GPlatesModel::FeatureCollectionHandle::weak_ref features =
-        file->get_reference().get_feature_collection();
-    ::output_as_gpml(features);
+        GPlatesModel::FeatureCollectionHandle::weak_ref features =
+            file->get_reference().get_feature_collection();
+        ::output_as_gpml(features);
+    } catch (std::exception e) {
+        std::cout << e.what() <<std::endl;
+    }
 }
 
 void MainWindow::reconstruction()
 {
+    outputStreamBuffer.clear();
     GPlatesMaths::assert_has_infinity_and_nan();
 
     GPlatesModel::ModelInterface model;
+    // Create an instance of QElapsedTimer
+    QElapsedTimer timer;
 
+    // Start the timer
+    timer.start();
+
+    std::cout << "start test rotate and reconstruction..." << std::endl;
+    std::cout << std::endl;
     std::cout << "read structural types from a GPML file." << std::endl;
     GPlatesModel::Gpgim::instance();
     // Used to read structural types from a GPML file.
@@ -133,8 +170,14 @@ void MainWindow::reconstruction()
     GPlatesModel::FeatureCollectionHandle::weak_ref total_recon_seqs =
         isochrons_and_total_recon_seqs.second;
 
-    ::output_as_gpml(isochrons);
     ::output_reconstructions(isochrons, total_recon_seqs);
+    ::output_as_gpml(isochrons);
+    std::cout  << std::endl;
+    // Calculate the elapsed time
+    qint64 elapsedTime = timer.elapsed();
+
+    std::cout << "Elapsed time (in milliseconds): " << elapsedTime  << std::endl;
+    std::cout << "finish test rotate and reconstruction." << std::endl;
 }
 
 //! [3]
@@ -329,6 +372,10 @@ void MainWindow::createActions()
     QMenu *testMenu = menuBar()->addMenu(tr("&Reconstruction"));
     QAction *testAct = testMenu->addAction(tr("&reconstruction"), this, &MainWindow::reconstruction);
     testAct->setStatusTip(tr("Test reconstruction for the gplates"));
+
+    QMenu *gpmlMenu = menuBar()->addMenu(tr("&Gpml"));
+    QAction *gpmlAct = gpmlMenu->addAction(tr("&process GPML file"), this, &MainWindow::open_and_read_gpml);
+    gpmlAct->setStatusTip(tr("read and process GPML files"));
 
 //! [23]
 #ifndef QT_NO_CLIPBOARD

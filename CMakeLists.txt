@@ -78,7 +78,7 @@ target_link_libraries(web-app-demo PRIVATE gplates-lib)
 if (EMSCRIPTEN)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -s WASM=1 -s MODULARIZE=1 -sNO_DISABLE_EXCEPTION_CATCHING")
 endif()
-#set_target_properties(gplates-no-gui PROPERTIES COMPILE_FLAGS "-sMAIN_MODULE")
+set_target_properties(web-app-demo PROPERTIES COMPILE_FLAGS "-sNO_DISABLE_EXCEPTION_CATCHING")
 set_target_properties(web-app-demo PROPERTIES LINK_FLAGS "--preload-file C:\\Users\\yunwei37\\Documents\\bise\\gplates_2.3.0_src\\gplates_2.3.0_src\\src\\qt-resources")
 
 
