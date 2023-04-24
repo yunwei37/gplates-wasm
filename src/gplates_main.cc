@@ -763,13 +763,13 @@ namespace
 		// is called then contained objects are destroyed in correct order.
 		// Also we should be careful about excessive use of singletons because they are essentially global data.
 
-		if(GPlatesUtils::ComponentManager::instance().is_enabled(
-				GPlatesUtils::ComponentManager::Component::python()))
-		{
-			GPlatesApi::PythonInterpreterLocker lock;
-			delete GPlatesGui::DrawStyleManager::instance(); //delete draw style manager singleton.
-		}
-		delete GPlatesGui::PythonManager::instance();
+//		if(GPlatesUtils::ComponentManager::instance().is_enabled(
+//				GPlatesUtils::ComponentManager::Component::python()))
+//		{
+//			GPlatesApi::PythonInterpreterLocker lock;
+//			delete GPlatesGui::DrawStyleManager::instance(); //delete draw style manager singleton.
+//		}
+//		delete GPlatesGui::PythonManager::instance();
 	}
 }
 

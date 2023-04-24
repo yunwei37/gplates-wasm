@@ -195,29 +195,29 @@ GPlatesFileIO::StandaloneBundle::get_python_standard_library_directory()
 {
 #if defined(GPLATES_PYTHON_EMBEDDING)  // gplates
 
-	// Get the bundle root directory.
-	boost::optional<QString> bundle_root_dir = get_bundle_root_directory();
-	if (!bundle_root_dir)
-	{
-		return boost::none;
-	}
-	QString bundle_python_stdlib_dir = bundle_root_dir.get();
+//	// Get the bundle root directory.
+//	boost::optional<QString> bundle_root_dir = get_bundle_root_directory();
+//	if (!bundle_root_dir)
+//	{
+//		return boost::none;
+//	}
+//	QString bundle_python_stdlib_dir = bundle_root_dir.get();
 
-	// On macOS the bundle Python standard library is relative to the frameworks directory.
-#	if defined(Q_OS_MACOS)
-	bundle_python_stdlib_dir += "/gplates.app/Contents/Frameworks";
-#	endif
+//	// On macOS the bundle Python standard library is relative to the frameworks directory.
+//#	if defined(Q_OS_MACOS)
+//	bundle_python_stdlib_dir += "/gplates.app/Contents/Frameworks";
+//#	endif
 
-	bundle_python_stdlib_dir = bundle_python_stdlib_dir + "/" + GPLATES_STANDALONE_PYTHON_STDLIB_DIR;
+//	bundle_python_stdlib_dir = bundle_python_stdlib_dir + "/" + GPLATES_STANDALONE_PYTHON_STDLIB_DIR;
 
-	// See if the bundle Python standard library directory exists.
-	// If it does then it means it was included in the standalone bundle.
-	if (!QDir(bundle_python_stdlib_dir).exists())
-	{
-		return boost::none;
-	}
+//	// See if the bundle Python standard library directory exists.
+//	// If it does then it means it was included in the standalone bundle.
+//	if (!QDir(bundle_python_stdlib_dir).exists())
+//	{
+//		return boost::none;
+//	}
 
-	return bundle_python_stdlib_dir;
+//	return bundle_python_stdlib_dir;
 
 #else // pygplates
 
@@ -226,4 +226,5 @@ GPlatesFileIO::StandaloneBundle::get_python_standard_library_directory()
 	return boost::none;
 
 #endif
+    return boost::none;
 }

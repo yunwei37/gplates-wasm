@@ -966,7 +966,7 @@ target_link_libraries(gplates-lib PUBLIC proj)
 #	# target_include_directories(pygplates SYSTEM PUBLIC ${GPLATES_Python_NumPy_INCLUDE_DIRS})
 #endif()
 ## Python is embedded in the GPlates application (as opposed to pygplates which is a Python extension library).
-#target_compile_definitions(gplates-lib PUBLIC GPLATES_PYTHON_EMBEDDING)
+target_compile_definitions(gplates-lib PUBLIC GPLATES_PYTHON_EMBEDDING)
 
 
 ## Test whether Python embedding works.

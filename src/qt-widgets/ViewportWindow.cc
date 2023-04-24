@@ -849,23 +849,23 @@ GPlatesQtWidgets::ViewportWindow::connect_utilities_menu_actions()
 
 	}
 
-	if(GPlatesUtils::ComponentManager::instance().is_enabled(
-			GPlatesUtils::ComponentManager::Component::python()))
-	{
-		d_utilities_menu_ptr = new GPlatesGui::UtilitiesMenu(
-				menu_Utilities,
-//				action_Open_Python_Console,
-				get_view_state().get_python_manager(),
-				this);
+//	if(GPlatesUtils::ComponentManager::instance().is_enabled(
+//			GPlatesUtils::ComponentManager::Component::python()))
+//	{
+//		d_utilities_menu_ptr = new GPlatesGui::UtilitiesMenu(
+//				menu_Utilities,
+////				action_Open_Python_Console,
+//				get_view_state().get_python_manager(),
+//				this);
 		
-		// ----
-		QObject::connect(action_Open_Python_Console, SIGNAL(triggered()),
-				this, SLOT(pop_up_python_console()));
-	}
-	else
-	{
+//		// ----
+//		QObject::connect(action_Open_Python_Console, SIGNAL(triggered()),
+//				this, SLOT(pop_up_python_console()));
+//	}
+//	else
+//	{
 		hide_python_menu();
-	}
+//	}
 }
 
 

@@ -456,8 +456,8 @@ namespace GPlatesApi
 					typename impl::template at<6>::type a6)
 			{
 				// Make sure we lose the GIL.
-				PythonInterpreterLocker interpreter_locker;
-				PythonInterpreterUnlocker interpreter_unlocker;
+//				PythonInterpreterLocker interpreter_locker;
+//				PythonInterpreterUnlocker interpreter_unlocker;
 
 				return GPlatesUtils::DeferCall<typename impl::template at<0>::type>::defer_call(
 						boost::bind(
@@ -597,8 +597,8 @@ namespace GPlatesApi
 					typename impl::template at<9>::type a9)
 			{
 				// Make sure we lose the GIL.
-				PythonInterpreterLocker interpreter_locker;
-				PythonInterpreterUnlocker interpreter_unlocker;
+//				PythonInterpreterLocker interpreter_locker;
+//				PythonInterpreterUnlocker interpreter_unlocker;
 
 				return GPlatesUtils::DeferCall<typename impl::template at<0>::type>::defer_call(
 						boost::bind(
@@ -650,8 +650,8 @@ namespace GPlatesApi
 					typename impl::template at<10>::type a10)
 			{
 				// Make sure we lose the GIL.
-				PythonInterpreterLocker interpreter_locker;
-				PythonInterpreterUnlocker interpreter_unlocker;
+//				PythonInterpreterLocker interpreter_locker;
+//				PythonInterpreterUnlocker interpreter_unlocker;
 
 				return GPlatesUtils::DeferCall<typename impl::template at<0>::type>::defer_call(
 						boost::bind(
