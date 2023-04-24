@@ -402,7 +402,7 @@ GPlatesQtWidgets::GlobeCanvas::GlobeCanvas(
 	d_velocity_legend_overlay(
 			new GPlatesGui::VelocityLegendOverlay())
 {
-    if (!context()->shareContext() != nullptr)
+    if (!context()->shareContext() != 0)
 	{
 		qWarning() << "Unable to share an OpenGL context between QOpenGLWidgets.";
 	}
@@ -1149,10 +1149,10 @@ GPlatesQtWidgets::GlobeCanvas::paintEvent(
 	// Note that we have already disabled auto buffer swapping because otherwise both the QPainter
 	// in 'paintGL()' and 'QOpenGLWidget::paintEvent()' will call 'QOpenGLWidget::swapBuffers()'
 	// essentially canceling each other out (or causing flickering).
-	if (doubleBuffer() && !autoBufferSwap())
-	{
-		swapBuffers();
-	}
+//	if (doubleBuffer() && !autoBufferSwap())
+//	{
+//		swapBuffers();
+//	}
 
 	// If d_mouse_press_info is not boost::none, then mouse is down.
 	Q_EMIT repainted(static_cast<bool>(d_mouse_press_info));

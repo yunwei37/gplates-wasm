@@ -33,6 +33,7 @@
 #include <QOpenGLFunctions>
 #include <QPaintEngine>
 #include <QScrollBar>
+#include <QOpenGLContext>
 
 #include "MapView.h"
 
@@ -117,12 +118,13 @@ GPlatesQtWidgets::MapView::MapView(
 				this,
 				// Share texture objects, vertex buffer objects, etc...
 				share_gl_widget)),
-    d_gl_context(context()->shareContext() != nullptr // Mirror the sharing of OpenGL context state (if sharing)...
+    d_gl_context(/*shareContext() != nullptr// Mirror the sharing of OpenGL context state (if sharing)...
 			? GPlatesOpenGL::GLContext::create(
 					boost::shared_ptr<GPlatesOpenGL::GLContext::Impl>(
 							new GPlatesOpenGL::GLContextImpl::QOpenGLWidgetImpl(*d_gl_widget_ptr)),
 					*share_gl_context)
-			: GPlatesOpenGL::GLContext::create(
+            :*/
+                     GPlatesOpenGL::GLContext::create(
 					boost::shared_ptr<GPlatesOpenGL::GLContext::Impl>(
 							new GPlatesOpenGL::GLContextImpl::QOpenGLWidgetImpl(*d_gl_widget_ptr)))),
 	d_gl_visual_layers(
@@ -848,7 +850,7 @@ GPlatesQtWidgets::MapView::MapViewport::MapViewport(
 		QWidget *parent_,
 		const QOpenGLWidget *shareWidget_,
 		Qt::WindowFlags flags_) :
-    QOpenGLWidget(parent_, shareWidget_, flags_)
+    QOpenGLWidget(parent_, /*shareWidget_, */flags_)
 {
 	// Since we're using a QPainter inside 'paintEvent()' or more specifically 'MapCanvas::drawBackground()'
 	// (which is called from 'paintEvent()') then we turn off automatic swapping of the OpenGL

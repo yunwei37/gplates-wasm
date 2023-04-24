@@ -168,7 +168,11 @@ namespace GPlatesPropertyValues
 		bool
 		operator==(
 				const GpmlTimeSample &other) const;
-
+		bool
+		operator<(const GpmlTimeSample &other) const {
+                    qDebug("No implement GpmlTimeSample");
+					return false;
+				}
 	private:
 
 		GPlatesModel::PropertyValue::non_null_ptr_type d_value;

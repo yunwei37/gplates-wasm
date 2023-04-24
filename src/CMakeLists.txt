@@ -300,8 +300,9 @@ add_library(gplates-lib STATIC EXCLUDE_FROM_ALL
 #
 # Add 'gplates' executable target (linked to gplates-lib).
 #
-#add_executable(gplates gplates_main.cc ScribeExportGPlates.cc)
-#target_link_libraries(gplates PRIVATE gplates-lib)
+add_executable(gplates gplates_main.cc ScribeExportGPlates.cc)
+target_link_libraries(gplates PRIVATE gplates-lib)
+set_target_properties(gplates PROPERTIES LINK_FLAGS "--preload-file C:\\Users\\yunwei37\\Documents\\bise\\gplates_2.3.0_src\\gplates_2.3.0_src\\src\\qt-resources")
 
 #
 # Add 'gplates-no-gui' executable target (linked to gplates-lib).

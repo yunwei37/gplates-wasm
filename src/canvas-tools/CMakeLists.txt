@@ -63,7 +63,7 @@ set(srcs
 )
 
 # Add the source files to the gplates static library.
-# target_sources_util(gplates-lib PRIVATE ${srcs})
+target_sources_util(gplates-lib PRIVATE ${srcs})
 
 # Add the source files to the pygplates extension module.
 #

@@ -98,7 +98,16 @@ namespace GPlatesMaths
 		{
 			return d_longitude;
 		}
-
+		bool
+		operator<(const LatLonPoint &other) const {
+                    qDebug("No implement LatLonPoint");
+					return false;
+		}
+		bool
+		operator==(const LatLonPoint &other) const {
+                    qDebug("No implement LatLonPoint");
+					return false;
+		}
 	private:
 
 		/**

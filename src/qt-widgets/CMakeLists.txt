@@ -289,8 +289,8 @@ set(srcs
     GenerateVelocityDomainTerraDialogUi.ui
     GlobeAndMapWidget.cc
     GlobeAndMapWidget.h
-    GlobeCanvas.cc
-    GlobeCanvas.h
+    # GlobeCanvas.cc
+    # GlobeCanvas.h
     GMenuButton.cc
     GMenuButton.h
     GMenuButtonUi.ui
@@ -346,17 +346,17 @@ set(srcs
     InsertVGPReconstructionPoleDialog.h
     InsertVGPReconstructionPoleDialogUi.ui
     InvalidPropertyValueException.h
-    KinematicGraphPicker.cc
-    KinematicGraphPicker.h
-    KinematicGraphsConfigurationDialog.cc
-    KinematicGraphsConfigurationDialog.h
-    KinematicGraphsConfigurationDialogUi.ui
-    KinematicGraphsConfigurationWidget.cc
-    KinematicGraphsConfigurationWidget.h
-    KinematicGraphsConfigurationWidgetUi.ui
-    KinematicGraphsDialog.cc
-    KinematicGraphsDialog.h
-    KinematicGraphsDialogUi.ui
+    # KinematicGraphPicker.cc
+    # KinematicGraphPicker.h
+    # KinematicGraphsConfigurationDialog.cc
+    # KinematicGraphsConfigurationDialog.h
+    # KinematicGraphsConfigurationDialogUi.ui
+    # KinematicGraphsConfigurationWidget.cc
+    # KinematicGraphsConfigurationWidget.h
+    # KinematicGraphsConfigurationWidgetUi.ui
+    # KinematicGraphsDialog.cc
+    # KinematicGraphsDialog.h
+    # KinematicGraphsDialogUi.ui
     LatLonCoordinatesTable.cc
     LatLonCoordinatesTable.h
     LayerOptionsWidget.h
@@ -380,8 +380,8 @@ set(srcs
     ManageFeatureCollectionsDialogUi.ui
     ManageFeatureCollectionsEditConfigurations.cc
     ManageFeatureCollectionsEditConfigurations.h
-    MapCanvas.cc
-    MapCanvas.h
+    # MapCanvas.cc
+    # MapCanvas.h
     MapView.cc
     MapView.h
     MeasureDistanceWidget.cc
@@ -625,7 +625,7 @@ set(srcs
 )
 
 # Add the source files to the gplates static library.
-# target_sources_util(gplates-lib PRIVATE ${srcs})
+target_sources_util(gplates-lib PRIVATE ${srcs})
 
 # Add the source files to the pygplates extension module.
 #

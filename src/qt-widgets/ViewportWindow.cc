@@ -72,7 +72,7 @@
 #include "ImportRasterDialog.h"
 #include "ImportScalarField3DDialog.h"
 #include "MapView.h"
-#include "PythonConsoleDialog.h"
+//#include "PythonConsoleDialog.h"
 #include "QtWidgetUtils.h"
 #include "ReadErrorAccumulationDialog.h"
 #include "ReconstructionViewWidget.h"
@@ -325,8 +325,8 @@ GPlatesQtWidgets::ViewportWindow::ViewportWindow(
 	canvas_tool_workflows().initialise(
 			*d_geometry_operation_state_ptr,
 			*d_modify_geometry_state,
-			*d_measure_distance_state_ptr,
-			boost::bind(&canvas_tool_status_message, boost::ref(*this), _1),
+            *d_measure_distance_state_ptr,
+        boost::bind(&canvas_tool_status_message, boost::ref(*this), boost::placeholders::_1),
 			get_view_state(),
 			*this);
 
@@ -854,7 +854,7 @@ GPlatesQtWidgets::ViewportWindow::connect_utilities_menu_actions()
 	{
 		d_utilities_menu_ptr = new GPlatesGui::UtilitiesMenu(
 				menu_Utilities,
-				action_Open_Python_Console,
+//				action_Open_Python_Console,
 				get_view_state().get_python_manager(),
 				this);
 		
@@ -900,7 +900,7 @@ GPlatesQtWidgets::ViewportWindow::connect_tools_menu_actions()
 				d_canvas_tools_dock_ptr->get_workflow_tool_menu_actions(canvas_tool_workflow);
 
 		// Add the workflow tool actions to the sub-menu.
-		Q_FOREACH(QAction *canvas_tool_action, canvas_tool_actions)
+        for(QAction *canvas_tool_action: canvas_tool_actions)
 		{
 			canvas_workflow_menu->addAction(canvas_tool_action);
 		}
@@ -1054,7 +1054,7 @@ GPlatesQtWidgets::ViewportWindow::populate_gmenu_from_menubar()
 	if (gmenu) {
 		// Add each of the top-level menu items from the main menu bar.
 		QList<QAction *> main_menubar_actions = menubar->actions();
-		Q_FOREACH(QAction *action, main_menubar_actions) {
+        for(QAction *action: main_menubar_actions) {
 			gmenu->addAction(action);
 		}
 	}
@@ -1725,10 +1725,10 @@ GPlatesQtWidgets::ViewportWindow::open_new_window()
 	// because with the latter, the program string contains both the program
 	// name and the arguments, separated by whitespace. Thus, it does the wrong
 	// thing if the path to the executable has whitespace, e.g. on Windows.
-	if (!QProcess::startDetached(file_path, QStringList()))
-	{
-		qDebug() << "ViewportWindow::open_new_window: new instance could not be started";
-	}
+//	if (!QProcess::startDetached(file_path, QStringList()))
+//	{
+//		qDebug() << "ViewportWindow::open_new_window: new instance could not be started";
+//	}
 }
 
 
@@ -1897,7 +1897,7 @@ GPlatesQtWidgets::ViewportWindow::open_online_documentation()
 void
 GPlatesQtWidgets::ViewportWindow::pop_up_python_console()
 {
-	d_view_state.get_python_manager().pop_up_python_console();
+//	d_view_state.get_python_manager().pop_up_python_console();
 }
 
 

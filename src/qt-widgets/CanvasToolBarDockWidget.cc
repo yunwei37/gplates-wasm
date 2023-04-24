@@ -1027,7 +1027,7 @@ GPlatesQtWidgets::CanvasToolBarDockWidget::get_tool_action(
 		QList<QAction *> workflow_tool_actions = workflow_info.action_group->actions();
 
 		// Search all tool actions in the current workflow.
-		Q_FOREACH(QAction *workflow_tool_action, workflow_tool_actions)
+        for(QAction *workflow_tool_action: workflow_tool_actions)
 		{
 			if (is_tool_action(workflow_tool_action, workflow, tool))
 			{
