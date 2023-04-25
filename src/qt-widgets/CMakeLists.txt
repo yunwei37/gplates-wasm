@@ -425,9 +425,9 @@ set(srcs
     PreferencesPaneFiles.cc
     PreferencesPaneFiles.h
     PreferencesPaneFilesUi.ui
-    PreferencesPaneKinematicGraphs.cc
-    PreferencesPaneKinematicGraphs.h
-    PreferencesPaneKinematicGraphsUi.ui
+    # PreferencesPaneKinematicGraphs.cc
+    # PreferencesPaneKinematicGraphs.h
+    # PreferencesPaneKinematicGraphsUi.ui
     PreferencesPaneNetwork.cc
     PreferencesPaneNetwork.h
     PreferencesPaneNetworkUi.ui
