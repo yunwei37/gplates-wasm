@@ -135,9 +135,26 @@ endif()
 #		To enable this functionality please install NumPy and then re-run CMake (to enable use of NumPy C-API).]])
 #endif()
 
+set(THIRD_PARTY_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../third_party)
+set(THIRD_PARTY_LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../lib)
 ###############
 ## Find Boost #
 ##
+set(PROGRAM_OPTIONS_DIR ${THIRD_PARTY_LIB_DIR}/program_options/src)
+add_library(boost_program_options STATIC
+    ${PROGRAM_OPTIONS_DIR}/cmdline.cpp
+    ${PROGRAM_OPTIONS_DIR}/config_file.cpp
+    ${PROGRAM_OPTIONS_DIR}/convert.cpp
+    ${PROGRAM_OPTIONS_DIR}/options_description.cpp
+    ${PROGRAM_OPTIONS_DIR}/parsers.cpp
+    ${PROGRAM_OPTIONS_DIR}/positional_options.cpp
+    ${PROGRAM_OPTIONS_DIR}/split.cpp
+    ${PROGRAM_OPTIONS_DIR}/utf8_codecvt_facet.cpp
+    ${PROGRAM_OPTIONS_DIR}/value_semantic.cpp
+    ${PROGRAM_OPTIONS_DIR}/variables_map.cpp
+    ${PROGRAM_OPTIONS_DIR}/winmain.cpp
+)
+target_include_directories(boost_program_options PRIVATE SYSTEM ${CMAKE_CURRENT_SOURCE_DIR}/../third_party)
 ## Use dynamic linking for all Boost libraries.
 ## This includes the optional unit test framework, since it's error prone to switch static linking off and on, and
 ## note that we set the compiler flag BOOST_TEST_DYN_LINK later below (required by code using unit test framework).
@@ -300,10 +317,11 @@ add_library(gplates-lib STATIC EXCLUDE_FROM_ALL
 
 add_library(gplates-ui-lib STATIC)
 target_link_libraries(gplates-ui-lib PRIVATE gplates-lib)
+target_link_libraries(gplates-ui-lib PRIVATE boost_program_options)
 #
 # Add 'gplates' executable target (linked to gplates-lib).
 #
-qt_add_executable(gplates gplates_main.cc ScribeExportGPlates.cc)
+add_executable(gplates gplates_main.cc ScribeExportGPlates.cc)
 target_link_libraries(gplates PRIVATE gplates-ui-lib)
 set_target_properties(gplates PROPERTIES LINK_FLAGS "--preload-file C:\\Users\\yunwei37\\Documents\\bise\\gplates_2.3.0_src\\gplates_2.3.0_src\\src\\qt-resources")
 #target_link_libraries(gplates PRIVATE
@@ -554,7 +572,7 @@ target_compile_definitions(gplates PUBLIC BOOST_VARIANT_USE_RELAXED_GET_BY_DEFAU
 target_compile_definitions(gplates-lib PUBLIC BOOST_ALLOW_DEPRECATED_HEADERS)
 target_compile_definitions(gplates-ui-lib PUBLIC BOOST_ALLOW_DEPRECATED_HEADERS)
 target_compile_definitions(gplates PUBLIC BOOST_ALLOW_DEPRECATED_HEADERS)
-
+target_compile_definitions(boost_program_options PUBLIC BOOST_ALLOW_DEPRECATED_HEADERS)
 #	target_compile_definitions(pygplates PUBLIC BOOST_ALLOW_DEPRECATED_HEADERS)
 
 #
