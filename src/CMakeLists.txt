@@ -341,10 +341,10 @@ add_executable(gplates-no-gui EXCLUDE_FROM_ALL gplates_demo_no_gui_main.cc Scrib
 target_link_libraries(gplates-no-gui PRIVATE gplates-lib)
 
 if (EMSCRIPTEN)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -s WASM=1 -s MODULARIZE=1 -sNO_DISABLE_EXCEPTION_CATCHING -sMAX_WEBGL_VERSION=2")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -s WASM=1 -s MODULARIZE=1 -sNO_DISABLE_EXCEPTION_CATCHING -sFULL_ES2")
 endif()
 #set_target_properties(gplates-no-gui PROPERTIES COMPILE_FLAGS "-sMAIN_MODULE")
-set_target_properties(gplates-no-gui PROPERTIES LINK_FLAGS "--preload-file C:\\Users\\yunwei37\\Documents\\bise\\gplates_2.3.0_src\\gplates_2.3.0_src\\src\\qt-resources")
+set_target_properties(gplates-no-gui PROPERTIES LINK_FLAGS "-sFULL_ES2 -sLEGACY_GL_EMULATION --preload-file C:\\Users\\yunwei37\\Documents\\bise\\gplates_2.3.0_src\\gplates_2.3.0_src\\src\\qt-resources")
 
 #
 # Add 'gplates-unit-test' executable (linked to gplates-lib).
