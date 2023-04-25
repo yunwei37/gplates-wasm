@@ -60,7 +60,7 @@ GPlatesOpenGL::GLShaderObject::Allocator::allocate(
 			capabilities.shader.gl_ARB_shader_objects,
 			GPLATES_ASSERTION_SOURCE);
 
-	const resource_handle_type shader_object = glCreateShaderObjectARB(d_shader_type);
+	const resource_handle_type shader_object = glCreateShader(d_shader_type);
 
 	GPlatesGlobal::Assert<OpenGLException>(
 			shader_object,
@@ -75,7 +75,7 @@ void
 GPlatesOpenGL::GLShaderObject::Allocator::deallocate(
 		resource_handle_type shader_object)
 {
-	glDeleteObjectARB(shader_object);
+	glDeleteShader(shader_object);
 }
 
 
@@ -165,7 +165,7 @@ GPlatesOpenGL::GLShaderObject::gl_shader_source(
 	}
 
 	// 'length' is NULL indicating the source strings are null-terminated.
-	glShaderSourceARB(get_shader_resource_handle(), count, strings.get(), NULL);
+	glShaderSource(get_shader_resource_handle(), count, strings.get(), NULL);
 }
 
 
@@ -180,11 +180,11 @@ GPlatesOpenGL::GLShaderObject::gl_compile_shader(
 
 	const resource_handle_type shader_resource_handle = get_shader_resource_handle();
 
-	glCompileShaderARB(shader_resource_handle);
+	glCompileShader(shader_resource_handle);
 
 	// Check the status of the compilation.
 	GLint compile_status;
-	glGetObjectParameterivARB(shader_resource_handle, GL_OBJECT_COMPILE_STATUS_ARB, &compile_status);
+	glGetShaderiv(shader_resource_handle, GL_OBJECT_COMPILE_STATUS_ARB, &compile_status);
 
 	// If the compilation was unsuccessful then log a compile diagnostic message.
 	if (!compile_status)
@@ -269,11 +269,11 @@ GPlatesOpenGL::GLShaderObject::output_info_log()
 
 	// Determine the length of the info log message.
 	GLint info_log_length;
-	glGetObjectParameterivARB(shader_resource_handle, GL_OBJECT_INFO_LOG_LENGTH_ARB, &info_log_length);
+	glGetShaderiv(shader_resource_handle, GL_OBJECT_INFO_LOG_LENGTH_ARB, &info_log_length);
 
 	// Allocate and read the info log message.
 	boost::scoped_array<GLcharARB> info_log(new GLcharARB[info_log_length]);
-	glGetInfoLogARB(shader_resource_handle, info_log_length, NULL, info_log.get());
+	glGetShaderInfoLog(shader_resource_handle, info_log_length, NULL, info_log.get());
 	// ...the returned string is null-terminated.
 
 	qDebug()

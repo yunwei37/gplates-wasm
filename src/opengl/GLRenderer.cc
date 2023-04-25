@@ -1062,7 +1062,7 @@ GPlatesOpenGL::GLRenderer::gl_draw_range_elements(
 
 			// NOTE: When using gDEBugger you'll need to change this to 'glDrawRangeElements' if you
 			// want to break on it since it doesn't allow you to break on 'glDrawRangeElementsEXT'.
-			glDrawRangeElementsEXT(mode, start, end, count, type, GPLATES_OPENGL_BUFFER_OFFSET(indices_offset));
+			glDrawRangeElements(mode, start, end, count, type, GPLATES_OPENGL_BUFFER_OFFSET(indices_offset));
 		}
 
 		GLenum mode;
@@ -1141,7 +1141,7 @@ GPlatesOpenGL::GLRenderer::gl_draw_range_elements(
 
 			// NOTE: When using gDEBugger you'll need to change this to 'glDrawRangeElements' if you
 			// want to break on it since it doesn't allow you to break on 'glDrawRangeElementsEXT'.
-			glDrawRangeElementsEXT(mode, start, end, count, type, indices);
+			glDrawRangeElements(mode, start, end, count, type, indices);
 		}
 
 		GLenum mode;

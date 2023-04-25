@@ -34,6 +34,9 @@
  * For this reason it's best to try and include it in ".cc" files only.
  */
 #include <GL/glew.h>
+#include <QOpenGLFunctions>
+#include <QOpenGLFunctions_ES2>
+#include <QOpenGLExtraFunctions>
 #include <opengl/OpenGL.h>
 #include <QDebug>
 #include <QString>
@@ -65,7 +68,7 @@ GPlatesOpenGL::GLProgramObject::Allocator::allocate(
 			capabilities.shader.gl_ARB_shader_objects,
 			GPLATES_ASSERTION_SOURCE);
 
-	const resource_handle_type program_object = glCreateProgramObjectARB();
+	const resource_handle_type program_object = glCreateProgram();
 
 	GPlatesGlobal::Assert<OpenGLException>(
 			program_object,
@@ -80,7 +83,7 @@ void
 GPlatesOpenGL::GLProgramObject::Allocator::deallocate(
 		resource_handle_type program_object)
 {
-	glDeleteObjectARB(program_object);
+	glDeleteShader(program_object);
 }
 
 
@@ -118,7 +121,7 @@ GPlatesOpenGL::GLProgramObject::gl_attach_shader(
 {
 	d_shader_objects.insert(shader);
 
-	glAttachObjectARB(get_program_resource_handle(), shader->get_shader_resource_handle());
+	glAttachShader(get_program_resource_handle(), shader->get_shader_resource_handle());
 }
 
 
@@ -127,7 +130,7 @@ GPlatesOpenGL::GLProgramObject::gl_detach_shader(
 		GLRenderer &renderer,
 		const GLShaderObject::shared_ptr_to_const_type &shader)
 {
-	glDetachObjectARB(get_program_resource_handle(), shader->get_shader_resource_handle());
+	glDetachShader(get_program_resource_handle(), shader->get_shader_resource_handle());
 
 	d_shader_objects.erase(shader);
 }
@@ -138,7 +141,7 @@ GPlatesOpenGL::GLProgramObject::gl_bind_attrib_location(
 		const char *attribute_name,
 		GLuint attribute_index)
 {
-	glBindAttribLocationARB(get_program_resource_handle(), attribute_index, attribute_name);
+	glBindAttribLocation(get_program_resource_handle(), attribute_index, attribute_name);
 }
 
 
@@ -157,7 +160,7 @@ GPlatesOpenGL::GLProgramObject::gl_program_parameteri(
 			capabilities.shader.gl_EXT_geometry_shader4,
 			GPLATES_ASSERTION_SOURCE);
 
-	glProgramParameteriEXT(get_program_resource_handle(), pname, value);
+	glProgramParameteri(get_program_resource_handle(), pname, value);
 #else
 	GPlatesGlobal::Abort(GPLATES_ASSERTION_SOURCE);
 #endif
@@ -176,11 +179,11 @@ GPlatesOpenGL::GLProgramObject::gl_link_program(
 	const resource_handle_type program_resource_handle = get_program_resource_handle();
 
 	// Link the attached compiled shader objects into a program.
-	glLinkProgramARB(program_resource_handle);
+	glLinkProgram(program_resource_handle);
 
 	// Check the status of linking.
 	GLint link_status;
-	glGetObjectParameterivARB(program_resource_handle, GL_OBJECT_LINK_STATUS_ARB, &link_status);
+	glGetShaderiv(program_resource_handle, GL_OBJECT_LINK_STATUS_ARB, &link_status);
 
 	// Log a link diagnostic message if compilation was unsuccessful.
 	if (!link_status)
@@ -202,11 +205,11 @@ GPlatesOpenGL::GLProgramObject::gl_validate_program(
 {
 	const resource_handle_type program_resource_handle = get_program_resource_handle();
 
-	glValidateProgramARB(program_resource_handle);
+	glValidateProgram(program_resource_handle);
 
 	// Check the validation status.
 	GLint validate_status;
-	glGetObjectParameterivARB(program_resource_handle, GL_OBJECT_VALIDATE_STATUS_ARB, &validate_status);
+	glGetShaderiv(program_resource_handle, GL_OBJECT_VALIDATE_STATUS_ARB, &validate_status);
 
 	// Log the validate diagnostic message.
 	// We do this on success *or* failure since this method is really meant for use during development.
@@ -225,7 +228,7 @@ bool
 GPlatesOpenGL::GLProgramObject::is_active_uniform(
 		const char *uniform_name) const
 {
-	return glGetUniformLocationARB(get_program_resource_handle(), uniform_name) >= 0;
+	return glGetUniformLocation(get_program_resource_handle(), uniform_name) >= 0;
 }
 
 
@@ -246,7 +249,7 @@ GPlatesOpenGL::GLProgramObject::gl_uniform1f(
 		return false;
 	}
 
-	glUniform1fARB(uniform_location, v0);
+	glUniform1f(uniform_location, v0);
 
 	return true;
 }
@@ -270,7 +273,7 @@ GPlatesOpenGL::GLProgramObject::gl_uniform1f(
 		return false;
 	}
 
-	glUniform1fvARB(uniform_location, count, value);
+	glUniform1fv(uniform_location, count, value);
 
 	return true;
 }
@@ -293,7 +296,7 @@ GPlatesOpenGL::GLProgramObject::gl_uniform1i(
 		return false;
 	}
 
-	glUniform1iARB(uniform_location, v0);
+	glUniform1i(uniform_location, v0);
 
 	return true;
 }
@@ -317,7 +320,7 @@ GPlatesOpenGL::GLProgramObject::gl_uniform1i(
 		return false;
 	}
 
-	glUniform1ivARB(uniform_location, count, value);
+	glUniform1iv(uniform_location, count, value);
 
 	return true;
 }
@@ -417,7 +420,7 @@ GPlatesOpenGL::GLProgramObject::gl_uniform1ui(
 		return false;
 	}
 
-	glUniform1uiEXT(uniform_location, v0);
+	glUniform1ui(uniform_location, v0);
 #else
 	GPlatesGlobal::Abort(GPLATES_ASSERTION_SOURCE);
 #endif
@@ -452,7 +455,7 @@ GPlatesOpenGL::GLProgramObject::gl_uniform1ui(
 		return false;
 	}
 
-	glUniform1uivEXT(uniform_location, count, value);
+	glUniform1uiv(uniform_location, count, value);
 #else
 	GPlatesGlobal::Abort(GPLATES_ASSERTION_SOURCE);
 #endif
@@ -479,7 +482,7 @@ GPlatesOpenGL::GLProgramObject::gl_uniform2f(
 		return false;
 	}
 
-	glUniform2fARB(uniform_location, v0, v1);
+	glUniform2f(uniform_location, v0, v1);
 
 	return true;
 }
@@ -503,7 +506,7 @@ GPlatesOpenGL::GLProgramObject::gl_uniform2f(
 		return false;
 	}
 
-	glUniform2fvARB(uniform_location, count, value);
+	glUniform2fv(uniform_location, count, value);
 
 	return true;
 }
@@ -527,7 +530,7 @@ GPlatesOpenGL::GLProgramObject::gl_uniform2i(
 		return false;
 	}
 
-	glUniform2iARB(uniform_location, v0, v1);
+	glUniform2i(uniform_location, v0, v1);
 
 	return true;
 }
@@ -551,7 +554,7 @@ GPlatesOpenGL::GLProgramObject::gl_uniform2i(
 		return false;
 	}
 
-	glUniform2ivARB(uniform_location, count, value);
+	glUniform2iv(uniform_location, count, value);
 
 	return true;
 }
@@ -653,7 +656,7 @@ GPlatesOpenGL::GLProgramObject::gl_uniform2ui(
 		return false;
 	}
 
-	glUniform2uiEXT(uniform_location, v0, v1);
+	glUniform2ui(uniform_location, v0, v1);
 #else
 	GPlatesGlobal::Abort(GPLATES_ASSERTION_SOURCE);
 #endif
@@ -688,7 +691,7 @@ GPlatesOpenGL::GLProgramObject::gl_uniform2ui(
 		return false;
 	}
 
-	glUniform2uivEXT(uniform_location, count, value);
+	glUniform2uiv(uniform_location, count, value);
 #else
 	GPlatesGlobal::Abort(GPLATES_ASSERTION_SOURCE);
 #endif
@@ -716,7 +719,7 @@ GPlatesOpenGL::GLProgramObject::gl_uniform3f(
 		return false;
 	}
 
-	glUniform3fARB(uniform_location, v0, v1, v2);
+	glUniform3f(uniform_location, v0, v1, v2);
 
 	return true;
 }
@@ -740,7 +743,7 @@ GPlatesOpenGL::GLProgramObject::gl_uniform3f(
 		return false;
 	}
 
-	glUniform3fvARB(uniform_location, count, value);
+	glUniform3fv(uniform_location, count, value);
 
 	return true;
 }
@@ -765,7 +768,7 @@ GPlatesOpenGL::GLProgramObject::gl_uniform3i(
 		return false;
 	}
 
-	glUniform3iARB(uniform_location, v0, v1, v2);
+	glUniform3i(uniform_location, v0, v1, v2);
 
 	return true;
 }
@@ -789,7 +792,7 @@ GPlatesOpenGL::GLProgramObject::gl_uniform3i(
 		return false;
 	}
 
-	glUniform3ivARB(uniform_location, count, value);
+	glUniform3iv(uniform_location, count, value);
 
 	return true;
 }
@@ -893,7 +896,7 @@ GPlatesOpenGL::GLProgramObject::gl_uniform3ui(
 		return false;
 	}
 
-	glUniform3uiEXT(uniform_location, v0, v1, v2);
+	glUniform3ui(uniform_location, v0, v1, v2);
 #else
 	GPlatesGlobal::Abort(GPLATES_ASSERTION_SOURCE);
 #endif
@@ -928,7 +931,7 @@ GPlatesOpenGL::GLProgramObject::gl_uniform3ui(
 		return false;
 	}
 
-	glUniform3uivEXT(uniform_location, count, value);
+	glUniform3uiv(uniform_location, count, value);
 #else
 	GPlatesGlobal::Abort(GPLATES_ASSERTION_SOURCE);
 #endif
@@ -957,7 +960,7 @@ GPlatesOpenGL::GLProgramObject::gl_uniform4f(
 		return false;
 	}
 
-	glUniform4fARB(uniform_location, v0, v1, v2, v3);
+	glUniform4f(uniform_location, v0, v1, v2, v3);
 
 	return true;
 }
@@ -981,7 +984,7 @@ GPlatesOpenGL::GLProgramObject::gl_uniform4f(
 		return false;
 	}
 
-	glUniform4fvARB(uniform_location, count, value);
+	glUniform4fv(uniform_location, count, value);
 
 	return true;
 }
@@ -1007,7 +1010,7 @@ GPlatesOpenGL::GLProgramObject::gl_uniform4i(
 		return false;
 	}
 
-	glUniform4iARB(uniform_location, v0, v1, v2, v3);
+	glUniform4i(uniform_location, v0, v1, v2, v3);
 
 	return true;
 }
@@ -1031,7 +1034,7 @@ GPlatesOpenGL::GLProgramObject::gl_uniform4i(
 		return false;
 	}
 
-	glUniform4ivARB(uniform_location, count, value);
+	glUniform4iv(uniform_location, count, value);
 
 	return true;
 }
@@ -1137,7 +1140,7 @@ GPlatesOpenGL::GLProgramObject::gl_uniform4ui(
 		return false;
 	}
 
-	glUniform4uiEXT(uniform_location, v0, v1, v2, v3);
+	glUniform4ui(uniform_location, v0, v1, v2, v3);
 #else
 	GPlatesGlobal::Abort(GPLATES_ASSERTION_SOURCE);
 #endif
@@ -1172,7 +1175,7 @@ GPlatesOpenGL::GLProgramObject::gl_uniform4ui(
 		return false;
 	}
 
-	glUniform4uivEXT(uniform_location, count, value);
+	glUniform4uiv(uniform_location, count, value);
 #else
 	GPlatesGlobal::Abort(GPLATES_ASSERTION_SOURCE);
 #endif
@@ -1200,7 +1203,7 @@ GPlatesOpenGL::GLProgramObject::gl_uniform_matrix2x2f(
 		return false;
 	}
 
-	glUniformMatrix2fvARB(uniform_location, count, transpose, value);
+	glUniformMatrix2fv(uniform_location, count, transpose, value);
 
 	return true;
 }
@@ -1261,7 +1264,7 @@ GPlatesOpenGL::GLProgramObject::gl_uniform_matrix3x3f(
 		return false;
 	}
 
-	glUniformMatrix3fvARB(uniform_location, count, transpose, value);
+	glUniformMatrix3fv(uniform_location, count, transpose, value);
 
 	return true;
 }
@@ -1322,7 +1325,7 @@ GPlatesOpenGL::GLProgramObject::gl_uniform_matrix4x4f(
 		return false;
 	}
 
-	glUniformMatrix4fvARB(uniform_location, count, transpose, value);
+	glUniformMatrix4fv(uniform_location, count, transpose, value);
 
 	return true;
 }
@@ -1391,7 +1394,7 @@ GPlatesOpenGL::GLProgramObject::gl_uniform_matrix4x4f(
 	}
 
 	// Note that the matrix is in column-major format.
-	glUniformMatrix4fvARB(uniform_location, 1, GL_FALSE/*transpose*/, float_matrix);
+	glUniformMatrix4fv(uniform_location, 1, GL_FALSE/*transpose*/, float_matrix);
 
 	return true;
 }
@@ -1466,7 +1469,7 @@ GPlatesOpenGL::GLProgramObject::gl_uniform_matrix4x4f(
 		return false;
 	}
 
-	glUniformMatrix4fvARB(uniform_location, matrices.size(), GL_FALSE/*transpose*/, float_matrices.get());
+	glUniformMatrix4fv(uniform_location, matrices.size(), GL_FALSE/*transpose*/, float_matrices.get());
 
 	return true;
 }
@@ -1526,7 +1529,7 @@ GPlatesOpenGL::GLProgramObject::get_uniform_location(
 		// The uniform name was inserted which means it didn't already exist.
 		// So find, and assign, its location index.
 		const uniform_location_type uniform_location =
-				glGetUniformLocationARB(get_program_resource_handle(), uniform_name);
+				glGetUniformLocation(get_program_resource_handle(), uniform_name);
 
 		if (uniform_location < 0)
 		{
@@ -1574,11 +1577,11 @@ GPlatesOpenGL::GLProgramObject::output_info_log()
 
 	// Determine the length of the info log message.
 	GLint info_log_length;
-	glGetObjectParameterivARB(program_resource_handle, GL_OBJECT_INFO_LOG_LENGTH_ARB, &info_log_length);
+	glGetShaderiv(program_resource_handle, GL_OBJECT_INFO_LOG_LENGTH_ARB, &info_log_length);
 
 	// Allocate and read the info log message.
 	boost::scoped_array<GLcharARB> info_log(new GLcharARB[info_log_length]);
-	glGetInfoLogARB(program_resource_handle, info_log_length, NULL, info_log.get());
+	glGetShaderInfoLog(program_resource_handle, info_log_length, NULL, info_log.get());
 	// ...the returned string is null-terminated.
 
 	// If some of the shader code segments came from files then print that information since

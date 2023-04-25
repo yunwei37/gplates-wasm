@@ -29,7 +29,9 @@
  * For this reason it's best to try and include it in ".cc" files only.
  */
 #include <GL/glew.h>
-
+#include <QOpenGLFunctions>
+#include <QOpenGLFunctions_ES2>
+#include <QOpenGLExtraFunctions>
 #include "GLStateSets.h"
 
 #include "GLCapabilities.h"
@@ -81,7 +83,7 @@ namespace GPlatesOpenGL
 				if (capabilities.texture.gl_ARB_multitexture)
 				{
 					// Apply the change to OpenGL.
-					glActiveTextureARB(texture_unit);
+					glActiveTexture(texture_unit);
 
 					// And record the change we've made.
 					last_applied_state.set_active_texture(capabilities, texture_unit);
@@ -106,7 +108,7 @@ namespace GPlatesOpenGL
 				if (capabilities.texture.gl_ARB_multitexture)
 				{
 					// Apply the change to OpenGL.
-					glClientActiveTextureARB(texture_unit);
+					glActiveTexture(texture_unit);
 
 					// And record the change we've made.
 					last_applied_state.set_client_active_texture(capabilities, texture_unit);
@@ -134,7 +136,7 @@ namespace GPlatesOpenGL
 						GPLATES_ASSERTION_SOURCE);
 
 				// Bind the buffer object.
-				glBindBufferARB(target, buffer_object_resource);
+				glBindBuffer(target, buffer_object_resource);
 
 				// And record the change we've made.
 				last_applied_state.set_bind_buffer_object(buffer_object, target);
@@ -159,7 +161,7 @@ namespace GPlatesOpenGL
 						GPLATES_ASSERTION_SOURCE);
 
 				// No buffer object - back to client memory arrays.
-				glBindBufferARB(target, 0);
+				glBindBuffer(target, 0);
 
 				// And record the change we've made.
 				last_applied_state.set_unbind_buffer_object(target);
@@ -183,21 +185,24 @@ namespace GPlatesOpenGL
 			operator()(
 					const GLint &param) const
 			{
-				glTexGeni(d_coord, d_pname, param);
+				qDebug("glTexGeni");
+				// glTexGeni(d_coord, d_pname, param);
 			}
 
 			void
 			operator()(
 					const GLfloat &param) const
 			{
-				glTexGenf(d_coord, d_pname, param);
+				qDebug("glTexGenf");
+				// glTexGenf(d_coord, d_pname, param);
 			}
 
 			void
 			operator()(
 					const GLdouble &param) const
 			{
-				glTexGend(d_coord, d_pname, param);
+				qDebug("glTexGend");
+				// glTexGend(d_coord, d_pname, param);
 			}
 
 			void
@@ -208,8 +213,8 @@ namespace GPlatesOpenGL
 				GPlatesGlobal::Assert<GPlatesGlobal::PreconditionViolationError>(
 						param.size() == 4,
 						GPLATES_ASSERTION_SOURCE);
-
-				glTexGeniv(d_coord, d_pname, &param[0]);
+				 qDebug("glTexGeniv");
+				// glTexGeniv(d_coord, d_pname, &param[0]);
 			}
 
 			void
@@ -220,8 +225,8 @@ namespace GPlatesOpenGL
 				GPlatesGlobal::Assert<GPlatesGlobal::PreconditionViolationError>(
 						param.size() == 4,
 						GPLATES_ASSERTION_SOURCE);
-
-				glTexGenfv(d_coord, d_pname, &param[0]);
+				qDebug("glTexGenfv");
+				// glTexGenfv(d_coord, d_pname, &param[0]);
 			}
 
 			void
@@ -232,8 +237,8 @@ namespace GPlatesOpenGL
 				GPlatesGlobal::Assert<GPlatesGlobal::PreconditionViolationError>(
 						param.size() == 4,
 						GPLATES_ASSERTION_SOURCE);
-
-				glTexGendv(d_coord, d_pname, &param[0]);
+				qDebug("glTexGendv");
+				// glTexGendv(d_coord, d_pname, &param[0]);
 			}
 
 		private:
@@ -258,14 +263,16 @@ namespace GPlatesOpenGL
 			operator()(
 					const GLint &param) const
 			{
-				glTexEnvi(d_target, d_pname, param);
+				qDebug("glTexEnvi*(d_target, d_pname, &param[0]);");
+				// glTexEnvi(d_target, d_pname, param);
 			}
 
 			void
 			operator()(
 					const GLfloat &param) const
 			{
-				glTexEnvf(d_target, d_pname, param);
+				qDebug("glTexEnvf*(d_target, d_pname, &param[0]);");				
+				// glTexEnvf(d_target, d_pname, param);
 			}
 
 			void
@@ -275,8 +282,8 @@ namespace GPlatesOpenGL
 				GPlatesGlobal::Assert<GPlatesGlobal::PreconditionViolationError>(
 						!param.empty(),
 						GPLATES_ASSERTION_SOURCE);
-
-				glTexEnviv(d_target, d_pname, &param[0]);
+				qDebug("glTexEnviv*(d_target, d_pname, &param[0]);");
+				// glTexEnviv(d_target, d_pname, &param[0]);
 			}
 
 			void
@@ -286,8 +293,8 @@ namespace GPlatesOpenGL
 				GPlatesGlobal::Assert<GPlatesGlobal::PreconditionViolationError>(
 						!param.empty(),
 						GPLATES_ASSERTION_SOURCE);
-
-				glTexEnvfv(d_target, d_pname, &param[0]);
+				qDebug("glTexEnvfv*(d_target, d_pname, &param[0]);");
+				// glTexEnvfv(d_target, d_pname, &param[0]);
 			}
 
 		private:
@@ -594,7 +601,7 @@ GPlatesOpenGL::GLActiveTextureStateSet::apply_state(
 
 	if (capabilities.texture.gl_ARB_multitexture)
 	{
-		glActiveTextureARB(d_active_texture);
+		glActiveTexture(d_active_texture);
 	}
 	// No GL_ARB_multitexture means we're always using texture unit 0.
 }
@@ -612,7 +619,7 @@ GPlatesOpenGL::GLActiveTextureStateSet::apply_from_default_state(
 
 	if (capabilities.texture.gl_ARB_multitexture)
 	{
-		glActiveTextureARB(d_active_texture);
+		glActiveTexture(d_active_texture);
 	}
 	// No GL_ARB_multitexture means we're always using texture unit 0.
 }
@@ -631,7 +638,7 @@ GPlatesOpenGL::GLActiveTextureStateSet::apply_to_default_state(
 	if (capabilities.texture.gl_ARB_multitexture)
 	{
 		// Texture unit 0.
-		glActiveTextureARB(GL_TEXTURE0);
+		glActiveTexture(GL_TEXTURE0);
 	}
 	// No GL_ARB_multitexture means we're always using texture unit 0.
 }
@@ -653,7 +660,7 @@ GPlatesOpenGL::GLAlphaFuncStateSet::apply_state(
 		return;
 	}
 
-	glAlphaFunc(d_alpha_func, d_ref.dval());
+	glAlphaFuncQCOM(d_alpha_func, d_ref.dval());
 }
 
 void
@@ -668,7 +675,7 @@ GPlatesOpenGL::GLAlphaFuncStateSet::apply_from_default_state(
 		return;
 	}
 
-	glAlphaFunc(d_alpha_func, d_ref.dval());
+	glAlphaFuncQCOM(d_alpha_func, d_ref.dval());
 }
 
 void
@@ -683,7 +690,7 @@ GPlatesOpenGL::GLAlphaFuncStateSet::apply_to_default_state(
 		return;
 	}
 
-	glAlphaFunc(GL_ALWAYS, 0);
+	glAlphaFuncQCOM(GL_ALWAYS, 0);
 }
 
 
@@ -708,12 +715,12 @@ GPlatesOpenGL::GLBindBufferObjectStateSet::apply_state(
 	if (d_buffer_object_resource)
 	{
 		// Bind the buffer object.
-		glBindBufferARB(d_target, d_buffer_object_resource.get());
+		glBindBuffer(d_target, d_buffer_object_resource.get());
 	}
 	else
 	{
 		// No buffer object - back to client memory arrays.
-		glBindBufferARB(d_target, 0);
+		glBindBuffer(d_target, 0);
 	}
 }
 
@@ -733,7 +740,7 @@ GPlatesOpenGL::GLBindBufferObjectStateSet::apply_from_default_state(
 			GPLATES_ASSERTION_SOURCE);
 
 	// Bind the buffer object.
-	glBindBufferARB(d_target, d_buffer_object_resource.get());
+	glBindBuffer(d_target, d_buffer_object_resource.get());
 }
 
 void
@@ -752,7 +759,7 @@ GPlatesOpenGL::GLBindBufferObjectStateSet::apply_to_default_state(
 			GPLATES_ASSERTION_SOURCE);
 
 	// The default is zero (no buffer object - back to client memory arrays).
-	glBindBufferARB(d_target, 0);
+	glBindBuffer(d_target, 0);
 }
 
 
@@ -777,12 +784,12 @@ GPlatesOpenGL::GLBindFrameBufferObjectStateSet::apply_state(
 	if (d_frame_buffer_object)
 	{
 		// Bind the frame buffer object.
-		glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, d_frame_buffer_object.get()->get_frame_buffer_resource_handle());
+		glBindFramebuffer(GL_FRAMEBUFFER_EXT, d_frame_buffer_object.get()->get_frame_buffer_resource_handle());
 	}
 	else
 	{
 		// No framebuffer object - back to using the main framebuffer.
-		glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
+		glBindFramebuffer(GL_FRAMEBUFFER_EXT, 0);
 	}
 }
 
@@ -802,7 +809,7 @@ GPlatesOpenGL::GLBindFrameBufferObjectStateSet::apply_from_default_state(
 			GPLATES_ASSERTION_SOURCE);
 
 	// Bind the frame buffer object.
-	glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, d_frame_buffer_object.get()->get_frame_buffer_resource_handle());
+	glBindFramebuffer(GL_FRAMEBUFFER_EXT, d_frame_buffer_object.get()->get_frame_buffer_resource_handle());
 }
 
 void
@@ -821,7 +828,7 @@ GPlatesOpenGL::GLBindFrameBufferObjectStateSet::apply_to_default_state(
 			GPLATES_ASSERTION_SOURCE);
 
 	// The default is zero (the main framebuffer).
-    glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
+    glBindFramebuffer(GL_FRAMEBUFFER_EXT, 0);
 }
 
 
@@ -846,12 +853,12 @@ GPlatesOpenGL::GLBindProgramObjectStateSet::apply_state(
 	if (d_program_object)
 	{
 		// Bind the shader program object.
-		glUseProgramObjectARB(d_program_object.get()->get_program_resource_handle());
+		glUseProgram(d_program_object.get()->get_program_resource_handle());
 	}
 	else
 	{
 		// No shader program object - back to using the fixed-function pipeline.
-		glUseProgramObjectARB(0);
+		glUseProgram(0);
 	}
 }
 
@@ -871,7 +878,7 @@ GPlatesOpenGL::GLBindProgramObjectStateSet::apply_from_default_state(
 			GPLATES_ASSERTION_SOURCE);
 
 	// Bind the shader program object.
-	glUseProgramObjectARB(d_program_object.get()->get_program_resource_handle());
+	glUseProgram(d_program_object.get()->get_program_resource_handle());
 }
 
 void
@@ -890,7 +897,7 @@ GPlatesOpenGL::GLBindProgramObjectStateSet::apply_to_default_state(
 			GPLATES_ASSERTION_SOURCE);
 
 	// The default is zero (the fixed-function pipeline).
-    glUseProgramObjectARB(0);
+    glUseProgram(0);
 }
 
 
@@ -1103,7 +1110,7 @@ GPlatesOpenGL::GLBlendEquationStateSet::GLBlendEquationStateSet(
 	d_mode_A(mode),
 	d_separate_equations(false)
 {
-	//! The GL_EXT_blend_minmax extension exposes 'glBlendEquationEXT()'.
+	//! The GL_EXT_blend_minmax extension exposes 'glBlendEquation()'.
 	GPlatesGlobal::Assert<GPlatesGlobal::PreconditionViolationError>(
 			capabilities.framebuffer.gl_EXT_blend_minmax,
 			GPLATES_ASSERTION_SOURCE);
@@ -1142,12 +1149,12 @@ GPlatesOpenGL::GLBlendEquationStateSet::apply_state(
 
 	if (d_separate_equations)
 	{
-		glBlendEquationSeparateEXT(d_mode_RGB, d_mode_A);
+		glBlendEquationSeparate(d_mode_RGB, d_mode_A);
 	}
 	else
 	{
 		// The RGB and A equations are the same so can use either to specify for RGBA.
-		glBlendEquationEXT(d_mode_RGB);
+		glBlendEquation(d_mode_RGB);
 	}
 }
 
@@ -1165,12 +1172,12 @@ GPlatesOpenGL::GLBlendEquationStateSet::apply_from_default_state(
 
 	if (d_separate_equations)
 	{
-		glBlendEquationSeparateEXT(d_mode_RGB, d_mode_A);
+		glBlendEquationSeparate(d_mode_RGB, d_mode_A);
 	}
 	else
 	{
 		// The RGB and A equations are the same so can use either to specify for RGBA.
-		glBlendEquationEXT(d_mode_RGB);
+		glBlendEquation(d_mode_RGB);
 	}
 }
 
@@ -1187,7 +1194,7 @@ GPlatesOpenGL::GLBlendEquationStateSet::apply_to_default_state(
 	}
 
 	// Applies to both RGB and A.
-	glBlendEquationEXT(GL_FUNC_ADD_EXT);
+	glBlendEquation(GL_FUNC_ADD_EXT);
 }
 
 
@@ -1229,7 +1236,7 @@ GPlatesOpenGL::GLBlendFuncStateSet::apply_state(
 
 	if (d_separate_factors)
 	{
-		glBlendFuncSeparateEXT(d_src_factor_RGB, d_dst_factor_RGB, d_src_factor_A, d_dst_factor_A);
+		glBlendFuncSeparate(d_src_factor_RGB, d_dst_factor_RGB, d_src_factor_A, d_dst_factor_A);
 	}
 	else
 	{
@@ -1254,7 +1261,7 @@ GPlatesOpenGL::GLBlendFuncStateSet::apply_from_default_state(
 
 	if (d_separate_factors)
 	{
-		glBlendFuncSeparateEXT(d_src_factor_RGB, d_dst_factor_RGB, d_src_factor_A, d_dst_factor_A);
+		glBlendFuncSeparate(d_src_factor_RGB, d_dst_factor_RGB, d_src_factor_A, d_dst_factor_A);
 	}
 	else
 	{
@@ -1471,7 +1478,7 @@ GPlatesOpenGL::GLClientActiveTextureStateSet::apply_state(
 
 	if (capabilities.texture.gl_ARB_multitexture)
 	{
-		glClientActiveTextureARB(d_client_active_texture);
+		glActiveTexture(d_client_active_texture);
 	}
 	// No GL_ARB_multitexture means we're always using texture unit 0.
 }
@@ -1489,7 +1496,7 @@ GPlatesOpenGL::GLClientActiveTextureStateSet::apply_from_default_state(
 
 	if (capabilities.texture.gl_ARB_multitexture)
 	{
-		glClientActiveTextureARB(d_client_active_texture);
+		glActiveTexture(d_client_active_texture);
 	}
 	// No GL_ARB_multitexture means we're always using texture unit 0.
 }
@@ -1508,7 +1515,7 @@ GPlatesOpenGL::GLClientActiveTextureStateSet::apply_to_default_state(
 	if (capabilities.texture.gl_ARB_multitexture)
 	{
 		// Texture unit 0.
-		glClientActiveTextureARB(GL_TEXTURE0);
+		glActiveTexture(GL_TEXTURE0);
 	}
 	// No GL_ARB_multitexture means we're always using texture unit 0.
 }
@@ -1586,8 +1593,10 @@ GPlatesOpenGL::GLColorPointerStateSet::apply_state(
 	d_buffer.bind_buffer(capabilities, last_applied_state);
 
 	// GL_COLOR_ARRAY_BUFFER_BINDING now captures the vertex buffer object binding (if any).
-	glColorPointer(d_size, d_type, d_stride, d_buffer.get_buffer_pointer_to_apply());
-	d_buffer.applied_buffer_pointer_to_opengl();
+//	glVertexAttribPointer(d_size, d_type, d_stride, d_buffer.get_buffer_pointer_to_apply());
+    GLboolean normalized = GL_FALSE;  // Or GL_TRUE, depending on your data requirements
+    glVertexAttribPointer(0, d_size, d_type, normalized, d_stride, d_buffer.get_buffer_pointer_to_apply());
+    d_buffer.applied_buffer_pointer_to_opengl();
 }
 
 void
@@ -1608,7 +1617,7 @@ GPlatesOpenGL::GLColorPointerStateSet::apply_from_default_state(
 	d_buffer.bind_buffer(capabilities, last_applied_state);
 
 	// GL_COLOR_ARRAY_BUFFER_BINDING now captures the vertex buffer object binding (if any).
-	glColorPointer(d_size, d_type, d_stride, d_buffer.get_buffer_pointer_to_apply());
+    glVertexAttribPointer(0, d_size, d_type, GL_FALSE, d_stride, d_buffer.get_buffer_pointer_to_apply());
 	d_buffer.applied_buffer_pointer_to_opengl();
 }
 
@@ -1630,7 +1639,7 @@ GPlatesOpenGL::GLColorPointerStateSet::apply_to_default_state(
 	d_buffer.unbind_buffer(capabilities, last_applied_state);
 
 	// These are the default parameters.
-	glColorPointer(4, GL_FLOAT, 0, NULL);
+    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, NULL);
 	d_buffer.applied_buffer_pointer_to_opengl();
 
 	// Any GL_COLOR_ARRAY_BUFFER_BINDING binding to a vertex buffer object (if any) is now released.
@@ -1910,11 +1919,11 @@ GPlatesOpenGL::GLEnableClientStateStateSet::apply_state(
 
 	if (d_enable)
 	{
-		glEnableClientState(d_array);
+		glEnableVertexAttribArray(d_array);
 	}
 	else
 	{
-		glDisableClientState(d_array);
+		glDisableVertexAttribArray(d_array);
 	}
 }
 
@@ -1929,7 +1938,7 @@ GPlatesOpenGL::GLEnableClientStateStateSet::apply_from_default_state(
 		return;
 	}
 
-	glEnableClientState(d_array);
+	glEnableVertexAttribArray(d_array);
 }
 
 void
@@ -1943,7 +1952,7 @@ GPlatesOpenGL::GLEnableClientStateStateSet::apply_to_default_state(
 		return;
 	}
 
-	glDisableClientState(d_array);
+	glDisableVertexAttribArray(d_array);
 }
 
 
@@ -1966,11 +1975,11 @@ GPlatesOpenGL::GLEnableClientTextureStateStateSet::apply_state(
 
 	if (d_enable)
 	{
-		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+		glEnableVertexAttribArray(GL_TEXTURE_COORD_ARRAY);
 	}
 	else
 	{
-		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+		glDisableVertexAttribArray(GL_TEXTURE_COORD_ARRAY);
 	}
 }
 
@@ -1988,7 +1997,7 @@ GPlatesOpenGL::GLEnableClientTextureStateStateSet::apply_from_default_state(
 	// Make sure the correct texture unit is currently active.
 	set_client_active_texture(capabilities, d_texture_unit, last_applied_state);
 
-	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	glEnableVertexAttribArray(GL_TEXTURE_COORD_ARRAY);
 }
 
 void
@@ -2005,7 +2014,7 @@ GPlatesOpenGL::GLEnableClientTextureStateStateSet::apply_to_default_state(
 	// Make sure the correct texture unit is currently active.
 	set_client_active_texture(capabilities, d_texture_unit, last_applied_state);
 
-	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+	glDisableVertexAttribArray(GL_TEXTURE_COORD_ARRAY);
 }
 
 
@@ -2167,11 +2176,11 @@ GPlatesOpenGL::GLEnableVertexAttribArrayStateSet::apply_state(
 
 	if (d_enable)
 	{
-		glEnableVertexAttribArrayARB(d_attribute_index);
+		glEnableVertexAttribArray(d_attribute_index);
 	}
 	else
 	{
-		glDisableVertexAttribArrayARB(d_attribute_index);
+		glDisableVertexAttribArray(d_attribute_index);
 	}
 }
 
@@ -2186,7 +2195,7 @@ GPlatesOpenGL::GLEnableVertexAttribArrayStateSet::apply_from_default_state(
 		return;
 	}
 
-	glEnableVertexAttribArrayARB(d_attribute_index);
+	glEnableVertexAttribArray(d_attribute_index);
 }
 
 void
@@ -2200,7 +2209,7 @@ GPlatesOpenGL::GLEnableVertexAttribArrayStateSet::apply_to_default_state(
 		return;
 	}
 
-	glDisableVertexAttribArrayARB(d_attribute_index);
+	glDisableVertexAttribArray(d_attribute_index);
 }
 
 
@@ -2524,7 +2533,7 @@ GPlatesOpenGL::GLNormalPointerStateSet::apply_state(
 	d_buffer.bind_buffer(capabilities, last_applied_state);
 
 	// GL_NORMAL_ARRAY_BUFFER_BINDING now captures the vertex buffer object binding (if any).
-	glNormalPointer(d_type, d_stride, d_buffer.get_buffer_pointer_to_apply());
+    glVertexAttribPointer(0, 0, d_type, GL_FALSE, d_stride, d_buffer.get_buffer_pointer_to_apply());
 	d_buffer.applied_buffer_pointer_to_opengl();
 }
 
@@ -2545,7 +2554,7 @@ GPlatesOpenGL::GLNormalPointerStateSet::apply_from_default_state(
 	d_buffer.bind_buffer(capabilities, last_applied_state);
 
 	// GL_NORMAL_ARRAY_BUFFER_BINDING now captures the vertex buffer object binding (if any).
-	glNormalPointer(d_type, d_stride, d_buffer.get_buffer_pointer_to_apply());
+    glVertexAttribPointer(0, 0, d_type, GL_FALSE, d_stride, d_buffer.get_buffer_pointer_to_apply());
 	d_buffer.applied_buffer_pointer_to_opengl();
 }
 
@@ -2566,7 +2575,7 @@ GPlatesOpenGL::GLNormalPointerStateSet::apply_to_default_state(
 	d_buffer.unbind_buffer(capabilities, last_applied_state);
 
 	// These are the default parameters.
-	glNormalPointer(GL_FLOAT, 0, NULL);
+    glVertexAttribPointer(0, 0, GL_FLOAT, GL_FALSE, 0, NULL);
 	d_buffer.applied_buffer_pointer_to_opengl();
 
 	// Any GL_NORMAL_ARRAY_BUFFER_BINDING binding to a vertex buffer object (if any) is now released.
@@ -3029,7 +3038,7 @@ GPlatesOpenGL::GLTexCoordPointerStateSet::apply_state(
 	set_client_active_texture(capabilities, d_texture_unit, last_applied_state);
 
 	// GL_TEXTURE_COORD_ARRAY_BUFFER_BINDING now captures the vertex buffer object binding (if any).
-	glTexCoordPointer(d_size, d_type, d_stride, d_buffer.get_buffer_pointer_to_apply());
+    glVertexAttribPointer(0, d_size, d_type, GL_FALSE, d_stride, d_buffer.get_buffer_pointer_to_apply());
 	d_buffer.applied_buffer_pointer_to_opengl();
 }
 
@@ -3055,7 +3064,7 @@ GPlatesOpenGL::GLTexCoordPointerStateSet::apply_from_default_state(
 	set_client_active_texture(capabilities, d_texture_unit, last_applied_state);
 
 	// GL_TEXTURE_COORD_ARRAY_BUFFER_BINDING now captures the vertex buffer object binding (if any).
-	glTexCoordPointer(d_size, d_type, d_stride, d_buffer.get_buffer_pointer_to_apply());
+    glVertexAttribPointer(0, d_size, d_type, GL_FALSE, d_stride, d_buffer.get_buffer_pointer_to_apply());
 	d_buffer.applied_buffer_pointer_to_opengl();
 }
 
@@ -3081,7 +3090,7 @@ GPlatesOpenGL::GLTexCoordPointerStateSet::apply_to_default_state(
 	set_client_active_texture(capabilities, d_texture_unit, last_applied_state);
 
 	// These are the default parameters.
-	glTexCoordPointer(4, GL_FLOAT, 0, NULL);
+    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, NULL);
 	d_buffer.applied_buffer_pointer_to_opengl();
 
 	// Any GL_TEXTURE_COORD_ARRAY_BUFFER_BINDING binding to a vertex buffer object (if any) is now released.
@@ -3476,19 +3485,19 @@ GPlatesOpenGL::GLVertexAttribPointerStateSet::apply_state(
 	switch (d_vertex_attrib_api)
 	{
 	case VERTEX_ATTRIB_POINTER:
-		glVertexAttribPointerARB(
+		glVertexAttribPointer(
 				d_attribute_index, d_size, d_type, d_normalized.get(), d_stride, d_buffer.get_buffer_pointer_to_apply());
 		break;
 	case VERTEX_ATTRIB_I_POINTER:
 #ifdef GL_EXT_gpu_shader4 // In case old 'glew.h' (since extension added relatively recently).
-		glVertexAttribIPointerEXT(
+		glVertexAttribIPointer(
 				d_attribute_index, d_size, d_type, d_stride, d_buffer.get_buffer_pointer_to_apply());
 #endif
 		break;
 	case VERTEX_ATTRIB_L_POINTER:
 #ifdef GL_ARB_vertex_attrib_64bit // In case old 'glew.h' (since extension added relatively recently).
-		glVertexAttribLPointer(
-				d_attribute_index, d_size, d_type, d_stride, d_buffer.get_buffer_pointer_to_apply());
+		glVertexAttribPointer(
+                d_attribute_index, d_size, d_type, GL_FALSE, d_stride, d_buffer.get_buffer_pointer_to_apply());
 #endif
 		break;
 	default:
@@ -3523,19 +3532,19 @@ GPlatesOpenGL::GLVertexAttribPointerStateSet::apply_from_default_state(
 	switch (d_vertex_attrib_api)
 	{
 	case VERTEX_ATTRIB_POINTER:
-		glVertexAttribPointerARB(
+		glVertexAttribPointer(
 				d_attribute_index, d_size, d_type, d_normalized.get(), d_stride, d_buffer.get_buffer_pointer_to_apply());
 		break;
 	case VERTEX_ATTRIB_I_POINTER:
 #ifdef GL_EXT_gpu_shader4 // In case old 'glew.h' (since extension added relatively recently).
-		glVertexAttribIPointerEXT(
+		glVertexAttribIPointer(
 				d_attribute_index, d_size, d_type, d_stride, d_buffer.get_buffer_pointer_to_apply());
 #endif
 		break;
 	case VERTEX_ATTRIB_L_POINTER:
 #ifdef GL_ARB_vertex_attrib_64bit // In case old 'glew.h' (since extension added relatively recently).
-		glVertexAttribLPointer(
-				d_attribute_index, d_size, d_type, d_stride, d_buffer.get_buffer_pointer_to_apply());
+		glVertexAttribPointer(
+                d_attribute_index, d_size, d_type, d_stride, GL_FALSE, d_buffer.get_buffer_pointer_to_apply());
 #endif
 		break;
 	default:
@@ -3568,7 +3577,7 @@ GPlatesOpenGL::GLVertexAttribPointerStateSet::apply_to_default_state(
 
 	// These are the default parameters.
 	// Note that for the default state we arbitrarily chose the 'glVertexAttribPointer' API.
-	glVertexAttribPointerARB(d_attribute_index, 4, GL_FLOAT, GL_FALSE, 0, NULL);
+	glVertexAttribPointer(d_attribute_index, 4, GL_FLOAT, GL_FALSE, 0, NULL);
 	d_buffer.applied_buffer_pointer_to_opengl();
 
 	// Any GL_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING binding to a vertex buffer object (if any) is now released.

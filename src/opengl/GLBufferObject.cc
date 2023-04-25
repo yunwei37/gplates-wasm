@@ -29,6 +29,9 @@
  * For this reason it's best to try and include it in ".cc" files only.
  */
 #include <GL/glew.h>
+#include <QOpenGLFunctions>
+#include <QOpenGLFunctions_ES2>
+#include <QOpenGLExtraFunctions>
 #include <opengl/OpenGL.h>
 #include <QDebug>
 
@@ -61,7 +64,7 @@ GPlatesOpenGL::GLBufferObject::Allocator::allocate(
 			GPLATES_ASSERTION_SOURCE);
 
 	resource_handle_type buffer_object;
-	glGenBuffersARB(1, &buffer_object);
+	glGenBuffers(1, &buffer_object);
 	return buffer_object;
 }
 
@@ -70,7 +73,7 @@ void
 GPlatesOpenGL::GLBufferObject::Allocator::deallocate(
 		resource_handle_type buffer_object)
 {
-	glDeleteBuffersARB(1, &buffer_object);
+	glDeleteBuffers(1, &buffer_object);
 }
 
 
@@ -114,7 +117,7 @@ GPlatesOpenGL::GLBufferObject::gl_buffer_data(
 			boost::dynamic_pointer_cast<const GLBufferObject>(shared_from_this()),
 			target);
 
-	glBufferDataARB(target, size, data, usage);
+	glBufferData(target, size, data, usage);
 
 	// Record the new buffer size.
 	d_size = size;
@@ -157,7 +160,7 @@ GPlatesOpenGL::GLBufferObject::gl_buffer_sub_data(
 			boost::dynamic_pointer_cast<const GLBufferObject>(shared_from_this()),
 			target);
 
-	glBufferSubDataARB(target, offset, size, data);
+	glBufferSubData(target, offset, size, data);
 
 	// If we're loading data that overlaps with the un-initialised region of the buffer then
 	// update the offset into un-initialised memory.
@@ -196,7 +199,7 @@ GPlatesOpenGL::GLBufferObject::gl_get_buffer_sub_data(
 			boost::dynamic_pointer_cast<const GLBufferObject>(shared_from_this()),
 			target);
 
-	glGetBufferSubDataARB(target, offset, size, data);
+	glGetBufferSubData(target, offset, size, data);
 }
 
 
@@ -218,7 +221,7 @@ GPlatesOpenGL::GLBufferObject::gl_map_buffer_static(
 			boost::dynamic_pointer_cast<const GLBufferObject>(shared_from_this()),
 			target);
 
-	GLvoid *mapped_data = glMapBufferARB(target, access);
+	GLvoid *mapped_data = glMapBuffer(target, access);
 
 	// We have to assume the entire buffer will be written to.
 	d_uninitialised_offset = d_size;
@@ -290,11 +293,11 @@ GPlatesOpenGL::GLBufferObject::gl_map_buffer_dynamic(
 		// One or more ranges of the buffer will need to be explicitly flushed
 		// (using 'gl_flush_buffer_dynamic()').
 		// NOTE: This is buffer object state (not global state) so it applies to the currently bound buffer object.
-		glBufferParameteriAPPLE(target, GL_BUFFER_FLUSHING_UNMAP_APPLE, GL_FALSE);
+//		glBufferParameteri(target, GL_BUFFER_FLUSHING_UNMAP_APPLE, GL_FALSE);
 
 		// Map the entire buffer.
 		// Only used for write access - otherwise caller should be using 'gl_map_buffer_static'.
-		mapped_data = glMapBufferARB(target, GL_WRITE_ONLY_ARB);
+		mapped_data = glMapBuffer(target, GL_WRITE_ONLY_ARB);
 
 		// If the mapping failed for some reason then 'gl_unmap_buffer()' won't get called so
 		// we should restore the default flushing behaviour before we return.
@@ -302,7 +305,7 @@ GPlatesOpenGL::GLBufferObject::gl_map_buffer_dynamic(
 		{
 			// Restore default flushing behaviour - which is to flush the entire buffer.
 			// NOTE: This is buffer object state (not global state) so it applies to the currently bound buffer object.
-			glBufferParameteriAPPLE(target, GL_BUFFER_FLUSHING_UNMAP_APPLE, GL_TRUE);
+//			glBufferParameteri(target, GL_BUFFER_FLUSHING_UNMAP_APPLE, GL_TRUE);
 		}
 	}
 	else // We have no asynchronous API ...
@@ -315,7 +318,7 @@ GPlatesOpenGL::GLBufferObject::gl_map_buffer_dynamic(
 
 		// Map the entire buffer.
 		// Only used for write access - otherwise caller should be using 'gl_map_buffer_static'.
-		mapped_data = glMapBufferARB(target, GL_WRITE_ONLY_ARB);
+		mapped_data = glMapBuffer(target, GL_WRITE_ONLY_ARB);
 	}
 
 	// If there was an error during mapping then report it and throw exception.
@@ -373,7 +376,7 @@ GPlatesOpenGL::GLBufferObject::gl_flush_buffer_dynamic(
 	else if (capabilities.buffer.gl_APPLE_flush_buffer_range)
 	{
 		// Only flush the requested range.
-		glFlushMappedBufferRangeAPPLE(target, offset, length);
+		glFlushMappedBufferRange(target, offset, length);
 	}
 	else // We have no asynchronous API ...
 	{
@@ -519,17 +522,17 @@ GPlatesOpenGL::GLBufferObject::gl_map_buffer_stream(
 			// Disable synchronisation temporarily while we map the current buffer - this prevents
 			// OpenGL from blocking (until the GPU is finished using any data currently in the buffer).
 			// NOTE: This is buffer object state (not global state) so it applies to the currently bound buffer object.
-			glBufferParameteriAPPLE(target, GL_BUFFER_SERIALIZED_MODIFY_APPLE, GL_FALSE);
+//			glBufferParameteri(target, GL_BUFFER_SERIALIZED_MODIFY_APPLE, GL_FALSE);
 		}
 
 		// Prevent OpenGL from flushing the entire buffer.
 		// The client will call 'gl_flush_buffer_stream' to flush the data they stream.
 		// NOTE: This is buffer object state (not global state) so it applies to the currently bound buffer object.
-		glBufferParameteriAPPLE(target, GL_BUFFER_FLUSHING_UNMAP_APPLE, GL_FALSE);
+//		glBufferParameteri(target, GL_BUFFER_FLUSHING_UNMAP_APPLE, GL_FALSE);
 
 		// With the APPLE API we can only map the entire buffer.
 		// Use write access - otherwise caller should be using 'gl_map_buffer_static'.
-		mapped_data = glMapBufferARB(target, GL_WRITE_ONLY_ARB);
+		mapped_data = glMapBuffer(target, GL_WRITE_ONLY_ARB);
 		if (mapped_data)
 		{
 			// Return pointer to start of un-initialised memory.
@@ -542,7 +545,7 @@ GPlatesOpenGL::GLBufferObject::gl_map_buffer_stream(
 			// will block until the GPU is finished processing previously submitted draw call (if necessary).
 			// This is the default state.
 			// NOTE: This is buffer object state (not global state) so it applies to the currently bound buffer object.
-			glBufferParameteriAPPLE(target, GL_BUFFER_SERIALIZED_MODIFY_APPLE, GL_TRUE);
+//			glBufferParameteri(target, GL_BUFFER_SERIALIZED_MODIFY_APPLE, GL_TRUE);
 		}
 	}
 	else // We have no asynchronous API ...
@@ -576,7 +579,7 @@ GPlatesOpenGL::GLBufferObject::gl_map_buffer_stream(
 		//
 		// NOTE: 'mapped_data' always points to the beginning of the buffer (because
 		// 'd_uninitialised_offset' is always zero).
-		mapped_data = glMapBufferARB(target, GL_WRITE_ONLY_ARB);
+		mapped_data = glMapBuffer(target, GL_WRITE_ONLY_ARB);
 	}
 
 	// If there was an error during mapping then report it and throw exception.
@@ -651,7 +654,7 @@ GPlatesOpenGL::GLBufferObject::gl_flush_buffer_stream(
 		//
 		// Note that the offset is 'd_uninitialised_offset' and not zero since the mapped region
 		// was the entire buffer (and not just the un-initialised region at the end of the buffer).
-		glFlushMappedBufferRangeAPPLE(target, d_uninitialised_offset, bytes_written);
+		glFlushMappedBufferRange(target, d_uninitialised_offset, bytes_written);
 	}
 	else // We have no asynchronous API ...
 	{
@@ -686,7 +689,7 @@ GPlatesOpenGL::GLBufferObject::gl_unmap_buffer(
 			boost::dynamic_pointer_cast<const GLBufferObject>(shared_from_this()),
 			target);
 
-	const GLboolean unmap_result = glUnmapBufferARB(target);
+	const GLboolean unmap_result = glUnmapBuffer(target);
 
 	if (capabilities.buffer.gl_ARB_map_buffer_range)
 	{
@@ -698,7 +701,7 @@ GPlatesOpenGL::GLBufferObject::gl_unmap_buffer(
 	{
 		// Restore default flushing behaviour - which is to flush the entire buffer.
 		// NOTE: This is buffer object state (not global state) so it applies to the currently bound buffer object.
-		glBufferParameteriAPPLE(target, GL_BUFFER_FLUSHING_UNMAP_APPLE, GL_TRUE);
+//		glBufferParameteri(target, GL_BUFFER_FLUSHING_UNMAP_APPLE, GL_TRUE);
 	}
 
 	// If the unmapping was unsuccessful...
