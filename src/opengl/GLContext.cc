@@ -32,7 +32,7 @@
 #include <GL/glew.h>
 #include <opengl/OpenGL.h>
 #include <QDebug>
-
+//#include <QOpenGLFormat>
 #include "GLContext.h"
 
 #include "GLBufferImpl.h"
@@ -98,24 +98,24 @@ GPlatesOpenGL::GLContext::initialise()
 
 	// A lot of main frame buffer and render-target rendering uses an alpha channel so emit
 	// a warning if the frame buffer doesn't have an alpha channel.
-	if (!get_qgl_format().alpha())
-	{
+//	if (!get_qgl_format().alpha())
+//	{
 		qWarning("Could not get alpha channel on main frame buffer.");
 
 		// If there's no framebuffer object support then the main framebuffer will be used
 		// to emulate render targets and lack of an alpha channel will affects the results.
-		if (!get_capabilities().framebuffer.gl_EXT_framebuffer_object)
-		{
-			qDebug("Render-target results will be suboptimal.");
-		}
-	}
+//		if (!get_capabilities().framebuffer.gl_EXT_framebuffer_object)
+//		{
+//			qDebug("Render-target results will be suboptimal.");
+//		}
+//	}
 
 	// A lot of main frame buffer and render-target rendering uses a stencil buffer so emit
 	// a warning if the frame buffer doesn't have a stencil buffer.
-	if (!get_qgl_format().stencil())
-	{
+//	if (!get_qgl_format().stencil())
+//	{
 		qWarning("Could not get a stencil buffer on the main frame buffer.");
-	}
+//	}
 }
 
 
@@ -167,11 +167,12 @@ GPlatesOpenGL::GLContext::deallocate_queued_object_resources()
 void
 GPlatesOpenGL::GLContext::disable_opengl_extensions()
 {
-#ifdef GL_ARB_vertex_array_object // In case old 'glew.h' header
-	// It turns out that using vertex array objects is slower than just setting the
-	// vertex attribute arrays (and vertex element buffer) at each vertex array bind.
-	__GLEW_ARB_vertex_array_object = 0;
-#endif
+//#ifdef GL_ARB_vertex_array_object // In case old 'glew.h' header
+//	// It turns out that using vertex array objects is slower than just setting the
+//	// vertex attribute arrays (and vertex element buffer) at each vertex array bind.
+//	__GLEW_ARB_vertex_array_object = 0;
+    qDebug("__GLEW_ARB_vertex_array_object = 0;");
+//#endif
 
 	//
 	// For testing different code paths.

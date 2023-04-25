@@ -294,7 +294,7 @@ namespace GPlatesOpenGL
 			virtual
 			bool
 			is_required_direct_or_indirect_dependency(
-					const GPlatesAppLogic::LayerProxyHandle::non_null_ptr_type &layer_proxy) const = 0;
+					const GPlatesAppLogic::LayerProxyHandle::non_null_ptr_type &layer_proxy) const { return false;};
 
 			/**
 			 * Notifies that a layer (proxy) is about to be removed.

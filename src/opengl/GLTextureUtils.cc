@@ -33,7 +33,7 @@
 #include <opengl/OpenGL.h>
 #include <QOpenGLWidget>
 #include <QImage>
-#include <QMatrix>
+#include <QTransform>
 
 #include "GLTextureUtils.h"
 

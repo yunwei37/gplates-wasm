@@ -222,7 +222,7 @@ if(CMAKE_VERSION VERSION_LESS 3.7)
 endif()
 # Require Qt 5.6 for the Qt::AA_EnableHighDpiScaling attribute (Bionic, our minimum supported Ubuntu, uses Qt 5.9).
 # find_package(Qt6 6.5 REQUIRED COMPONENTS Core Gui Network OpenGL Svg Widgets Xml XmlPatterns)
-find_package(Qt6 6.5 REQUIRED COMPONENTS Core Gui Network OpenGL Svg Widgets Xml OpenGLWidgets )
+find_package(Qt6 6.5 REQUIRED COMPONENTS Core Gui Network OpenGL Svg Widgets Xml OpenGLWidgets)
 ############
 # Find Qwt #
 #
@@ -341,7 +341,7 @@ add_executable(gplates-no-gui EXCLUDE_FROM_ALL gplates_demo_no_gui_main.cc Scrib
 target_link_libraries(gplates-no-gui PRIVATE gplates-lib)
 
 if (EMSCRIPTEN)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -s WASM=1 -s MODULARIZE=1 -sNO_DISABLE_EXCEPTION_CATCHING")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -s WASM=1 -s MODULARIZE=1 -sNO_DISABLE_EXCEPTION_CATCHING -sMAX_WEBGL_VERSION=2")
 endif()
 #set_target_properties(gplates-no-gui PROPERTIES COMPILE_FLAGS "-sMAIN_MODULE")
 set_target_properties(gplates-no-gui PROPERTIES LINK_FLAGS "--preload-file C:\\Users\\yunwei37\\Documents\\bise\\gplates_2.3.0_src\\gplates_2.3.0_src\\src\\qt-resources")
@@ -839,7 +839,7 @@ endif()
 #
 #target_link_libraries(gplates-lib PUBLIC OpenGL::GL OpenGL::GLU GLEW::GLEW)
 #target_link_libraries(pygplates PUBLIC OpenGL::GL OpenGL::GLU GLEW::GLEW)
-target_link_libraries(gplates-lib PUBLIC OpenGL::GL OpenGL::GLU)
+target_link_libraries(gplates-ui-lib PUBLIC OpenGL::GL OpenGL::GLU)
 # target_link_libraries(pygplates PUBLIC OpenGL::GL OpenGL::GLU)
 # Define GL_SILENCE_DEPRECATION to avoid a bunch of OpenGL deprecation warnings.
 # Currently happens when compiling on macOS mojave (10.14).
