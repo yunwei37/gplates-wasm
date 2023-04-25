@@ -21,7 +21,7 @@ set(CMAKE_OSX_DEPLOYMENT_TARGET 10.13 CACHE STRING "Minimum macOS deployment ver
 #       CMake always allows an extra TWEAK component but we don't use it.
 #       We do however support pre-releases (see GPLATES_VERSION_PRERELEASE in 'ConfigDefault.cmake').
 project(GPlates VERSION 2.3.0 LANGUAGES C CXX)
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 # Where to find our CMake modules.
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake/modules)
 

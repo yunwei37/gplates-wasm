@@ -28,6 +28,7 @@
 #include "app-logic/PropertyExtractors.h"
 #include "global/CompilerWarnings.h"
 #include "AgeColourPalettes.h"
+#include "presentation/Application.h"
 #include "DrawStyleManager.h"
 #include "DrawStyleAdapters.h"
 #include "FeatureTypeColourPalette.h"
@@ -54,8 +55,8 @@ GPlatesGui::DrawStyleManager::DrawStyleManager(
 	//Since DrawStyleManager is a singleton, it is safer to use a local UserPreferences by default.
 	if(d_use_local_user_pref)
 		d_user_prefs = new GPlatesAppLogic::UserPreferences(this);
-	else
-		d_user_prefs = &GPlatesPresentation::Application::instance().get_application_state().get_user_preferences();
+    else
+        d_user_prefs = &GPlatesPresentation::Application::instance().get_application_state().get_user_preferences();
 
 	//register built-in categories
 	register_style_catagory("PlateId");

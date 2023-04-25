@@ -297,13 +297,25 @@ add_library(gplates-lib STATIC EXCLUDE_FROM_ALL
         ${GPlates_BINARY_DIR}/src/global/License.cc)
         #${GPlates_BINARY_DIR}/src/global/config.h)
 
+
+add_library(gplates-ui-lib STATIC)
+target_link_libraries(gplates-ui-lib PRIVATE gplates-lib)
 #
 # Add 'gplates' executable target (linked to gplates-lib).
 #
-add_executable(gplates gplates_main.cc ScribeExportGPlates.cc)
-target_link_libraries(gplates PRIVATE gplates-lib)
+qt_add_executable(gplates gplates_main.cc ScribeExportGPlates.cc)
+target_link_libraries(gplates PRIVATE gplates-ui-lib)
 set_target_properties(gplates PROPERTIES LINK_FLAGS "--preload-file C:\\Users\\yunwei37\\Documents\\bise\\gplates_2.3.0_src\\gplates_2.3.0_src\\src\\qt-resources")
-
+#target_link_libraries(gplates PRIVATE
+#     Qt6::Core Qt6::Gui Qt6::Network Qt6::OpenGL Qt6::Svg Qt6::Widgets Qt6::Xml Qt6::OpenGLWidgets
+#)
+target_include_directories(gplates PRIVATE
+    ${Qt6Core_INCLUDE_DIRS}
+    ${Qt6Xml_INCLUDE_DIRS}
+    ${Qt6Svg_INCLUDE_DIRS}
+    ${Qt6OpenGL_INCLUDE_DIRS}
+    ${Qt6Network_INCLUDE_DIRS}
+    ${Qt6Gui_INCLUDE_DIRS} ${Qt6Widgets_INCLUDE_DIRS} ${Qt6OpenGLWidgets_INCLUDE_DIRS})
 #
 # Add 'gplates-no-gui' executable target (linked to gplates-lib).
 #
@@ -499,15 +511,18 @@ endif()
 
 # A lot of "#include" statements are relative to the 'src' directory.
 target_include_directories(gplates-lib PUBLIC ${GPlates_SOURCE_DIR}/src)
+target_include_directories(gplates PUBLIC ${GPlates_SOURCE_DIR}/src)
 # target_include_directories(pygplates PUBLIC ${GPlates_SOURCE_DIR}/src)
 # The 'src' directory exists in both the CMake source and binary trees (which, while same for in-place builds,
 # are different for out-of-place builds). This is so generated source files (like 'global/config.h') can be found.
 target_include_directories(gplates-lib PUBLIC ${GPlates_BINARY_DIR}/src)
+target_include_directories(gplates PUBLIC ${GPlates_BINARY_DIR}/src)
 # target_include_directories(pygplates PUBLIC ${GPlates_BINARY_DIR}/src)
 
 # External library include directories are treated as system include directories.
 # 'src/system-fixes' contains files copied from external libraries.
 target_include_directories(gplates-lib SYSTEM PUBLIC ${GPlates_SOURCE_DIR}/src/system-fixes)
+target_include_directories(gplates SYSTEM PUBLIC ${GPlates_SOURCE_DIR}/src/system-fixes)
 # target_include_directories(pygplates SYSTEM PUBLIC ${GPlates_SOURCE_DIR}/src/system-fixes)
 
 
@@ -517,21 +532,29 @@ target_include_directories(gplates-lib SYSTEM PUBLIC ${GPlates_SOURCE_DIR}/src/s
 
 # Add GPLATES_DEBUG preprocessor define to DEBUG and RELWITHDEBINFO configurations.
 target_compile_definitions(gplates-lib PUBLIC $<$<CONFIG:DEBUG>:GPLATES_DEBUG> $<$<CONFIG:RELWITHDEBINFO>:GPLATES_DEBUG>)
+target_compile_definitions(gplates-ui-lib PUBLIC $<$<CONFIG:DEBUG>:GPLATES_DEBUG> $<$<CONFIG:RELWITHDEBINFO>:GPLATES_DEBUG>)
 #	target_compile_definitions(pygplates PUBLIC $<$<CONFIG:DEBUG>:GPLATES_DEBUG> $<$<CONFIG:RELWITHDEBINFO>:GPLATES_DEBUG>)
 # The 64-bit C99 macro UINT64_C macro fails to compile on Visual Studio 2005 using boost 1.36.
 # Boost 1.42 defines __STDC_CONSTANT_MACROS in <boost/cstdint.hpp> but prior to that the application
 # is required to define it and it needs to be defined before any header inclusion to ensure it is defined
 # before it is accessed (which means before pre-compiled headers). So we define it on the compiler command-line.
 target_compile_definitions(gplates-lib PUBLIC __STDC_CONSTANT_MACROS)
+target_compile_definitions(gplates-ui-lib PUBLIC __STDC_CONSTANT_MACROS)
+target_compile_definitions(gplates PUBLIC __STDC_CONSTANT_MACROS)
 #	target_compile_definitions(pygplates PUBLIC __STDC_CONSTANT_MACROS)
 # Boost 1.58 introduced a breaking change in boost::variant that does compile-time with boost::get<U>(variant)
 # to see if U is one of the variant types. However it seems to generate compile errors for references and boost::optional.
 # So we'll default to using the old relaxed (run-time) method.
 target_compile_definitions(gplates-lib PUBLIC BOOST_VARIANT_USE_RELAXED_GET_BY_DEFAULT)
+target_compile_definitions(gplates-ui-lib PUBLIC BOOST_VARIANT_USE_RELAXED_GET_BY_DEFAULT)
+target_compile_definitions(gplates PUBLIC BOOST_VARIANT_USE_RELAXED_GET_BY_DEFAULT)
 #	target_compile_definitions(pygplates PUBLIC BOOST_VARIANT_USE_RELAXED_GET_BY_DEFAULT)
 # Temporary avoidance of warning in Boost due to bug in version 1.69 caused by using deprecated "boost/pending/integer_log2.hpp".
 # Apparently it wasn't fixed in 1.69 (only 1.70 and above).
 target_compile_definitions(gplates-lib PUBLIC BOOST_ALLOW_DEPRECATED_HEADERS)
+target_compile_definitions(gplates-ui-lib PUBLIC BOOST_ALLOW_DEPRECATED_HEADERS)
+target_compile_definitions(gplates PUBLIC BOOST_ALLOW_DEPRECATED_HEADERS)
+
 #	target_compile_definitions(pygplates PUBLIC BOOST_ALLOW_DEPRECATED_HEADERS)
 
 #
@@ -850,6 +873,9 @@ endif()
 target_include_directories(gplates-lib PUBLIC SYSTEM ${CMAKE_CURRENT_SOURCE_DIR}/../third_party)
 target_link_directories(gplates-lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../lib)
 
+target_include_directories(gplates PUBLIC SYSTEM ${CMAKE_CURRENT_SOURCE_DIR}/../third_party)
+# target_include_directories(gplates PUBLIC SYSTEM ${Qt6Core_INCLUDE_DIRS})
+# target_link_directories(gplates PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../lib)
 #
 # Qt6 dependency.
 #
@@ -874,6 +900,18 @@ target_include_directories(gplates-lib PUBLIC
         ${CMAKE_CURRENT_BINARY_DIR}
         ${CMAKE_CURRENT_BINARY_DIR}/gplates-lib_autogen/include
         ${CMAKE_CURRENT_BINARY_DIR}/gplates-lib_autogen/include_$<CONFIG>)
+target_include_directories(gplates-ui-lib PUBLIC
+        ${CMAKE_CURRENT_BINARY_DIR}
+        ${CMAKE_CURRENT_BINARY_DIR}/gplates-lib_autogen/include
+        ${CMAKE_CURRENT_BINARY_DIR}/gplates-lib_autogen/include_$<CONFIG>
+        ${CMAKE_CURRENT_BINARY_DIR}/gplates-ui-lib_autogen/include
+        ${CMAKE_CURRENT_BINARY_DIR}/gplates-ui-lib_autogen/include_$<CONFIG>)
+target_include_directories(gplates PUBLIC
+        ${CMAKE_CURRENT_BINARY_DIR}
+        ${CMAKE_CURRENT_BINARY_DIR}/gplates-lib_autogen/include
+        ${CMAKE_CURRENT_BINARY_DIR}/gplates-lib_autogen/include_$<CONFIG>
+        ${CMAKE_CURRENT_BINARY_DIR}/gplates-ui-lib_autogen/include
+        ${CMAKE_CURRENT_BINARY_DIR}/gplates-ui-lib_autogen/include_$<CONFIG>)
 # # target_include_directories(pygplates PUBLIC
 # 	${CMAKE_CURRENT_BINARY_DIR}
 # 	${CMAKE_CURRENT_BINARY_DIR}/gplates-lib_autogen/include
@@ -928,6 +966,7 @@ target_include_directories(gplates-lib PUBLIC
 target_compile_definitions(gplates-lib PUBLIC CGAL_HEADER_ONLY)
 target_compile_definitions(gplates-lib PUBLIC QT_NO_FOREACH)
 
+target_compile_definitions(gplates PUBLIC CGAL_HEADER_ONLY)
 ##
 ## GDAL dependency.
 ##
@@ -967,6 +1006,7 @@ target_link_libraries(gplates-lib PUBLIC proj)
 #endif()
 ## Python is embedded in the GPlates application (as opposed to pygplates which is a Python extension library).
 target_compile_definitions(gplates-lib PUBLIC GPLATES_PYTHON_EMBEDDING)
+target_compile_definitions(gplates PUBLIC GPLATES_PYTHON_EMBEDDING)
 
 
 ## Test whether Python embedding works.
