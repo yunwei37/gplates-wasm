@@ -110,16 +110,15 @@ namespace GPlatesQtWidgets
 }
 
 
-GPlatesQtWidgets::MapCanvas::MapCanvas(
-		GPlatesPresentation::ViewState &view_state,
-		GPlatesViewOperations::RenderedGeometryCollection &rendered_geometry_collection,
-		MapView *map_view_ptr,
-		QOpenGLWidget *gl_widget,
-		const GPlatesOpenGL::GLContext::non_null_ptr_type &gl_context,
-		const GPlatesOpenGL::GLVisualLayers::non_null_ptr_type &gl_visual_layers,
-		GPlatesGui::ViewportZoom &viewport_zoom,
-		const GPlatesGui::ColourScheme::non_null_ptr_type &colour_scheme,
-		QWidget *parent_) :
+GPlatesQtWidgets::MapCanvas::MapCanvas(				GPlatesPresentation::ViewState &view_state,
+                GPlatesViewOperations::RenderedGeometryCollection &rendered_geometry_collection,
+                MapView *map_view_ptr,
+                QWidget *gl_widget,
+                const GPlatesOpenGL::GLContext::non_null_ptr_type &gl_context,
+                const GPlatesOpenGL::GLVisualLayers::non_null_ptr_type &gl_visual_layers,
+                GPlatesGui::ViewportZoom &viewport_zoom,
+                const GPlatesGui::ColourScheme::non_null_ptr_type &colour_scheme,
+                QWidget *parent_) :
 	QGraphicsScene(parent_),
 	d_view_state(view_state),
 	d_map_view_ptr(map_view_ptr),
@@ -138,8 +137,8 @@ GPlatesQtWidgets::MapCanvas::MapCanvas(
 	d_rendered_geometry_collection(&rendered_geometry_collection)
 {
 	// Do some OpenGL initialisation.
-	// Because of 'd_make_context_current' we know the OpenGL context is currently active.
-	initializeGL(gl_widget);
+    // Because of 'd_make_context_current' we know the OpenGL context is currently active.
+            initializeGL((QOpenGLWidget*)gl_widget);
 
 	// Give the scene a rectangle that's big enough to guarantee that the map view,
 	// even after rotations and translations, won't go outside these boundaries.

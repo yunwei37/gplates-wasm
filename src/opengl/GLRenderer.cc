@@ -1365,33 +1365,33 @@ GPlatesOpenGL::GLRenderer::gl_draw_pixels(
 			// and projection matrices so that 'glRasterPos2i' generates the correct x and y
 			// pixel offset in the frame buffer.
 			state_to_apply.apply_state(capabilities, last_applied_state);
-
-			if (capabilities.gl_version_1_4) // 'glWindowPos2i' only available in 1.4 or above
-			{
+			qDebug() << "DrawPixelsDrawable::draw()";
+			// if (capabilities.gl_version_1_4) // 'glWindowPos2i' only available in 1.4 or above
+			// {
 				// Set the raster position directly in window coordinates (bypassing the
 				// model-view/projection transforms and the viewport-to-window transform).
-				glWindowPos2i(x, y);
-			}
-			else // using 'glRasterPos2i' ...
-			{
-				// Set the raster position - the final window coordinates depend on the current
-				// model-view/projection transforms and the viewport-to-window transform applied above.
-				glRasterPos2i(x, y);
-			}
+				// glWindowPos2i(x, y);
+			// }
+			// else // using 'glRasterPos2i' ...
+			// {
+			// 	// Set the raster position - the final window coordinates depend on the current
+			// 	// model-view/projection transforms and the viewport-to-window transform applied above.
+			// 	glRasterPos2i(x, y);
+			// }
 
-			glDrawPixels(width, height, format, type, GPLATES_OPENGL_BUFFER_OFFSET(offset));
+			// glDrawPixels(width, height, format, type, GPLATES_OPENGL_BUFFER_OFFSET(offset));
 
 			// Restore raster position to default value since calling OpenGL directly instead of using GLRenderer state.
 			//
 			// FIXME: Shouldn't really be making direct calls to OpenGL - transfer to GLRenderer.
-			if (capabilities.gl_version_1_4) // 'glWindowPos2i' only available in 1.4 or above
-			{
-				glWindowPos2i(0, 0);
-			}
-			else // using 'glRasterPos2i' ...
-			{
-				glRasterPos2i(0, 0);
-			}
+			// if (capabilities.gl_version_1_4) // 'glWindowPos2i' only available in 1.4 or above
+			// {
+				// glWindowPos2i(0, 0);
+			// }
+			// else // using 'glRasterPos2i' ...
+			// {
+			// 	glRasterPos2i(0, 0);
+			// }
 		}
 
 		GLint x;
@@ -1476,41 +1476,41 @@ GPlatesOpenGL::GLRenderer::gl_draw_pixels(
 			// Also, if using glRasterPos2i, then we need to apply the changes to model-view
 			// and projection matrices so that 'glRasterPos2i' generates the correct x and y
 			// pixel offset in the frame buffer.
-			state_to_apply.apply_state(capabilities, last_applied_state);
+			// state_to_apply.apply_state(capabilities, last_applied_state);
+			qDebug("DrawPixelsDrawable::draw() - state_to_apply.apply_state() not called");
+			// if (capabilities.gl_version_1_4) // 'glWindowPos2i' only available in 1.4 or above
+			// {
+			// 	// Set the raster position directly in window coordinates (bypassing the
+			// 	// model-view/projection transforms and the viewport-to-window transform).
+			// 	glWindowPos2i(x, y);
+			// }
+			// else // using 'glRasterPos2i' ...
+			// {
+			// 	// Set the raster position - the final window coordinates depend on the current
+			// 	// model-view/projection transforms and the viewport-to-window transform applied above.
+			// 	glRasterPos2i(x, y);
+			// }
 
-			if (capabilities.gl_version_1_4) // 'glWindowPos2i' only available in 1.4 or above
-			{
-				// Set the raster position directly in window coordinates (bypassing the
-				// model-view/projection transforms and the viewport-to-window transform).
-				glWindowPos2i(x, y);
-			}
-			else // using 'glRasterPos2i' ...
-			{
-				// Set the raster position - the final window coordinates depend on the current
-				// model-view/projection transforms and the viewport-to-window transform applied above.
-				glRasterPos2i(x, y);
-			}
+			// // The client memory pixel data pointer.
+			// // NOTE: By getting the pixel data resource pointer here (at the OpenGL draw pixels call)
+			// // we allow the buffer to be updated *after* the draw pixels call is submitted
+			// // (eg, a compiled draw state).
+			// // This emulates how buffer objects work.
+			// GLvoid *pixels = pixel_buffer_impl->get_buffer_resource() + offset;
 
-			// The client memory pixel data pointer.
-			// NOTE: By getting the pixel data resource pointer here (at the OpenGL draw pixels call)
-			// we allow the buffer to be updated *after* the draw pixels call is submitted
-			// (eg, a compiled draw state).
-			// This emulates how buffer objects work.
-			GLvoid *pixels = pixel_buffer_impl->get_buffer_resource() + offset;
+			// glDrawPixels(width, height, format, type, pixels);
 
-			glDrawPixels(width, height, format, type, pixels);
-
-			// Restore raster position to default value since calling OpenGL directly instead of using GLRenderer state.
-			//
-			// FIXME: Shouldn't really be making direct calls to OpenGL - transfer to GLRenderer.
-			if (capabilities.gl_version_1_4) // 'glWindowPos2i' only available in 1.4 or above
-			{
-				glWindowPos2i(0, 0);
-			}
-			else // using 'glRasterPos2i' ...
-			{
-				glRasterPos2i(0, 0);
-			}
+			// // Restore raster position to default value since calling OpenGL directly instead of using GLRenderer state.
+			// //
+			// // FIXME: Shouldn't really be making direct calls to OpenGL - transfer to GLRenderer.
+			// if (capabilities.gl_version_1_4) // 'glWindowPos2i' only available in 1.4 or above
+			// {
+			// 	glWindowPos2i(0, 0);
+			// }
+			// else // using 'glRasterPos2i' ...
+			// {
+			// 	glRasterPos2i(0, 0);
+			// }
 		}
 
 		GLint x;
@@ -2019,10 +2019,12 @@ GPlatesOpenGL::GLRenderer::suspend_qpainter()
 		// Also we need to set these matrices to identity to match the default OpenGL state which
 		// GLRenderer will assume from here onwards.
 		glMatrixMode(GL_MODELVIEW);
-		glPushMatrix();
+        qDebug("glPushMatrix");
+//		glPushMatrix();
 		glLoadIdentity(); // The default modelview matrix.
 		glMatrixMode(GL_PROJECTION);
-		glPushMatrix();
+        qDebug("glPushMatrix");
+//		glPushMatrix();
 		glLoadIdentity(); // The default projection matrix.
 		glMatrixMode(GL_MODELVIEW); // The default matrix mode.
 	}
@@ -2048,9 +2050,11 @@ GPlatesOpenGL::GLRenderer::resume_qpainter()
 		// For the QPainter OpenGL2 paint engine this is not necessary but it is for the OpenGL1 paint engine.
 		// So we pop the modelview and projection matrices that we pushed onto the OpenGL matrix stack.
 		glMatrixMode(GL_MODELVIEW);
-		glPopMatrix();
+        qDebug("glPopMatrix");
+//		glPopMatrix();
 		glMatrixMode(GL_PROJECTION);
-		glPopMatrix();
+        qDebug("glPopMatrix");
+		// glPopMatrix();
 		glMatrixMode(GL_MODELVIEW); // The default matrix mode.
 	}
 

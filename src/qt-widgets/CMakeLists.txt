@@ -380,8 +380,8 @@ set(srcs
     ManageFeatureCollectionsDialogUi.ui
     ManageFeatureCollectionsEditConfigurations.cc
     ManageFeatureCollectionsEditConfigurations.h
-    # MapCanvas.cc
-    # MapCanvas.h
+    MapCanvas.cc
+    MapCanvas.h
     MapView.cc
     MapView.h
     MeasureDistanceWidget.cc

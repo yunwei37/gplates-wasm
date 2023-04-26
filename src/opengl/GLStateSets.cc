@@ -659,8 +659,8 @@ GPlatesOpenGL::GLAlphaFuncStateSet::apply_state(
 	{
 		return;
 	}
-
-	glAlphaFuncQCOM(d_alpha_func, d_ref.dval());
+	qDebug("glAlphaFuncQCOM");
+	// glAlphaFuncQCOM(d_alpha_func, d_ref.dval());
 }
 
 void
@@ -674,8 +674,8 @@ GPlatesOpenGL::GLAlphaFuncStateSet::apply_from_default_state(
 	{
 		return;
 	}
-
-	glAlphaFuncQCOM(d_alpha_func, d_ref.dval());
+	qDebug("glAlphaFuncQCOM");
+	// glAlphaFuncQCOM(d_alpha_func, d_ref.dval());
 }
 
 void
@@ -689,8 +689,8 @@ GPlatesOpenGL::GLAlphaFuncStateSet::apply_to_default_state(
 	{
 		return;
 	}
-
-	glAlphaFuncQCOM(GL_ALWAYS, 0);
+	qDebug("glAlphaFuncQCOM");
+	// glAlphaFuncQCOM(GL_ALWAYS, 0);
 }
 
 
@@ -1881,7 +1881,7 @@ GPlatesOpenGL::GLDepthRangeStateSet::apply_state(
 		return;
 	}
 
-#ifdef GL_ARB_viewport_array // In case old 'glew.h' header
+#if 0 // GL_ARB_viewport_array // In case old 'glew.h' header
 	if (capabilities.viewport.gl_ARB_viewport_array)
 	{
 		// Put the depth range parameters into one array so can call 'glDepthRangeArrayv' once
@@ -2365,8 +2365,8 @@ GPlatesOpenGL::GLLoadMatrixStateSet::apply_state(
 
 	// Make sure the correct matrix mode is set.
 	set_matrix_mode(d_mode, last_applied_state);
-
-	glLoadMatrixd(d_matrix.get_matrix());
+	qDebug("glLoadMatrixd");
+	// glLoadMatrixd(d_matrix.get_matrix());
 }
 
 void
@@ -2382,8 +2382,8 @@ GPlatesOpenGL::GLLoadMatrixStateSet::apply_from_default_state(
 
 	// Make sure the correct matrix mode is set.
 	set_matrix_mode(d_mode, last_applied_state);
-
-	glLoadMatrixd(d_matrix.get_matrix());
+	qDebug("glLoadMatrixd");
+	// glLoadMatrixd(d_matrix.get_matrix());
 }
 
 void
@@ -2421,8 +2421,8 @@ GPlatesOpenGL::GLLoadTextureMatrixStateSet::apply_state(
 
 	// Make sure the correct matrix mode is set.
 	set_matrix_mode(GL_TEXTURE, last_applied_state);
-
-	glLoadMatrixd(d_matrix.get_matrix());
+	qDebug("glLoadMatrixd");
+	// glLoadMatrixd(d_matrix.get_matrix());
 }
 
 void
@@ -2441,8 +2441,8 @@ GPlatesOpenGL::GLLoadTextureMatrixStateSet::apply_from_default_state(
 
 	// Make sure the correct matrix mode is set.
 	set_matrix_mode(GL_TEXTURE, last_applied_state);
-
-	glLoadMatrixd(d_matrix.get_matrix());
+	qDebug("glLoadMatrixd");
+	// glLoadMatrixd(d_matrix.get_matrix());
 }
 
 void
@@ -2595,8 +2595,8 @@ GPlatesOpenGL::GLPointSizeStateSet::apply_state(
 	{
 		return;
 	}
-
-	glPointSize(d_size.dval());
+	qDebug("glPointSize");
+	// glPointSize(d_size.dval());
 }
 
 void
@@ -2610,8 +2610,8 @@ GPlatesOpenGL::GLPointSizeStateSet::apply_from_default_state(
 	{
 		return;
 	}
-
-	glPointSize(d_size.dval());
+	qDebug("glPointSize");
+	// glPointSize(d_size.dval());
 }
 
 void
@@ -2625,8 +2625,8 @@ GPlatesOpenGL::GLPointSizeStateSet::apply_to_default_state(
 	{
 		return;
 	}
-
-	glPointSize(GLfloat(1));
+	qDebug("glPointSize");
+	// glPointSize(GLfloat(1));
 }
 
 
@@ -2835,7 +2835,7 @@ GPlatesOpenGL::GLScissorStateSet::apply_state(
 		return;
 	}
 
-#ifdef GL_ARB_viewport_array // In case old 'glew.h' header
+#if 0 //GL_ARB_viewport_array // In case old 'glew.h' header
 	if (capabilities.viewport.gl_ARB_viewport_array)
 	{
 		// Put the scissor rectangle parameters into one array so can call 'glScissorArrayv' once
@@ -3754,7 +3754,7 @@ GPlatesOpenGL::GLViewportStateSet::apply_state(
 		return;
 	}
 
-#ifdef GL_ARB_viewport_array // In case old 'glew.h' header
+#if 0//GL_ARB_viewport_array // In case old 'glew.h' header
 	if (capabilities.viewport.gl_ARB_viewport_array)
 	{
 		// Put the viewport parameters into one array so can call 'glViewportArrayv' once

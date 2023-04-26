@@ -230,7 +230,9 @@ namespace GPlatesPresentation
 				return d_project_session->get_project_filename();
 			}
 
-			friend bool operator<(const ProjectInfo& lhs, const ProjectInfo& rhs);
+			friend bool operator<(const ProjectInfo& lhs, const ProjectInfo& rhs) {
+				return false;
+			}
 
 			/**
 			 * Returns the number of file paths of transcribed files.

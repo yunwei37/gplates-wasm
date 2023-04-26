@@ -230,7 +230,7 @@ namespace GPlatesQtWidgets
 		//! Do some OpenGL initialisation.
 		void 
 		initializeGL(
-                QWidget *gl_widget);
+                QOpenGLWidget *gl_widget);
 
 		/**
 		 * Render one tile of the scene (as specified by @a tile_render).

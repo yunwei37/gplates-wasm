@@ -145,8 +145,8 @@ GPlatesOpenGL::GLPixelBufferObject::gl_tex_image_1D(
 
 	// Bind this pixel buffer to the *unpack* target.
 	GLRenderer::BindBufferObjectAndApply save_restore_bind_pixel_buffer(renderer, d_buffer, get_unpack_target_type());
-
-	glTexImage1D(target, level, internalformat, width, border, format, type, GPLATES_OPENGL_BUFFER_OFFSET(offset));
+	qDebug("glTexImage1D");
+	// glTexImage1D(target, level, internalformat, width, border, format, type, GPLATES_OPENGL_BUFFER_OFFSET(offset));
 }
 
 
@@ -236,8 +236,8 @@ GPlatesOpenGL::GLPixelBufferObject::gl_tex_sub_image_1D(
 
 	// Bind this pixel buffer to the *unpack* target.
 	GLRenderer::BindBufferObjectAndApply save_restore_bind_pixel_buffer(renderer, d_buffer, get_unpack_target_type());
-
-	glTexSubImage1D(target, level, xoffset, width, format, type, GPLATES_OPENGL_BUFFER_OFFSET(offset));
+	qDebug("glTexSubImage1D");
+	// glTexSubImage1D(target, level, xoffset, width, format, type, GPLATES_OPENGL_BUFFER_OFFSET(offset));
 }
 
 
