@@ -75,7 +75,7 @@ GPlatesOpenGL::GLUtils::check_gl_errors(
 	GLenum error;
 	while ((error = glGetError()) != GL_NO_ERROR)
 	{
-		const char *gl_error_string = reinterpret_cast<const char *>(gluErrorString(error));
+		const char *gl_error_string = "reinterpret_cast<const char *>(gluErrorString(error))";
 
 		qWarning() << "OpenGL error: " << gl_error_string;
 

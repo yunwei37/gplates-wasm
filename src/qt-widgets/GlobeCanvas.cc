@@ -367,9 +367,10 @@ GPlatesQtWidgets::GlobeCanvas::GlobeCanvas(
 		QWidget *parent_) :
 	QOpenGLWidget(
 //			GPlatesOpenGL::GLContext::get_qgl_format_to_create_context_with(),
-			parent_,
+            parent_
 			// Share texture objects, vertex buffer objects, etc...
-			existing_globe_canvas),
+//			existing_globe_canvas
+        ),
 	d_view_state(view_state_),
     d_gl_context(context()->shareContext() != nullptr // Mirror the sharing of OpenGL context state (if sharing)...
 			? GPlatesOpenGL::GLContext::create(

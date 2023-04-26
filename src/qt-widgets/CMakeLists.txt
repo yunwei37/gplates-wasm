@@ -289,8 +289,8 @@ set(srcs
     GenerateVelocityDomainTerraDialogUi.ui
     GlobeAndMapWidget.cc
     GlobeAndMapWidget.h
-    # GlobeCanvas.cc
-    # GlobeCanvas.h
+    GlobeCanvas.cc
+    GlobeCanvas.h
     GMenuButton.cc
     GMenuButton.h
     GMenuButtonUi.ui

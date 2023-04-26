@@ -627,11 +627,11 @@ GPlatesOpenGL::GLFrameBufferObject::gl_draw_buffers(
 	GLRenderer::BindFrameBufferAndApply save_restore_bind(renderer, shared_from_this());
 
 	// If just one buffer then use the OpenGL 1.1 function.
-	if (bufs.size() == 1)
-	{
-		glDrawBuffer(bufs[0]);
-		return;
-	}
+	// if (bufs.size() == 1)
+	// {
+	// 	glDrawBuffer(bufs[0]);
+	// 	return;
+	// }
 	// Otherwise use the GL_ARB_draw_buffers extension for multiple buffers.
 	GPlatesGlobal::Assert<GPlatesGlobal::AssertionFailureException>(
 			capabilities.framebuffer.gl_ARB_draw_buffers,

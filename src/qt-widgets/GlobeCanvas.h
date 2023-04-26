@@ -139,7 +139,7 @@ namespace GPlatesQtWidgets
 				GPlatesGui::ColourScheme::non_null_ptr_type colour_scheme,
 				QWidget *parent_ = 0);
 
-		~GlobeCanvas();
+        virtual ~GlobeCanvas();
 
 	private:
 

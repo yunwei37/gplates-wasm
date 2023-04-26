@@ -153,6 +153,7 @@ add_library(boost_program_options STATIC
     ${PROGRAM_OPTIONS_DIR}/value_semantic.cpp
     ${PROGRAM_OPTIONS_DIR}/variables_map.cpp
     ${PROGRAM_OPTIONS_DIR}/winmain.cpp
+    ${PROGRAM_OPTIONS_DIR}/error_code.cpp
 )
 target_include_directories(boost_program_options PRIVATE SYSTEM ${CMAKE_CURRENT_SOURCE_DIR}/../third_party)
 ## Use dynamic linking for all Boost libraries.
@@ -323,7 +324,7 @@ target_link_libraries(gplates-ui-lib PRIVATE boost_program_options)
 #
 add_executable(gplates gplates_main.cc ScribeExportGPlates.cc)
 target_link_libraries(gplates PRIVATE gplates-ui-lib)
-set_target_properties(gplates PROPERTIES LINK_FLAGS "--preload-file C:\\Users\\yunwei37\\Documents\\bise\\gplates_2.3.0_src\\gplates_2.3.0_src\\src\\qt-resources")
+set_target_properties(gplates PROPERTIES LINK_FLAGS "-sFULL_ES2 --preload-file C:\\Users\\yunwei37\\Documents\\bise\\gplates_2.3.0_src\\gplates_2.3.0_src\\src\\qt-resources")
 #target_link_libraries(gplates PRIVATE
 #     Qt6::Core Qt6::Gui Qt6::Network Qt6::OpenGL Qt6::Svg Qt6::Widgets Qt6::Xml Qt6::OpenGLWidgets
 #)
@@ -839,7 +840,8 @@ endif()
 #
 #target_link_libraries(gplates-lib PUBLIC OpenGL::GL OpenGL::GLU GLEW::GLEW)
 #target_link_libraries(pygplates PUBLIC OpenGL::GL OpenGL::GLU GLEW::GLEW)
-target_link_libraries(gplates-ui-lib PUBLIC OpenGL::GL OpenGL::GLU)
+target_link_libraries(gplates PRIVATE OpenGL::GL OpenGL::GLU)
+#target_link_libraries(gplates-ui-lib PRIVATE OpenGL::GL OpenGL::GLU)
 # target_link_libraries(pygplates PUBLIC OpenGL::GL OpenGL::GLU)
 # Define GL_SILENCE_DEPRECATION to avoid a bunch of OpenGL deprecation warnings.
 # Currently happens when compiling on macOS mojave (10.14).
