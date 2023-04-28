@@ -407,7 +407,7 @@ GPlatesQtWidgets::GlobeCanvas::GlobeCanvas(
 	{
 		qWarning() << "Unable to share an OpenGL context between QOpenGLWidgets.";
 	}
-
+qDebug("GPlatesQtWidgets::GlobeCanvas::GlobeCanvas init");
 	init();
 }
 
@@ -476,6 +476,7 @@ GPlatesQtWidgets::GlobeCanvas::init()
 	handle_zoom_change();
 
 	setAttribute(Qt::WA_NoSystemBackground);
+	qDebug("GPlatesQtWidgets::GlobeCanvas::init() success");
 }
 
 GPlatesQtWidgets::GlobeCanvas *
@@ -651,6 +652,7 @@ GPlatesQtWidgets::GlobeCanvas::initializeGL_if_necessary()
 void 
 GPlatesQtWidgets::GlobeCanvas::initializeGL() 
 {
+	qDebug("GPlatesQtWidgets::GlobeCanvas::initializeGL() ");
 	// Initialise our context-like object first.
 	d_gl_context->initialise();
 

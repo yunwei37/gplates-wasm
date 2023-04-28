@@ -325,6 +325,7 @@ target_link_libraries(gplates-ui-lib PRIVATE boost_program_options)
 add_executable(gplates gplates_main.cc ScribeExportGPlates.cc)
 target_link_libraries(gplates PRIVATE gplates-ui-lib)
 set_target_properties(gplates PROPERTIES LINK_FLAGS "-sFULL_ES2 --preload-file C:\\Users\\yunwei37\\Documents\\bise\\gplates_2.3.0_src\\gplates_2.3.0_src\\src\\qt-resources")
+
 #target_link_libraries(gplates PRIVATE
 #     Qt6::Core Qt6::Gui Qt6::Network Qt6::OpenGL Qt6::Svg Qt6::Widgets Qt6::Xml Qt6::OpenGLWidgets
 #)
@@ -342,10 +343,11 @@ add_executable(gplates-no-gui EXCLUDE_FROM_ALL gplates_demo_no_gui_main.cc Scrib
 target_link_libraries(gplates-no-gui PRIVATE gplates-lib)
 
 if (EMSCRIPTEN)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -s WASM=1 -s MODULARIZE=1 -sNO_DISABLE_EXCEPTION_CATCHING -sFULL_ES2")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -s WASM=1 -s MODULARIZE=1 -sNO_DISABLE_EXCEPTION_CATCHING -sFULL_ES2")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -s EXPORTED_RUNTIME_METHODS=['ccall','cwrap','setValue','getValue','specialHTMLTargets']")
 endif()
 #set_target_properties(gplates-no-gui PROPERTIES COMPILE_FLAGS "-sMAIN_MODULE")
-set_target_properties(gplates-no-gui PROPERTIES LINK_FLAGS "-sFULL_ES2 -sLEGACY_GL_EMULATION --preload-file C:\\Users\\yunwei37\\Documents\\bise\\gplates_2.3.0_src\\gplates_2.3.0_src\\src\\qt-resources")
+set_target_properties(gplates-no-gui PROPERTIES LINK_FLAGS "-sFULL_ES2 --preload-file C:\\Users\\yunwei37\\Documents\\bise\\gplates_2.3.0_src\\gplates_2.3.0_src\\src\\qt-resources")
 
 #
 # Add 'gplates-unit-test' executable (linked to gplates-lib).

@@ -138,7 +138,7 @@ GPlatesQtWidgets::MapCanvas::MapCanvas(				GPlatesPresentation::ViewState &view_
 {
 	// Do some OpenGL initialisation.
     // Because of 'd_make_context_current' we know the OpenGL context is currently active.
-            initializeGL((QOpenGLWidget*)gl_widget);
+    // initializeGL((QOpenGLWidget*)gl_widget);
 
 	// Give the scene a rectangle that's big enough to guarantee that the map view,
 	// even after rotations and translations, won't go outside these boundaries.
@@ -168,7 +168,9 @@ void
 GPlatesQtWidgets::MapCanvas::initializeGL(
 		QOpenGLWidget *gl_widget) 
 {
-	// Initialise our context-like object first.
+	qDebug("GPlatesQtWidgets::MapCanvas::initializeGL");
+
+	// Initialise our context-like object first
 	d_gl_context->initialise();
 
 	// Create the off-screen context that's used when rendering OpenGL outside the paint event.

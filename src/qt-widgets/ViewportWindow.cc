@@ -249,8 +249,8 @@ GPlatesQtWidgets::ViewportWindow::ViewportWindow(
 	d_inside_update_undo_action_tooltip(false),
 	d_inside_update_redo_action_tooltip(false)
 {
-	setupUi(this);
-
+    setupUi(this);
+    qDebug("GPlatesQtWidgets::ViewportWindow::ViewportWindow init");
 	// FIXME: remove this when all non Qt widget state has been moved into ViewState.
 	// This is a temporary solution to avoiding passing ViewportWindow references around
 	// when only non Qt widget related view state is needed - currently ViewportWindow contains

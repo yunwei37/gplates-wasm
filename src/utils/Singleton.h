@@ -164,11 +164,11 @@ namespace GPlatesUtils
 		T&
 		instance()
 		{
-            qDebug("instance");
+            // qDebug("instance");
 #if defined( GPLATES_SINGLETON_THREADSAFE )
 			QMutexLocker locker;
 #endif
-            qDebug("instance");
+            // qDebug("instance");
 			if (!static_instance_ptr())
             {
                 qDebug("no instance static_instance_ptr");

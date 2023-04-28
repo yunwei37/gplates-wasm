@@ -41,7 +41,7 @@ GPlatesQtWidgets::MissingSessionFilesDialog::MissingSessionFilesDialog(
 	d_signal_mapper(new QSignalMapper(this))
 {
 	setupUi(this);
-
+	qDebug("MissingSessionFilesDialog");
 	// Try to adjust column widths.
 	QHeaderView *header = missing_files_table_widget->horizontalHeader();
 	header->setSectionResizeMode(ColumnNames::FILENAME, QHeaderView::Stretch);
@@ -54,9 +54,9 @@ GPlatesQtWidgets::MissingSessionFilesDialog::MissingSessionFilesDialog(
 			buttonbox->button(QDialogButtonBox::Abort), SIGNAL(clicked()),
 			this, SLOT(abort_load()));
 
-    QObject::connect(
-			d_signal_mapper, SIGNAL(mapped(int)),
-            this, SLOT(update(int)));
+    // QObject::connect(
+	// 		d_signal_mapper, SIGNAL(mapped(int)),
+    //         this, SLOT(update(int)));
 }
 
 
