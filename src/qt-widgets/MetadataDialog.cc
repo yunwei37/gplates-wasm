@@ -1084,7 +1084,7 @@ GPlatesQtWidgets::MetadataDialog::save_pole_meta()
 	if(d_grot_proxy)
 	{
 		GPlatesFileIO::RotationPoleData pole_data;
-		QStringList tmp = d_trs_dlg_current_item->parent()->text(0).split(QRegularExpression("\\s+"));
+		QStringList tmp = d_trs_dlg_current_item->parent()->text(0).split(QRegExp("\\s+"));
 		pole_data.moving_plate_id = tmp[0].toInt();
 		pole_data.fix_plate_id = tmp[2].toInt();
 		pole_data.time = d_trs_dlg_current_item->text(1).toDouble();

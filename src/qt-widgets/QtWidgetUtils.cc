@@ -27,15 +27,13 @@
 #include <QApplication>
 #include <QBrush>
 #include <QColorDialog>
-#include <QScreen>
+#include <QDesktopWidget>
 #include <QHBoxLayout>
 #include <QPainter>
 #include <QPen>
 #include <QRect>
 #include <QSize>
 #include <QtGlobal>
-#include <QGuiApplication>
-#include <QScreen>
 
 #include "QtWidgetUtils.h"
 
@@ -62,9 +60,9 @@ GPlatesQtWidgets::QtWidgetUtils::reposition_to_side_of_parent(
 		int new_x = par->pos().x() + par->frameGeometry().width();
 		int new_y = par->pos().y() + (par->frameGeometry().height() - frame_geometry.height()) / 2;
 
-        // Ensure the dialog is not off-screen.
-        QScreen *primaryScreen = QGuiApplication::primaryScreen();
-        QRect screen_geometry = primaryScreen->geometry();
+		// Ensure the dialog is not off-screen.
+		QDesktopWidget *desktop = QApplication::desktop();
+		QRect screen_geometry = desktop->screenGeometry(par);
 		if (new_x + frame_geometry.width() > screen_geometry.right())
 		{
 			new_x = screen_geometry.right() - frame_geometry.width();
@@ -77,6 +75,7 @@ GPlatesQtWidgets::QtWidgetUtils::reposition_to_side_of_parent(
 		dialog->move(new_x, new_y);
 	}
 }
+
 
 void
 GPlatesQtWidgets::QtWidgetUtils::pop_up_dialog(

@@ -127,14 +127,12 @@ GPlatesOpenGL::GLProjectionUtils::glu_project(
 		GLdouble *winy,
 		GLdouble *winz)
 {
-	qDebug("gluUnProject");
-	return GL_FALSE;
-	// return gluProject(
-	// 		objx, objy, objz,
-	// 		model_view_transform.get_matrix(),
-	// 		projection_transform.get_matrix(),
-	// 		viewport.get_viewport(),
-	// 		winx, winy, winz);
+	return gluProject(
+			objx, objy, objz,
+			model_view_transform.get_matrix(),
+			projection_transform.get_matrix(),
+			viewport.get_viewport(),
+			winx, winy, winz);
 }
 
 
@@ -150,14 +148,12 @@ GPlatesOpenGL::GLProjectionUtils::glu_un_project(
 		GLdouble *objy,
 		GLdouble *objz)
 {
-	qDebug("gluUnProject");
-	return GL_FALSE;
-	// gluUnProject(
-	// 		winx, winy, winz,
-	// 		model_view_transform.get_matrix(),
-	// 		projection_transform.get_matrix(),
-	// 		viewport.get_viewport(),
-	// 		objx, objy, objz);
+	return gluUnProject(
+			winx, winy, winz,
+			model_view_transform.get_matrix(),
+			projection_transform.get_matrix(),
+			viewport.get_viewport(),
+			objx, objy, objz);
 }
 
 

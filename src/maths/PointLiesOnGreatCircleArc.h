@@ -28,7 +28,7 @@
 #ifndef GPLATES_MATHS_POINTLIESONGREATCIRCLEARC_H
 #define GPLATES_MATHS_POINTLIESONGREATCIRCLEARC_H
 
-#include <functional>  /* std::__unary_function */
+#include <functional>  /* std::unary_function */
 
 #include "GreatCircleArc.h"
 
@@ -53,10 +53,10 @@ namespace GPlatesMaths
 	 *
 	 * See Josuttis99, Chapter 8 "STL Function Objects", and in particular
 	 * section 8.2.4 "User-Defined Function Objects for Function Adapters",
-	 * for more information about @a std::__unary_function.
+	 * for more information about @a std::unary_function.
 	 */
 	class PointLiesOnGreatCircleArc:
-			public std::__unary_function< PointOnSphere, bool >
+			public std::unary_function< PointOnSphere, bool >
 	{
 
 	  public:

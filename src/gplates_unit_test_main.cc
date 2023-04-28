@@ -116,7 +116,7 @@ namespace
 	}
 }
 
-boost::unit_test::test_suite* init_unit_test(int argc, char** argv)
+bool init_unit_test()
 {
 	// Initialise Qt resources that exist in the static 'qt-resources' library.
 	Q_INIT_RESOURCE(opengl);
@@ -151,7 +151,7 @@ boost::unit_test::test_suite* init_unit_test(int argc, char** argv)
 	" DO NOT REMOVE THE NEW OPERATOR!
 	*/
 
-    return nullptr;
+	return true;
 }
 
 //

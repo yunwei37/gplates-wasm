@@ -32,7 +32,7 @@
 #include "GsmlNodeProcessorFactory.h"
 
 #include "global/LogException.h"
-// #include "utils/XQueryUtils.h"
+#include "utils/XQueryUtils.h"
 
 
 using namespace GPlatesUtils;
@@ -101,18 +101,18 @@ GPlatesFileIO::GsmlFeatureHandler::handle_feature_member(
 			GPLATES_EXCEPTION_SOURCE,	
 			"Unable to open buffer.");
 	}
-//	QXmlStreamReader reader(&buffer);
+	QXmlStreamReader reader(&buffer);
 
-//	//gml:featureMember
-//	XQuery::next_start_element(reader);
+	//gml:featureMember
+	XQuery::next_start_element(reader);
 
-//	//will give: 'gsml:MappedFeature', 'gpml:RockUnit_siliciclastic', etc.
-//	XQuery::next_start_element(reader);
+	//will give: 'gsml:MappedFeature', 'gpml:RockUnit_siliciclastic', etc.
+	XQuery::next_start_element(reader);
 
-//	QString feature_type = reader.name().toString();
+	QString feature_type = reader.name().toString();
 
-#if 1
-qDebug() << "GsmlFeatureHandler::handle_feature_member(): feature_type";
+#if 0
+qDebug() << "GsmlFeatureHandler::handle_feature_member(): feature_type" << feature_type;
 qDebug() << "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
 qDebug() << xml_data;
 qDebug() << "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
@@ -120,24 +120,24 @@ qDebug() << "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
 
 	std::vector<QByteArray> results;
 
-//	if ( feature_type.startsWith("UnclassifiedFeature") )
-//	{
-//		results = XQuery::evaluate_query(
-//				xml_data,
-//				"//gsml:" + feature_type);
-//	}
-//	else if ( feature_type.startsWith("RockUnit_") )
-//	{
-//		results = XQuery::evaluate_query(
-//				xml_data,
-//				"//gpml:" + feature_type);
-//	}
-//	else if ( feature_type.startsWith("FossilCollection_") )
-//	{
-//		results = XQuery::evaluate_query(
-//				xml_data,
-//				"//gpml:" + feature_type);
-//	}
+	if ( feature_type.startsWith("UnclassifiedFeature") )
+	{
+		results = XQuery::evaluate_query(
+				xml_data,
+				"//gsml:" + feature_type);
+	}
+	else if ( feature_type.startsWith("RockUnit_") )
+	{
+		results = XQuery::evaluate_query(
+				xml_data,
+				"//gpml:" + feature_type);
+	}
+	else if ( feature_type.startsWith("FossilCollection_") )
+	{
+		results = XQuery::evaluate_query(
+				xml_data,
+				"//gpml:" + feature_type);
+	}
 
 	if(results.size() != 1)
 	{
@@ -155,6 +155,6 @@ qDebug() << "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
 			"Unable to open buffer.");
 	}
 
-//	handle_gsml_feature( feature_type, fc, buf);
+	handle_gsml_feature( feature_type, fc, buf);
 }
 

@@ -31,5 +31,5 @@ set(srcs
     CliStageRotationCommand.h
 )
 
-# # Add the source files to the gplates static library.
+# Add the source files to the gplates static library.
 target_sources_util(gplates-lib PRIVATE ${srcs})

@@ -183,8 +183,8 @@ GPlatesQtWidgets::ReconstructionViewWidget::ReconstructionViewWidget(
 	d_view_state(view_state),
 	d_splitter_widget(new QSplitter(this))
 {
-    qDebug("GPlatesQtWidgets::ReconstructionViewWidget::ReconstructionViewWidget");
 	setupUi(this);
+
 	d_globe_and_map_widget_ptr = new GlobeAndMapWidget(view_state, this);
 	
 	// Construct the Awesome Bar. This used to go on top, but we want to push this

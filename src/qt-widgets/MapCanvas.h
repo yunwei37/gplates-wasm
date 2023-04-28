@@ -32,7 +32,7 @@
 #include <boost/optional.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
-#include <QOpenGLWidget>
+#include <QGLWidget>
 #include <QGraphicsScene>
 #include <QImage>
 #include <QPaintDevice>
@@ -87,7 +87,7 @@ namespace GPlatesQtWidgets
 				GPlatesPresentation::ViewState &view_state,
 				GPlatesViewOperations::RenderedGeometryCollection &rendered_geometry_collection,
 				MapView *map_view_ptr,
-                QWidget *gl_widget,
+				QGLWidget *gl_widget,
 				const GPlatesOpenGL::GLContext::non_null_ptr_type &gl_context,
 				const GPlatesOpenGL::GLVisualLayers::non_null_ptr_type &gl_visual_layers,
 				GPlatesGui::ViewportZoom &viewport_zoom,
@@ -118,7 +118,7 @@ namespace GPlatesQtWidgets
 		/**
 		 * Renders the scene to a QImage of the dimensions specified by @a image_size.
 		 *
-		 * The paint device is the QOpenGLWidget set as the viewport on MapView (on QGraphicsView).
+		 * The paint device is the QGLWidget set as the viewport on MapView (on QGraphicsView).
 		 *
 		 * The specified image size should be in device *independent* pixels (eg, widget dimensions).
 		 * The returned image will be a high-DPI image if this canvas has a device pixel ratio greater than 1.0
@@ -230,7 +230,7 @@ namespace GPlatesQtWidgets
 		//! Do some OpenGL initialisation.
 		void 
 		initializeGL(
-                QOpenGLWidget *gl_widget);
+				QGLWidget *gl_widget);
 
 		/**
 		 * Render one tile of the scene (as specified by @a tile_render).

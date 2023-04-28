@@ -50,11 +50,11 @@
 #	endif
 #endif
 
-//#include "qwt_picker_machine.h"
-//#include "qwt_plot.h"
-//#include "qwt_plot_canvas.h"
-//#include "qwt_plot_curve.h"
-//#include "qwt_series_data.h"
+#include "qwt_picker_machine.h"
+#include "qwt_plot.h"
+#include "qwt_plot_canvas.h"
+#include "qwt_plot_curve.h"
+#include "qwt_series_data.h"
 
 #include <algorithm>
 #include <functional>
@@ -66,7 +66,7 @@ namespace
 
 	class
 	SmallestTimeCoordinateYoungerThan:
-			public std::__unary_function<QPointF,bool>
+			public std::unary_function<QPointF,bool>
 	{
 
 	public:

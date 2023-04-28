@@ -494,11 +494,11 @@ GPlatesGui::FeedbackOpenGLToQPainter::begin_render_vector_geometry(
 	// http://www.glprogramming.com/red/chapter13.html
 	//
 	// TODO: Move this function to 'GLRenderer'.
-	// glFeedbackBuffer(
-	// 		d_vector_render->feedback_buffer_size,
-	// 		GL_3D_COLOR,
-	// 		d_vector_render->feedback_buffer.get());
-	qDebug("glFeedbackBuffer");
+	glFeedbackBuffer(
+			d_vector_render->feedback_buffer_size,
+			GL_3D_COLOR,
+			d_vector_render->feedback_buffer.get());
+
 	// Specify OpenGL feedback mode.
 	//
 	// TODO: Move this function to 'GLRenderer'.
@@ -511,8 +511,7 @@ GPlatesGui::FeedbackOpenGLToQPainter::begin_render_vector_geometry(
 	// In fact, according to http://www.glprogramming.com/red/chapter13.html#name2 ,
 	// section "Feedback":
 	// "For this step, you can ignore the value returned by glRenderMode()."
-//	glRenderMode(GL_FEEDBACK);
-    qDebug("glRenderMode");
+	glRenderMode(GL_FEEDBACK);
 
 	GPlatesOpenGL::GLUtils::check_gl_errors(GPLATES_ASSERTION_SOURCE);
 }
@@ -533,17 +532,17 @@ GPlatesGui::FeedbackOpenGLToQPainter::end_render_vector_geometry(
 	// Return to regular rendering mode.
 	//
 	// TODO: Move this function to 'GLRenderer'.
-//	const GLint num_feedback_items = glRenderMode(GL_RENDER);
-    qDebug("glRenderMode");
+	const GLint num_feedback_items = glRenderMode(GL_RENDER);
+
 	GPlatesOpenGL::GLUtils::check_gl_errors(GPLATES_ASSERTION_SOURCE);
 
 	// According to http://www.glprogramming.com/red/chapter13.html#name1 , section
 	// "Selection", sub-section "The Basic Steps", a negative value means that the
 	// array has overflowed.
-//	GPlatesGlobal::Assert<GPlatesOpenGL::OpenGLException>(
-//			num_feedback_items >= 0,
-//			GPLATES_ASSERTION_SOURCE,
-//			"OpenGL feedback buffer overflowed.");
+	GPlatesGlobal::Assert<GPlatesOpenGL::OpenGLException>(
+			num_feedback_items >= 0,
+			GPLATES_ASSERTION_SOURCE,
+			"OpenGL feedback buffer overflowed.");
 
 	// Suspend rendering with 'GLRenderer' so we can resume painting with 'QPainter'.
 	// At scope exit we can resume rendering with 'GLRenderer'.
@@ -558,10 +557,10 @@ GPlatesGui::FeedbackOpenGLToQPainter::end_render_vector_geometry(
 	qpainter->setWorldTransform(QTransform()/*identity*/);
 
 	// Draw the feedback primitives to the QPainter.
-//	draw_feedback_primitives_to_qpainter(
-//			qpainter.get(),
-//			d_vector_render->feedback_buffer.get(),
-//			num_feedback_items);
+	draw_feedback_primitives_to_qpainter(
+			qpainter.get(),
+			d_vector_render->feedback_buffer.get(),
+			num_feedback_items);
 
 	// Finish begin/end vector block.
 	d_vector_render = boost::none;

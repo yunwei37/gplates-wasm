@@ -191,8 +191,8 @@ namespace GPlatesGui
 		GPlatesQtWidgets::HellingerDialog &
 		hellinger_dialog();
 
-		// GPlatesQtWidgets::KinematicGraphsDialog &
-		// kinematics_tool_dialog();
+		GPlatesQtWidgets::KinematicGraphsDialog &
+		kinematics_tool_dialog();
 
 		GPlatesQtWidgets::LogDialog &
 		log_dialog();

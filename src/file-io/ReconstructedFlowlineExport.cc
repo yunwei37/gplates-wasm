@@ -68,8 +68,8 @@ namespace GPlatesFileIO
 				{
 				case GMT:
 					GMTFormatFlowlinesExport::export_flowlines(
-                        grouped_recon_geoms_seq,
-                        QFileInfo(filename),
+						grouped_recon_geoms_seq,
+						filename,
 						referenced_files,
 						active_reconstruction_files,
 						reconstruction_anchor_plate_id,
@@ -80,8 +80,8 @@ namespace GPlatesFileIO
 				case OGRGMT:
 				case GEOJSON:
 					OgrFormatFlowlineExport::export_flowlines(
-                        grouped_recon_geoms_seq,
-                        QFileInfo(filename),
+						grouped_recon_geoms_seq,
+						filename,
 						referenced_files,
 						active_reconstruction_files,
 						reconstruction_anchor_plate_id,
@@ -113,8 +113,8 @@ namespace GPlatesFileIO
 				case OGRGMT:
 				case GEOJSON:
 					OgrFormatFlowlineExport::export_flowlines(
-                        grouped_recon_geoms_seq,
-                        QFileInfo(filename),
+						grouped_recon_geoms_seq,
+						filename,
 						referenced_files,
 						active_reconstruction_files,
 						reconstruction_anchor_plate_id,
@@ -124,8 +124,8 @@ namespace GPlatesFileIO
 					break;
 				case GMT:
 					GMTFormatFlowlinesExport::export_flowlines(
-                        grouped_recon_geoms_seq,
-                        QFileInfo(filename),
+						grouped_recon_geoms_seq,
+						filename,
 						referenced_files,
 						active_reconstruction_files,
 						reconstruction_anchor_plate_id,

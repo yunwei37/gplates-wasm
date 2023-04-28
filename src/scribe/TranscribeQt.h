@@ -362,17 +362,6 @@ namespace GPlatesScribe
 		return transcribe_sequence_protocol(TRANSCRIBE_SOURCE, scribe, list_object);
 	}
 
-//     QVector is alias of QList
-//    template <typename T>
-//    TranscribeResult
-//    transcribe(
-//        Scribe &scribe,
-//        QVector<T> &vector_object,
-//        bool transcribed_construct_data)
-//    {
-//        return transcribe_sequence_protocol(TRANSCRIBE_SOURCE, scribe, vector_object);
-//    }
-
 
 	template <typename Key, typename T>
 	TranscribeResult
@@ -428,6 +417,16 @@ namespace GPlatesScribe
 		return transcribe_sequence_protocol(TRANSCRIBE_SOURCE, scribe, stack_object);
 	}
 
+
+	template <typename T>
+	TranscribeResult
+	transcribe(
+			Scribe &scribe,
+			QVector<T> &vector_object,
+			bool transcribed_construct_data)
+	{
+		return transcribe_sequence_protocol(TRANSCRIBE_SOURCE, scribe, vector_object);
+	}
 }
 
 #endif // GPLATES_SCRIBE_TRANSCRIBEQT_H

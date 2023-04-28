@@ -30,6 +30,7 @@
 
 #include <QObject>
 #include <QString>
+#include <QXmlItem>
 
 #include "File.h"
 #include "model/FeatureCollectionHandle.h"

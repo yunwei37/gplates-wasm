@@ -27,10 +27,10 @@
 #include <boost/foreach.hpp>
 #include <boost/optional.hpp>
 #include <QDebug>
-//#include <QXmlQuery>
-//#include <QXmlSerializer>
+#include <QXmlQuery>
+#include <QXmlSerializer>
 #include <QXmlStreamReader>
-//#include <QXmlResultItems>
+#include <QXmlResultItems>
 
 #include "ArbitraryXmlReader.h"
 #include "GsmlConst.h"
@@ -54,7 +54,7 @@
 #include "property-values/XsDouble.h"
 #include "property-values/XsString.h"
 
-// #include "utils/XQueryUtils.h"
+#include "utils/XQueryUtils.h"
 
 
 using namespace GPlatesFileIO::GsmlConst;
@@ -68,12 +68,11 @@ namespace
 	get_element_text(
 			QBuffer& xml_data)
 	{
-        qWarning("not support now for xquery");
-//		QXmlStreamReader reader(&xml_data);
-//		if(XQuery::next_start_element(reader))
-//		{
-//			return reader.readElementText();
-//		}
+		QXmlStreamReader reader(&xml_data);
+		if(XQuery::next_start_element(reader))
+		{
+			return reader.readElementText();
+		}
 		return QString();
 	}
 	
@@ -132,20 +131,19 @@ namespace
 	get_srs_name(
 			QByteArray& array_buf)
 	{
-        qWarning("not support now for xquery");
-//		std::vector<QVariant> results =
-//			GPlatesUtils::XQuery::evaluate_attribute(array_buf,"srsName");
+		std::vector<QVariant> results = 
+			GPlatesUtils::XQuery::evaluate_attribute(array_buf,"srsName");
 
-//		std::size_t s = results.size();
-//		if( s >= 1)
-//		{
-//			if(s > 1)
-//			{
-//				qWarning() << "More than one srsName attributes have been found.";
-//				qWarning() << "Only the first one will be returned.";
-//			}
-//			return results[0].toString();
-//		}
+		std::size_t s = results.size();
+		if( s >= 1)
+		{
+			if(s > 1)
+			{
+				qWarning() << "More than one srsName attributes have been found.";
+				qWarning() << "Only the first one will be returned.";
+			}
+			return results[0].toString();
+		}
 		return QString();
 	}
 
@@ -167,27 +165,26 @@ namespace
 	find_srs_dimension(
 			const QByteArray& buf)
 	{
-        qWarning("not support now for xquery");
-//		QXmlStreamReader reader(buf);
-//		QXmlStreamAttributes attrs;
-//		while(XQuery::next_start_element(reader))
-//        {
-//            if(reader.name() == QString("posList"))
-//			{
-//				attrs = reader.attributes();
-//				break;
-//			}
-//		}
+		QXmlStreamReader reader(buf);
+		QXmlStreamAttributes attrs;
+		while(XQuery::next_start_element(reader))
+		{
+			if(reader.name() == "posList")
+			{
+				attrs = reader.attributes();
+				break;
+			}
+		}
 
-//		BOOST_FOREACH(const QXmlStreamAttribute& attr, attrs)
-//		{
-//			if(
-//				attr.name().toString() == "srsDimension" &&
-//				attr.value().toString() == "3")
-//				{
-//					return 3;
-//				}
-//		}
+		BOOST_FOREACH(const QXmlStreamAttribute& attr, attrs)
+		{
+			if(
+				attr.name().toString() == "srsDimension" && 
+				attr.value().toString() == "3")
+				{
+					return 3;
+				}
+		}
 		return 2;
 	}
 
@@ -313,15 +310,14 @@ namespace
 	GPlatesModel::XmlElementNode::non_null_ptr_type
 	create_xml_node(
 			QBuffer& buf)
-    {
-        qWarning("not support now for xquery");
-//		QXmlStreamReader reader(&buf);
-//		XQuery::next_start_element(reader);
+	{
+		QXmlStreamReader reader(&buf);
+		XQuery::next_start_element(reader);
 
-//		boost::shared_ptr<XmlElementNode::AliasToNamespaceMap> alias_map(
-//			new XmlElementNode::AliasToNamespaceMap());
+		boost::shared_ptr<XmlElementNode::AliasToNamespaceMap> alias_map(
+			new XmlElementNode::AliasToNamespaceMap());
 
-//		return XmlElementNode::create(reader,alias_map);
+		return XmlElementNode::create(reader,alias_map);
 	}
 
 	/*
@@ -358,133 +354,133 @@ GPlatesFileIO::GsmlPropertyHandlers::process_geometries(
 		const QString& query_str)
 {
 	QByteArray buf_array = xml_data.data();
-    qWarning("not support now for xquery");
-//#if 0
-//qDebug() << "======================================================================";
-//qDebug() << "GPlatesFileIO::GsmlPropertyHandlers::process_geometries() buf_array = " << buf_array;
-//qDebug() << "======================================================================";
-//#endif
 
-//    std::vector<QByteArray> results;// =
-////		XQuery::evaluate_query(
-////				buf_array,
-////				query_str);
+#if 0
+qDebug() << "======================================================================";
+qDebug() << "GPlatesFileIO::GsmlPropertyHandlers::process_geometries() buf_array = " << buf_array;
+qDebug() << "======================================================================";
+#endif
+
+	std::vector<QByteArray> results = 
+		XQuery::evaluate_query(
+				buf_array,
+				query_str);
 	
-//// qDebug() << "GPlatesFileIO::GsmlPropertyHandlers::process_geometries() results.size() = " << results.size();
+// qDebug() << "GPlatesFileIO::GsmlPropertyHandlers::process_geometries() results.size() = " << results.size();
 
-//	BOOST_FOREACH(QByteArray& array, results)
-//	{
-//		// GPlates doesn't support gml:outerBoundaryIs and gml:innerBoundaryIs
-//		// replace them with gml:exterior and gml:interior
-//		array.replace("outerBoundaryIs", "exterior");
-//		array.replace("innerBoundaryIs", "interior");
+	BOOST_FOREACH(QByteArray& array, results)
+	{
+		// GPlates doesn't support gml:outerBoundaryIs and gml:innerBoundaryIs
+		// replace them with gml:exterior and gml:interior
+		array.replace("outerBoundaryIs", "exterior");
+		array.replace("innerBoundaryIs", "interior");
 
-//		boost::optional<PropertyValue::non_null_ptr_type> geometry_property = boost::none;
+		boost::optional<PropertyValue::non_null_ptr_type> geometry_property = boost::none;
 
-//		if(query_str.indexOf("Point") != -1)
-//		{
-////			XQuery::wrap_xml_data(array,"gpml:position");
+		if(query_str.indexOf("Point") != -1)
+		{
+			XQuery::wrap_xml_data(array,"gpml:position");
 
-//			convert_to_epsg_4326(array);
-//			normalize_geometry_coord(array);
+			convert_to_epsg_4326(array);
+			normalize_geometry_coord(array);
 
-//			XmlElementNode::non_null_ptr_type xml_node = create_xml_node(array);
+			XmlElementNode::non_null_ptr_type xml_node = create_xml_node(array);
 
-//			geometry_property =
-//				GpmlPropertyStructuralTypeReaderUtils::create_gml_point(
-//					xml_node,
-//					// Read using current GPGIM version (it's not GPML so it won't change format anyway)...
-//					GPlatesModel::Gpgim::instance().get_version(),
-//					*d_read_errors);
+			geometry_property = 
+				GpmlPropertyStructuralTypeReaderUtils::create_gml_point(
+					xml_node,
+					// Read using current GPGIM version (it's not GPML so it won't change format anyway)...
+					GPlatesModel::Gpgim::instance().get_version(),
+					*d_read_errors);
 
-//			d_feature->add(
-//					GPlatesModel::TopLevelPropertyInline::create(
-//							PropertyName::create_gpml("position"),
-//							*geometry_property));
-//		}
-//		else if(query_str.indexOf("LineString") != -1)
-//		{
-//			// need to reorder the xml nesting
-////			XQuery::wrap_xml_data(array,"gml:baseCurve");
+			d_feature->add(
+					GPlatesModel::TopLevelPropertyInline::create(
+							PropertyName::create_gpml("position"),
+							*geometry_property));
+		}
+		else if(query_str.indexOf("LineString") != -1)
+		{
+			// need to reorder the xml nesting 
+			XQuery::wrap_xml_data(array,"gml:baseCurve");
 
-//			convert_to_epsg_4326(array);
-//			normalize_geometry_coord(array);
+			convert_to_epsg_4326(array);
+			normalize_geometry_coord(array);
 
-//			XmlElementNode::non_null_ptr_type xml_node = create_xml_node(array);
+			XmlElementNode::non_null_ptr_type xml_node = create_xml_node(array);
 
-//			GPlatesPropertyValues::GmlLineString::non_null_ptr_type gml_line_string =
-//				GpmlPropertyStructuralTypeReaderUtils::create_gml_line_string(
-//					xml_node,
-//					// Read using current GPGIM version (it's not GPML so it won't change format anyway)...
-//					GPlatesModel::Gpgim::instance().get_version(),
-//					*d_read_errors);
+			GPlatesPropertyValues::GmlLineString::non_null_ptr_type gml_line_string =
+				GpmlPropertyStructuralTypeReaderUtils::create_gml_line_string(
+					xml_node,
+					// Read using current GPGIM version (it's not GPML so it won't change format anyway)...
+					GPlatesModel::Gpgim::instance().get_version(),
+					*d_read_errors);
 
-//            GPlatesPropertyValues::GmlOrientableCurve::non_null_ptr_type gml_orientable_curve =
-//                    GPlatesModel::ModelUtils::create_gml_orientable_curve(gml_line_string);
+            GPlatesPropertyValues::GmlOrientableCurve::non_null_ptr_type gml_orientable_curve =
+                    GPlatesModel::ModelUtils::create_gml_orientable_curve(gml_line_string);
 
-//            GPlatesPropertyValues::GpmlConstantValue::non_null_ptr_type property_value =
-//                    GPlatesModel::ModelUtils::create_gpml_constant_value(gml_orientable_curve);
+            GPlatesPropertyValues::GpmlConstantValue::non_null_ptr_type property_value =
+                    GPlatesModel::ModelUtils::create_gpml_constant_value(gml_orientable_curve);
 
-//			d_feature->add(
-//				GPlatesModel::TopLevelPropertyInline::create(
-//				PropertyName::create_gpml("centerLineOf"),
-//				property_value)
-//			);
-//		}
-//		else if(query_str.indexOf("Polygon") != -1)
-//		{
-//			// need to reorder the xml nesting to match gpml
-//			array.replace("Polygon", "LinearRing");
-////			XQuery::wrap_xml_data(array,"gml:exterior");
-////			XQuery::wrap_xml_data(array,"gml:Polygon");
-////			XQuery::wrap_xml_data(array,"gpml:ConstantValue");
+			d_feature->add(
+				GPlatesModel::TopLevelPropertyInline::create(
+				PropertyName::create_gpml("centerLineOf"),
+				property_value)
+			);
+		}
+		else if(query_str.indexOf("Polygon") != -1)
+		{
+			// need to reorder the xml nesting to match gpml
+			array.replace("Polygon", "LinearRing");
+			XQuery::wrap_xml_data(array,"gml:exterior");
+			XQuery::wrap_xml_data(array,"gml:Polygon");
+			XQuery::wrap_xml_data(array,"gpml:ConstantValue");
 
-//			convert_to_epsg_4326(array);
-//			normalize_geometry_coord(array);
+			convert_to_epsg_4326(array);
+			normalize_geometry_coord(array);
 			
-//			XmlElementNode::non_null_ptr_type xml_node = create_xml_node(array);
+			XmlElementNode::non_null_ptr_type xml_node = create_xml_node(array);
 
-//			GPlatesPropertyValues::GmlPolygon::non_null_ptr_type gml_polygon =
-//				GpmlPropertyStructuralTypeReaderUtils::create_gml_polygon(
-//					xml_node,
-//					// Read using current GPGIM version (it's not GPML so it won't change format anyway)...
-//					GPlatesModel::Gpgim::instance().get_version(),
-//					*d_read_errors);
+			GPlatesPropertyValues::GmlPolygon::non_null_ptr_type gml_polygon = 
+				GpmlPropertyStructuralTypeReaderUtils::create_gml_polygon(
+					xml_node,
+					// Read using current GPGIM version (it's not GPML so it won't change format anyway)...
+					GPlatesModel::Gpgim::instance().get_version(),
+					*d_read_errors);
 
-//            GPlatesPropertyValues::GpmlConstantValue::non_null_ptr_type property_value =
-//                    GPlatesModel::ModelUtils::create_gpml_constant_value(gml_polygon);
+            GPlatesPropertyValues::GpmlConstantValue::non_null_ptr_type property_value =
+                    GPlatesModel::ModelUtils::create_gpml_constant_value(gml_polygon);
 
-//			d_feature->add(
-//				GPlatesModel::TopLevelPropertyInline::create(
-//				PropertyName::create_gpml("outlineOf"),
-//				property_value)
-//			);
+			d_feature->add(
+				GPlatesModel::TopLevelPropertyInline::create(
+				PropertyName::create_gpml("outlineOf"),
+				property_value)
+			);
 
 
-//		}
-//		else
-//		{
-//			qDebug() << "Unknown Geometry type?";
-//		}
+		}
+		else
+		{
+			qDebug() << "Unknown Geometry type?";
+		}
 
-//#if 0
-//// FIXME: do we need to do this?
+#if 0
+// FIXME: do we need to do this? 
 
-//		// Add the geom as a GsmlGeometry prop
-//		if(!geometry_property)
-//		{
-//			qWarning() << "Failed to create geometry property.";
-//		}
-//		else
-//		{
-//			d_feature->add(
-//					GPlatesModel::TopLevelPropertyInline::create(
-//							PropertyName::create_gpml("GsmlGeometry"),
-//							*geometry_property));
-//		}
-//#endif
+		// Add the geom as a GsmlGeometry prop
+		if(!geometry_property)
+		{
+			qWarning() << "Failed to create geometry property.";
+		}
+		else
+		{
+			d_feature->add(
+					GPlatesModel::TopLevelPropertyInline::create(
+							PropertyName::create_gpml("GsmlGeometry"),
+							*geometry_property));
+		}
+#endif
 
-//	} // end of loop over results
+	} // end of loop over results
 }
 
 
@@ -544,24 +540,24 @@ GPlatesFileIO::GsmlPropertyHandlers::handle_occurrence_property(
 				"/gsml:occurrence/gsml:MappedFeature/gsml:shape",
 				boost::bind(&XQuery::is_empty,_1));
 #endif
-    qWarning("unsupported xquery types");
-//	std::vector<QByteArray> results =
-//		XQuery::evaluate_query(
-//				xml_data,
-//				"/gsml:occurrence/gsml:MappedFeature/gsml:shape");
 
-//	BOOST_FOREACH(QByteArray& array, results)
-//	{
-//		QBuffer buffer(&array);
-//		buffer.open(QIODevice::ReadOnly | QIODevice::Text);
-//		if(!buffer.isOpen())
-//		{
-//			throw GPlatesGlobal::LogException(
-//				GPLATES_EXCEPTION_SOURCE,
-//				"Unable to open buffer.");
-//		}
-//		handle_geometry_property(buffer);
-//	}
+	std::vector<QByteArray> results = 
+		XQuery::evaluate_query(
+				xml_data,
+				"/gsml:occurrence/gsml:MappedFeature/gsml:shape");
+
+	BOOST_FOREACH(QByteArray& array, results)
+	{
+		QBuffer buffer(&array);
+		buffer.open(QIODevice::ReadOnly | QIODevice::Text);
+		if(!buffer.isOpen())
+		{
+			throw GPlatesGlobal::LogException(
+				GPLATES_EXCEPTION_SOURCE,	
+				"Unable to open buffer.");
+		}
+		handle_geometry_property(buffer);
+	}
 }
 
 
@@ -598,12 +594,12 @@ GPlatesFileIO::GsmlPropertyHandlers::handle_gml_valid_time(
 	while(reader.readNext() != QXmlStreamReader::Invalid) 
 	{
 		if( reader.tokenString() == "StartElement")
-        {
-            if(reader.name() == QString("begin")) { get_begin = true; }
-            else if( reader.name() == QString("end")) { get_begin = false; }
+		{
+			if(reader.name() == "begin") { get_begin = true; }
+			else if( reader.name() == "end") { get_begin = false; }
 		}
 
-        if (reader.name() == QString("timePosition"))
+		if (reader.name() == "timePosition")
 		{
 			reader.readNext();
 			if( get_begin )

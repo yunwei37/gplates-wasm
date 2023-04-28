@@ -28,7 +28,6 @@
 #include "app-logic/PropertyExtractors.h"
 #include "global/CompilerWarnings.h"
 #include "AgeColourPalettes.h"
-#include "presentation/Application.h"
 #include "DrawStyleManager.h"
 #include "DrawStyleAdapters.h"
 #include "FeatureTypeColourPalette.h"
@@ -55,8 +54,8 @@ GPlatesGui::DrawStyleManager::DrawStyleManager(
 	//Since DrawStyleManager is a singleton, it is safer to use a local UserPreferences by default.
 	if(d_use_local_user_pref)
 		d_user_prefs = new GPlatesAppLogic::UserPreferences(this);
-    else
-        d_user_prefs = &GPlatesPresentation::Application::instance().get_application_state().get_user_preferences();
+	else
+		d_user_prefs = &GPlatesPresentation::Application::instance().get_application_state().get_user_preferences();
 
 	//register built-in categories
 	register_style_catagory("PlateId");
@@ -213,7 +212,7 @@ GPlatesGui::DrawStyleManager::remove_style(GPlatesGui::StyleAdapter* style)
 	}
 
 	// Deleting a style also destroys Python objects.
-	// GPlatesApi::PythonInterpreterLocker interpreter_locker;
+	GPlatesApi::PythonInterpreterLocker interpreter_locker;
 
 	d_styles.erase(it);
 	delete style;
@@ -291,13 +290,13 @@ GPlatesGui::DrawStyleManager::get_saved_styles(const GPlatesGui::StyleCategory& 
 		d_user_prefs->extract_keyvalues_as_configbundle(draw_style_prefix + "/" + cata.name());
 	
 	QSet<QString> style_names;
-    for(QString subkey: styles_in_catagory->subkeys())
+	Q_FOREACH(QString subkey, styles_in_catagory->subkeys()) 
 	{
 		subkey = subkey.simplified();
 		style_names.insert(subkey.split("/").first());
 	}
 
-    for(QString style_name: style_names)
+	Q_FOREACH(QString style_name, style_names) 
 	{
 		if(style_name == "paths")//TODO: why "paths" is here?
 			continue;
@@ -311,7 +310,7 @@ GPlatesGui::DrawStyleManager::get_saved_styles(const GPlatesGui::StyleCategory& 
 		new_adapter->set_name(style_name);
 		Configuration& cfg = new_adapter->configuration();
 
-        for(QString subkey: style_bundle->subkeys())
+		Q_FOREACH(QString subkey, style_bundle->subkeys()) 
 		{
 			subkey = subkey.simplified();
 			ConfigurationItem* cfg_item = cfg.get(subkey);

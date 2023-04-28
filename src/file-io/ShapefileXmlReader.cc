@@ -29,8 +29,7 @@
 
 #include <QFile>
 #include <QMap>
-#include <QStringLiteral>
-#include <QStringView>
+
 #include "PropertyMapper.h"
 #include "ShapefileXmlReader.h"
 
@@ -58,7 +57,7 @@ GPlatesFileIO::ShapefileXmlReader::read_file(
          readNext();
 
          if (isStartElement()) {
-             if (name() == QString("GPlatesShapefileMap") && attributes().value("version") == QString("1"))
+             if (name() == "GPlatesShapefileMap" && attributes().value("version") == "1")
                  read_xml();
              else
                  raiseError(QObject::tr("The file is not a GPlatesShapefileMap version 1 file."));
@@ -72,7 +71,7 @@ GPlatesFileIO::ShapefileXmlReader::read_file(
 void
 GPlatesFileIO::ShapefileXmlReader::read_xml()
 {
-     Q_ASSERT(isStartElement() && name() == QString("GPlatesShapefileMap"));
+    Q_ASSERT(isStartElement() && name() == "GPlatesShapefileMap");
 
      while (!atEnd()) {
          readNext();

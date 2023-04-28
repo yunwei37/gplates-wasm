@@ -52,7 +52,7 @@
 #include "gui/FileIODirectoryConfigurations.h"
 #include "gui/GraticuleSettings.h"
 #include "gui/MapTransform.h"
-// #include "gui/PythonManager.h"
+#include "gui/PythonManager.h"
 #include "gui/RasterColourPalette.h"
 #include "gui/RenderSettings.h"
 #include "gui/SceneLightingParameters.h"
@@ -146,9 +146,8 @@ GPlatesPresentation::ViewState::ViewState(
 	d_topology_boundary_sections_container_ptr(
 			new GPlatesGui::TopologySectionsContainer()),
 	d_topology_interior_sections_container_ptr(
-            new GPlatesGui::TopologySectionsContainer()
-    // d_python_manager_ptr(GPlatesGui::PythonManager::instance()
-                         )
+			new GPlatesGui::TopologySectionsContainer()),
+	d_python_manager_ptr(GPlatesGui::PythonManager::instance())
 {
 	// Override a few defaults to the user's taste.
 	initialise_from_user_preferences();

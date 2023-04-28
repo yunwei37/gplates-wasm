@@ -73,7 +73,7 @@ namespace GPlatesMaths
 		 * Compares latitude of two points (distances relative to a North pole) using greater than.
 		 */
 		struct LatitudeGreaterCompare :
-				public std::function<bool(PointOnSphere, PointOnSphere)>
+				public std::binary_function<PointOnSphere, PointOnSphere, bool>
 		{
 			explicit
 			LatitudeGreaterCompare(

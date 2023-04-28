@@ -126,17 +126,17 @@ void
 GPlatesPresentation::Application::enable_syncing_with_external_applications(
 		bool gplates_is_master)
 {
-//	if (!d_external_sync_controller)
-//	{
-//		// Pass ExternalSyncController constructor parameters to boost::optional to
-//		// construct a new object directly in-place.
-//		d_external_sync_controller = boost::in_place(
-//				gplates_is_master,
-//				&d_main_window,
-//				&d_view_state);
-//	}
+	if (!d_external_sync_controller)
+	{
+		// Pass ExternalSyncController constructor parameters to boost::optional to
+		// construct a new object directly in-place.
+		d_external_sync_controller = boost::in_place(
+				gplates_is_master,
+				&d_main_window,
+				&d_view_state);
+	}
 
-//	d_external_sync_controller->enable_external_syncing();
+	d_external_sync_controller->enable_external_syncing();
 }
 
 

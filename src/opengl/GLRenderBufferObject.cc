@@ -50,7 +50,7 @@ GPlatesOpenGL::GLRenderBufferObject::Allocator::allocate(
 			GPLATES_ASSERTION_SOURCE);
 
 	GLuint render_buffer;
-	glGenRenderbuffers(1, &render_buffer);
+	glGenRenderbuffersEXT(1, &render_buffer);
 	return render_buffer;
 }
 
@@ -59,7 +59,7 @@ void
 GPlatesOpenGL::GLRenderBufferObject::Allocator::deallocate(
 		GLuint render_buffer)
 {
-	glDeleteRenderbuffers(1, &render_buffer);
+	glDeleteRenderbuffersEXT(1, &render_buffer);
 }
 
 
@@ -97,12 +97,12 @@ GPlatesOpenGL::GLRenderBufferObject::gl_render_buffer_storage(
 	//
 	// TODO: Make this a bind method in the GLRenderer interface.
 	// For now it's fine since the only reason for binding a render buffer is to set the storage on it.
-	glBindRenderbuffer(GL_RENDERBUFFER_EXT, get_render_buffer_resource_handle());
+	glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, get_render_buffer_resource_handle());
 
-	glRenderbufferStorage(GL_RENDERBUFFER_EXT, internalformat, width, height);
+	glRenderbufferStorageEXT(GL_RENDERBUFFER_EXT, internalformat, width, height);
 	d_internal_format = internalformat;
 	d_dimensions = std::make_pair(width, height);
 
 	// Unbind render buffer object.
-	glBindRenderbuffer(GL_RENDERBUFFER_EXT, 0);
+	glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, 0);
 }

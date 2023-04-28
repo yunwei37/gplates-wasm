@@ -468,7 +468,7 @@ GPlatesOpenGL::GLStateSetKeys::get_enable_client_state_key(
 
 	default:
 		// Unsupported capability.
-		qWarning() << "glEnableVertexAttribArray capability not currently supported - should be easy to add though.";
+		qWarning() << "glEnableClientState capability not currently supported - should be easy to add though.";
 		GPlatesGlobal::Abort(GPLATES_EXCEPTION_SOURCE);
 		break;
 	}

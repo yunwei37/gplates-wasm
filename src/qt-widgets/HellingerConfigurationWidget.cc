@@ -168,7 +168,7 @@ GPlatesQtWidgets::HellingerConfigurationWidget::initialise_widget()
 	static const colour_description_map_type
 			map = build_colour_description_map();
 
-    for(QString colour_string: map)
+	Q_FOREACH(QString colour_string, map)
 	{
 		combo_best_fit_pole_colour->addItem(colour_string);
 		combo_ellipse_colour->addItem(colour_string);

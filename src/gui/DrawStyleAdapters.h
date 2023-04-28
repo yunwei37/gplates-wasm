@@ -35,9 +35,9 @@
 #include <QVariant>
 #include <vector>
 #include "Colour.h"
-//#include "global/python.h"
-//#include "api/PythonUtils.h"
-//#include "api/PythonInterpreterLocker.h"
+#include "global/python.h"
+#include "api/PythonUtils.h"
+#include "api/PythonInterpreterLocker.h"
 #include "model/FeatureHandle.h"
 #include "AgeColourPalettes.h"
 #include "ColourPalette.h"
@@ -148,71 +148,71 @@ namespace GPlatesGui
 	};
 
 
-//	namespace bp = boost::python;
+	namespace bp = boost::python;
 	
-//	class PythonStyleAdapter :
-//		public StyleAdapter
-//	{
-//	public:
-//		PythonStyleAdapter(
-//				bp::object& obj,
-//				const StyleCategory& cata) ;
+	class PythonStyleAdapter : 
+		public StyleAdapter
+	{
+	public:
+		PythonStyleAdapter(
+				bp::object& obj,
+				const StyleCategory& cata) ;
 
 				
-//		const DrawStyle
-//		get_style(
-//				GPlatesModel::FeatureHandle::weak_ref f) const;
+		const DrawStyle
+		get_style(
+				GPlatesModel::FeatureHandle::weak_ref f) const;
 
 		
-//		StyleAdapter*
-//		deep_clone() const;
+		StyleAdapter*
+		deep_clone() const;
 
 
-//		/**
-//		  * Query the Python class for a dict-of-dicts representing a set of alternative
-//		  * configuration values, then instantiate additional StyleAdapters and register
-//		  * them with the DrawStyleManager as variants within the same category as this
-//		  * PythonStyleAdapter.
-//		  */
-//		void
-//		register_alternative_draw_styles(
-//			DrawStyleManager& dsm);
+		/**
+		  * Query the Python class for a dict-of-dicts representing a set of alternative
+		  * configuration values, then instantiate additional StyleAdapters and register
+		  * them with the DrawStyleManager as variants within the same category as this
+		  * PythonStyleAdapter.
+		  */
+		void
+		register_alternative_draw_styles(
+			DrawStyleManager& dsm);
 
-//		~PythonStyleAdapter();
+		~PythonStyleAdapter();
 
 
-//	protected:
+	protected:
 		
-//		/*
-//		* This function creates python configuration objects from C++ Configuration object.
-//		* Callers pass boost python dictionary by reference, into which this function output result data.
-//		*/
-//		void
-//		populate_py_dict(
-//				boost::python::dict& cfgs) const;
+		/*
+		* This function creates python configuration objects from C++ Configuration object.
+		* Callers pass boost python dictionary by reference, into which this function output result data.
+		*/
+		void
+		populate_py_dict(
+				boost::python::dict& cfgs) const;
 
-//		/*
-//		* Read python configuration information from python script and create empty Configuration items.
-//		*/
-//		void
-//		init_configuration();
+		/*
+		* Read python configuration information from python script and create empty Configuration items.
+		*/
+		void
+		init_configuration();
 		
-//		/*
-//		* Push the configuration data back to python object.
-//		*/
-//		void
-//		update_cfg() const;
+		/*
+		* Push the configuration data back to python object.
+		*/
+		void
+		update_cfg() const;
 
-//		/*
-//		* Create configuration items according to the config definition map.
-//		*/
-//		PythonCfgItem*
-//		create_cfg_item(
-//				const std::map<QString, QString>& data);
+		/*
+		* Create configuration items according to the config definition map.
+		*/
+		PythonCfgItem*
+		create_cfg_item(
+				const std::map<QString, QString>& data);
 
-//	private:
-//		mutable bp::object d_py_obj;
-//	};
+	private:
+		mutable bp::object d_py_obj;
+	};
 
 
 	/*

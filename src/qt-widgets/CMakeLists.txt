@@ -346,17 +346,17 @@ set(srcs
     InsertVGPReconstructionPoleDialog.h
     InsertVGPReconstructionPoleDialogUi.ui
     InvalidPropertyValueException.h
-    # KinematicGraphPicker.cc
-    # KinematicGraphPicker.h
-    # KinematicGraphsConfigurationDialog.cc
-    # KinematicGraphsConfigurationDialog.h
-    # KinematicGraphsConfigurationDialogUi.ui
-    # KinematicGraphsConfigurationWidget.cc
-    # KinematicGraphsConfigurationWidget.h
-    # KinematicGraphsConfigurationWidgetUi.ui
-    # KinematicGraphsDialog.cc
-    # KinematicGraphsDialog.h
-    # KinematicGraphsDialogUi.ui
+    KinematicGraphPicker.cc
+    KinematicGraphPicker.h
+    KinematicGraphsConfigurationDialog.cc
+    KinematicGraphsConfigurationDialog.h
+    KinematicGraphsConfigurationDialogUi.ui
+    KinematicGraphsConfigurationWidget.cc
+    KinematicGraphsConfigurationWidget.h
+    KinematicGraphsConfigurationWidgetUi.ui
+    KinematicGraphsDialog.cc
+    KinematicGraphsDialog.h
+    KinematicGraphsDialogUi.ui
     LatLonCoordinatesTable.cc
     LatLonCoordinatesTable.h
     LayerOptionsWidget.h
@@ -425,9 +425,9 @@ set(srcs
     PreferencesPaneFiles.cc
     PreferencesPaneFiles.h
     PreferencesPaneFilesUi.ui
-    # PreferencesPaneKinematicGraphs.cc
-    # PreferencesPaneKinematicGraphs.h
-    # PreferencesPaneKinematicGraphsUi.ui
+    PreferencesPaneKinematicGraphs.cc
+    PreferencesPaneKinematicGraphs.h
+    PreferencesPaneKinematicGraphsUi.ui
     PreferencesPaneNetwork.cc
     PreferencesPaneNetwork.h
     PreferencesPaneNetworkUi.ui
@@ -443,19 +443,19 @@ set(srcs
     ProjectionControlWidget.h
     ProjectionControlWidgetUi.ui
     PropertyValueNotSupportedException.h
-    # PythonArgumentWidget.h
-    # PythonConsoleDialog.cc
-    # PythonConsoleDialog.h
-    # PythonConsoleDialogUi.ui
-    # PythonExecutionMonitorWidget.cc
-    # PythonExecutionMonitorWidget.h
-    # PythonExecutionMonitorWidgetUi.ui
-    # PythonInitFailedDialog.cc
-    # PythonInitFailedDialog.h
-    # PythonInitFailedDialogUi.ui
-    # PythonReadlineDialog.cc
-    # PythonReadlineDialog.h
-    # PythonReadlineDialogUi.ui
+    PythonArgumentWidget.h
+    PythonConsoleDialog.cc
+    PythonConsoleDialog.h
+    PythonConsoleDialogUi.ui
+    PythonExecutionMonitorWidget.cc
+    PythonExecutionMonitorWidget.h
+    PythonExecutionMonitorWidgetUi.ui
+    PythonInitFailedDialog.cc
+    PythonInitFailedDialog.h
+    PythonInitFailedDialogUi.ui
+    PythonReadlineDialog.cc
+    PythonReadlineDialog.h
+    PythonReadlineDialogUi.ui
     QtWidgetUtils.cc
     QtWidgetUtils.h
     QueryFeaturePropertiesWidget.cc
@@ -625,7 +625,7 @@ set(srcs
 )
 
 # Add the source files to the gplates static library.
-target_sources_util(gplates-ui-lib PRIVATE ${srcs})
+target_sources_util(gplates-lib PRIVATE ${srcs})
 
 # Add the source files to the pygplates extension module.
 #
@@ -633,4 +633,4 @@ target_sources_util(gplates-ui-lib PRIVATE ${srcs})
 # All sources files compiled in pygplates need to be position independent and hence
 # compiled differently (POSITION_INDEPENDENT_CODE target property is set on pygplates).
 set(pygplates_srcs ${srcs})
-# target_sources_util(pygplates PRIVATE ${pygplates_srcs})
+target_sources_util(pygplates PRIVATE ${pygplates_srcs})

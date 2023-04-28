@@ -448,7 +448,7 @@ GPlatesPresentation::register_default_visual_layers(
 			&GPlatesQtWidgets::ReconstructScalarCoverageLayerOptionsWidget::create,
 			boost::bind(
 					&ReconstructScalarCoverageVisualLayerParams::create,
-                    boost::placeholders::_1),
+					_1),
 			true);
 
 	registry.register_visual_layer_type(
@@ -497,8 +497,8 @@ GPlatesPresentation::register_default_visual_layers(
 					&ScalarField3DVisualLayerParams::create,
 					// NOTE: We pass in ViewState and not the GlobeAndMapWidget, obtained from
 					// ViewportWindow, because ViewportWindow is not yet available (a reference to
-                    // it not yet been initialised inside ViewState) so accessing it would crash...
-            boost::placeholders::_1, boost::ref(view_state)),
+					// it not yet been initialised inside ViewState) so accessing it would crash...
+					_1, boost::ref(view_state)),
 			true);
 
 	// DERIVED_DATA group.
@@ -547,9 +547,9 @@ GPlatesPresentation::register_default_visual_layers(
 				layer_task_registry,
 				VELOCITY_FIELD_CALCULATOR),
 			&GPlatesQtWidgets::VelocityFieldCalculatorLayerOptionsWidget::create,
-            std::bind(
+			boost::bind(
 					&VelocityFieldCalculatorVisualLayerParams::create,
-                    std::placeholders::_1, std::cref(view_state.get_rendered_geometry_parameters())),
+					_1, boost::cref(view_state.get_rendered_geometry_parameters())),
 			true);
 
 	using namespace  GPlatesUtils;

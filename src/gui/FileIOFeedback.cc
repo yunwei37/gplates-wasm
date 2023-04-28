@@ -1255,7 +1255,7 @@ GPlatesGui::FileIOFeedback::extract_project_filenames_from_file_urls(
 	QStringList project_filenames;
 
 	// Add those URLs that are files with registered filename extensions.
-    for(const QUrl &url: urls)
+	Q_FOREACH(const QUrl &url, urls)
 	{
 		if (url.scheme() == "file")
 		{
@@ -1283,7 +1283,7 @@ GPlatesGui::FileIOFeedback::extract_feature_collection_filenames_from_file_urls(
 	QStringList feature_collection_filenames;
 
 	// Add those URLs that are files with registered filename extensions.
-    for(const QUrl &url: urls)
+	Q_FOREACH(const QUrl &url, urls)
 	{
 		if (url.scheme() == "file")
 		{

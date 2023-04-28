@@ -79,7 +79,7 @@ namespace
 		}
 		
 		QString common = QFileInfo(*filenames.begin()).path();
-        for(QString filename: filenames) {
+		Q_FOREACH(QString filename, filenames) {
 			QString dir = QFileInfo(filename).path();
 			common = common_base_dir(common, dir);
 		}

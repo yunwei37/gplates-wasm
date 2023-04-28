@@ -187,7 +187,7 @@
 #include <Qt>
 #include <QTcpServer>
 #include <QTcpSocket>
-#include <QRegularExpression>
+#include <QRegExp>
 #include <QXmlStreamReader>
 #include <QTableView>
 #include <QAbstractButton>
@@ -226,6 +226,7 @@
 #include <QIcon>
 #include <QPixmap>
 #include <QMouseEvent>
+#include <QGLFormat>
 #include <QCoreApplication>
 #include <QSet>
 #include <QGridLayout>
@@ -281,8 +282,8 @@
 #include <QValidator>
 #include <QSizePolicy>
 #include <QPainter>
-#include <QOpenGLWidget>
-#include <QOpenGLFramebufferObject>
+#include <QGLWidget>
+#include <QGLPixelBuffer>
 #include <QDialogButtonBox>
 #include <QWizard>
 #include <QScopedPointer>
@@ -352,7 +353,7 @@
 #include <QRadioButton>
 #include <QTextDocument>
 #include <QFontDialog>
-#include <QScreen>
+#include <QDesktopWidget>
 #include <QDragEnterEvent>
 #include <QDropEvent>
 #include <QContextMenuEvent>

@@ -206,21 +206,20 @@ GPlatesOpenGL::GLFilledPolygonsGlobeView::render(
 	//
 	// Note that we don't have an 'is_supported()' method that tests for this because pretty much all
 	// hardware should support a stencil buffer (and software implementations should also support).
-    qDebug("We need a stencil buffer so return early if there's not one - well, we actually use stencil");
-//	if (!renderer.get_context().get_qgl_format().stencil())
-//	{
-//		// Only emit warning message once.
-//		static bool emitted_warning = false;
-//		if (!emitted_warning)
-//		{
-//			qWarning() <<
-//					"Filled polygons NOT supported by this graphics hardware - \n"
-//					"  requires stencil buffer - Most graphics hardware for over a decade supports this.";
-//			emitted_warning = true;
-//		}
+	if (!renderer.get_context().get_qgl_format().stencil())
+	{
+		// Only emit warning message once.
+		static bool emitted_warning = false;
+		if (!emitted_warning)
+		{
+			qWarning() <<
+					"Filled polygons NOT supported by this graphics hardware - \n"
+					"  requires stencil buffer - Most graphics hardware for over a decade supports this.";
+			emitted_warning = true;
+		}
 
-//		return;
-//	}
+		return;
+	}
 
 	// Write the vertices/indices of all filled drawables (gathered by the client) into our
 	// vertex buffer and vertex element buffer.

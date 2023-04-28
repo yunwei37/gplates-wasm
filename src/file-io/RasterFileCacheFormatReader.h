@@ -290,7 +290,7 @@ namespace GPlatesFileIO
 		 * the case for the opposite ordering).
 		 */
 		class SortByFileOffset :
-				public std::function<bool(RasterFileCacheFormat::BlockInfo, RasterFileCacheFormat::BlockInfo)>
+				public std::binary_function<RasterFileCacheFormat::BlockInfo, RasterFileCacheFormat::BlockInfo, bool>
 		{
 		public:
 			//! Pointer-to-data-member determines which file offset (main or coverage) to use in comparison.

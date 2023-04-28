@@ -242,7 +242,7 @@ namespace GPlatesFileIO
 		 */
 		template <class ReconstructionGeometryType>
 		class ContainsSameFilePointerPredicate :
-				public std::__unary_function< FeatureCollectionFeatureGroup<ReconstructionGeometryType>, bool >
+				public std::unary_function< FeatureCollectionFeatureGroup<ReconstructionGeometryType>, bool >
 		{
 		public:
 			explicit
@@ -274,7 +274,7 @@ namespace GPlatesFileIO
 		 */
 		template <class ReconstructionGeometryType>
 		class SortByFeatureOrderInCollections :
-				public std::function<bool(const ReconstructionGeometryType *, const ReconstructionGeometryType *)>
+				public std::binary_function<const ReconstructionGeometryType *, const ReconstructionGeometryType *, bool>
 		{
 		public:
 

@@ -242,7 +242,7 @@ namespace GPlatesAppLogic
 		char d_pipe_buffer[16*1024];
 	};
 }
-// CMake documentation on Qt6 AUTOMOC states that if Q_OBJECT is found in an implementation file (ie, not a header)
+// CMake documentation on Qt5 AUTOMOC states that if Q_OBJECT is found in an implementation file (ie, not a header)
 // then the user must include "<basename>.moc" (at least for CMake > 3.7). This is not needed for header files.
 //
 // Note: We include this after declaring our QObject-derived class StdOutErrCapture above otherwise

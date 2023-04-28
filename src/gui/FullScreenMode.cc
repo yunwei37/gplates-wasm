@@ -121,7 +121,7 @@ GPlatesGui::FullScreenMode::toggle_full_screen(
 		viewport_window().setWindowState(viewport_window().windowState() | Qt::WindowFullScreen);
 		
 		// Hide non-essential widgets.
-        for(QString widget_name: things_to_hide) {
+		Q_FOREACH(QString widget_name, things_to_hide) {
 			QWidget *widget = viewport_window().findChild<QWidget *>(widget_name);
 			if (widget) {
 				widget->clearFocus();
@@ -130,7 +130,7 @@ GPlatesGui::FullScreenMode::toggle_full_screen(
 		}
 
 		// Disable certain actions on menus.
-        for(QString action_name: actions_to_disable) {
+		Q_FOREACH(QString action_name, actions_to_disable) {
 			QAction *action = viewport_window().findChild<QAction *>(action_name);
 			if (action) {
 				action->setEnabled(false);
@@ -146,7 +146,7 @@ GPlatesGui::FullScreenMode::toggle_full_screen(
 		viewport_window().setWindowState(viewport_window().windowState() & ~Qt::WindowFullScreen);
 
 		// Unhide hidden widgets.
-        for(QString widget_name: things_to_hide) {
+		Q_FOREACH(QString widget_name, things_to_hide) {
 			QWidget *widget = viewport_window().findChild<QWidget *>(widget_name);
 			if (widget) {
 				widget->show();
@@ -154,7 +154,7 @@ GPlatesGui::FullScreenMode::toggle_full_screen(
 		}
 
 		// Re-enable disabled actions.
-        for(QString action_name: actions_to_disable) {
+		Q_FOREACH(QString action_name, actions_to_disable) {
 			QAction *action = viewport_window().findChild<QAction *>(action_name);
 			if (action) {
 				action->setEnabled(true);

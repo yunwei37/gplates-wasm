@@ -102,7 +102,7 @@ GPlatesQtWidgets::LogDialog::copy_selection_to_clipboard()
 	QModelIndexList indexes = listview_log->selectionModel()->selectedIndexes();
 	
 	QString text;
-    for(QModelIndex idx: indexes) {
+	Q_FOREACH(QModelIndex idx, indexes) {
 		text.append(d_log_filter_model_ptr->data(idx).toString());
 		text.append("\n");
 	}

@@ -86,9 +86,10 @@ namespace
 	 * Used to sort GPGIM properties by the unqualified part of their property names.
 	 */
 	class SortByUnqualifiedPropertyName :
-			public std::function<bool(
+			public std::binary_function<
 					GPlatesModel::GpgimProperty::non_null_ptr_to_const_type,
-					GPlatesModel::GpgimProperty::non_null_ptr_to_const_type)>
+					GPlatesModel::GpgimProperty::non_null_ptr_to_const_type,
+					bool>
 	{
 	public:
 		bool
@@ -232,7 +233,7 @@ GPlatesQtWidgets::AddPropertyDialog::set_up_edit_widgets()
 	// to mix Qt Designer UIs with coded-by-hand UIs.
 	QVBoxLayout *edit_layout = new QVBoxLayout;
 	edit_layout->setSpacing(0);
-    edit_layout->setContentsMargins(0, 0, 0, 0);
+	edit_layout->setMargin(0);
 	edit_layout->addWidget(d_edit_widget_group_box_ptr);
 	placeholder_edit_widget->setLayout(edit_layout);
 	

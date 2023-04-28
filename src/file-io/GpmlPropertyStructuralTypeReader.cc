@@ -44,12 +44,11 @@ using GPlatesPropertyValues::StructuralType;
 GPlatesFileIO::GpmlPropertyStructuralTypeReader::non_null_ptr_type
 GPlatesFileIO::GpmlPropertyStructuralTypeReader::create()
 {
-    qDebug("GpmlPropertyStructuralTypeReader::create()");
 	non_null_ptr_type gpml_property_structural_type_reader = create_empty();
-    qDebug("create_empty complete\n");
+
 	// Add all property structural types.
 	gpml_property_structural_type_reader->add_all_structural_types();
-    qDebug("add_all_structural_types complete\n");
+
 	return gpml_property_structural_type_reader;
 }
 
@@ -69,21 +68,17 @@ GPlatesFileIO::GpmlPropertyStructuralTypeReader::~GpmlPropertyStructuralTypeRead
 void
 GPlatesFileIO::GpmlPropertyStructuralTypeReader::add_all_structural_types()
 {
-    qDebug("GPlatesFileIO::GpmlPropertyStructuralTypeReader::add_all_structural_types()");
-
 	//
 	// Add the 'time-dependent wrapper' property structural types.
 	//
 
 	add_time_dependent_wrapper_structural_types();
-    qDebug("add_time_dependent_wrapper_structural_types complete");
 
 	//
 	// Add the 'native' property structural types.
 	//
 
 	add_native_structural_types();
-    qDebug("add_native_structural_types complete");
 
 	//
 	// Add the 'enumeration' property structural types.
@@ -92,7 +87,6 @@ GPlatesFileIO::GpmlPropertyStructuralTypeReader::add_all_structural_types()
 	// definitions are not hard coded but instead declared in the GPGIM XML file.
 
 	add_enumeration_structural_types();
-    qDebug("add_enumeration_structural_types complete");
 
 	//
 	// Make sure we have handled all property structural types specified by the GPGIM.
@@ -102,14 +96,11 @@ GPlatesFileIO::GpmlPropertyStructuralTypeReader::add_all_structural_types()
 	// need to test them against the GPGIM but it's easier just to loop over all structural types.
 	const GPlatesModel::Gpgim::property_structural_type_seq_type &gpgim_property_structural_types =
 			GPlatesModel::Gpgim::instance().get_property_structural_types();
-    qDebug("get_property_structural_types complete");
 
 	BOOST_FOREACH(
 		const GPlatesModel::GpgimStructuralType::non_null_ptr_to_const_type &gpgim_property_structural_type,
 		gpgim_property_structural_types)
-    {
-        qDebug("gpgim_property_structural_types loop");
-
+	{
 		// The structural type should be in our map.
 		if (d_structural_type_reader_map.find(gpgim_property_structural_type->get_structural_type()) ==
 			d_structural_type_reader_map.end())
@@ -142,7 +133,6 @@ GPlatesFileIO::GpmlPropertyStructuralTypeReader::get_structural_type_reader_func
 void
 GPlatesFileIO::GpmlPropertyStructuralTypeReader::add_time_dependent_wrapper_structural_types()
 {
-    qDebug("add_time_dependent_wrapper_structural_types");
 	using namespace boost::placeholders;  // For _1, _2, etc
 
 	d_structural_type_reader_map[StructuralType::create_gpml("ConstantValue")] =
@@ -317,16 +307,14 @@ void
 GPlatesFileIO::GpmlPropertyStructuralTypeReader::add_enumeration_structural_types()
 {
 	using namespace boost::placeholders;  // For _1, _2, etc
-    qDebug("add_enumeration_structural_types start\n");
+
 	const GPlatesModel::Gpgim::property_enumeration_type_seq_type &gpgim_property_enumeration_types =
 			GPlatesModel::Gpgim::instance().get_property_enumeration_types();
-    qDebug("add_enumeration_structural_types end\n");
 
 	BOOST_FOREACH(
 			const GPlatesModel::GpgimEnumerationType::non_null_ptr_to_const_type &gpgim_property_enumeration_type,
 			gpgim_property_enumeration_types)
-    {
-        qDebug("add_enumeration_structural_types gpgim_property_enumeration_type loop\n");
+	{
 		d_structural_type_reader_map[gpgim_property_enumeration_type->get_structural_type()] = 
 				boost::bind<GPlatesModel::PropertyValue::non_null_ptr_type>(
 						&GpmlPropertyStructuralTypeReaderUtils::create_gpml_enumeration,

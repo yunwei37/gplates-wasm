@@ -27,7 +27,7 @@
 
 #include <QApplication>
 #include <QDebug>
-#include <QOpenGLWidget>
+#include <QGLWidget>
 #include <QGraphicsView>
 #include <QPaintDevice>
 #include <QPaintEngine>
@@ -110,15 +110,16 @@ namespace GPlatesQtWidgets
 }
 
 
-GPlatesQtWidgets::MapCanvas::MapCanvas(				GPlatesPresentation::ViewState &view_state,
-                GPlatesViewOperations::RenderedGeometryCollection &rendered_geometry_collection,
-                MapView *map_view_ptr,
-                QWidget *gl_widget,
-                const GPlatesOpenGL::GLContext::non_null_ptr_type &gl_context,
-                const GPlatesOpenGL::GLVisualLayers::non_null_ptr_type &gl_visual_layers,
-                GPlatesGui::ViewportZoom &viewport_zoom,
-                const GPlatesGui::ColourScheme::non_null_ptr_type &colour_scheme,
-                QWidget *parent_) :
+GPlatesQtWidgets::MapCanvas::MapCanvas(
+		GPlatesPresentation::ViewState &view_state,
+		GPlatesViewOperations::RenderedGeometryCollection &rendered_geometry_collection,
+		MapView *map_view_ptr,
+		QGLWidget *gl_widget,
+		const GPlatesOpenGL::GLContext::non_null_ptr_type &gl_context,
+		const GPlatesOpenGL::GLVisualLayers::non_null_ptr_type &gl_visual_layers,
+		GPlatesGui::ViewportZoom &viewport_zoom,
+		const GPlatesGui::ColourScheme::non_null_ptr_type &colour_scheme,
+		QWidget *parent_) :
 	QGraphicsScene(parent_),
 	d_view_state(view_state),
 	d_map_view_ptr(map_view_ptr),
@@ -137,8 +138,8 @@ GPlatesQtWidgets::MapCanvas::MapCanvas(				GPlatesPresentation::ViewState &view_
 	d_rendered_geometry_collection(&rendered_geometry_collection)
 {
 	// Do some OpenGL initialisation.
-    // Because of 'd_make_context_current' we know the OpenGL context is currently active.
-    // initializeGL((QOpenGLWidget*)gl_widget);
+	// Because of 'd_make_context_current' we know the OpenGL context is currently active.
+	initializeGL(gl_widget);
 
 	// Give the scene a rectangle that's big enough to guarantee that the map view,
 	// even after rotations and translations, won't go outside these boundaries.
@@ -166,17 +167,15 @@ GPlatesQtWidgets::MapCanvas::~MapCanvas()
 
 void 
 GPlatesQtWidgets::MapCanvas::initializeGL(
-		QOpenGLWidget *gl_widget) 
+		QGLWidget *gl_widget) 
 {
-	qDebug("GPlatesQtWidgets::MapCanvas::initializeGL");
-
-	// Initialise our context-like object first
+	// Initialise our context-like object first.
 	d_gl_context->initialise();
 
 	// Create the off-screen context that's used when rendering OpenGL outside the paint event.
 	d_gl_off_screen_context =
 			GPlatesOpenGL::GLOffScreenContext::create(
-					GPlatesOpenGL::GLOffScreenContext::QOpenGLWidgetContext(gl_widget, d_gl_context));
+					GPlatesOpenGL::GLOffScreenContext::QGLWidgetContext(gl_widget, d_gl_context));
 
 	// Get a renderer - it'll be used to initialise some OpenGL objects.
 	// NOTE: Before calling this, OpenGL should be in the default OpenGL state.
@@ -352,7 +351,7 @@ GPlatesQtWidgets::MapCanvas::render_to_qimage(
 	// main/default framebuffer (which is intimately tied to the windowing system).
 	// Using an off-screen render target appears to avoid this issue.
 	//
-	// Set the off-screen render target to the size of the QOpenGLWidget main framebuffer.
+	// Set the off-screen render target to the size of the QGLWidget main framebuffer.
 	// This is because we use QPainter to render text and it sets itself up using the dimensions
 	// of the main framebuffer - if we change the dimensions then the text is rendered incorrectly.
 	//
@@ -561,7 +560,7 @@ GPlatesQtWidgets::MapCanvas::render_opengl_feedback_to_paint_device(
 	// main/default framebuffer (which is intimately tied to the windowing system).
 	// Using an off-screen render target appears to avoid this issue.
 	//
-	// Set the off-screen render target to the size of the QOpenGLWidget main framebuffer.
+	// Set the off-screen render target to the size of the QGLWidget main framebuffer.
 	// This is because we use QPainter to render text and it sets itself up using the dimensions
 	// of the main framebuffer - actually that doesn't apply when painting to a device other than
 	// the main framebuffer (in our case the feedback paint device, eg, SVG) - but we'll leave the

@@ -101,7 +101,7 @@
 // to ensure <Python.h> is included before <ctype.h>.
 //
 // Note: This should be included after the above HAVE_DIRECT_H definition to avoid compile error on Windows.
-//#	include <Python.h>
+#	include <Python.h>
 
 // Re-define _DEBUG if it was undefined above (for <Python.h>).
 #	ifdef DEBUG_UNDEFINED_FROM_GLOBAL_PYTHON_H
@@ -122,7 +122,7 @@
 //       include <boost/bind.hpp>.
 //
 #	define BOOST_BIND_GLOBAL_PLACEHOLDERS
-// #	include <boost/python.hpp>
+#	include <boost/python.hpp>
 #	undef BOOST_BIND_GLOBAL_PLACEHOLDERS
 
 //

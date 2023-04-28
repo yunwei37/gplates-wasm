@@ -178,7 +178,7 @@ GPlatesFileIO::PlatesRotationFormatWriter::PlatesRotationFormatWriter(
 	// Write output to text file as UTF8 encoded (which includes the ASCII character set).
 	// If we don't specify this then (in Qt4) QTextCodec::codecForLocale() will get used
 	// during encoding, which is likely to not be UTF8.
-    d_output_stream->setEncoding(QStringConverter::Utf8);
+	d_output_stream->setCodec("UTF-8");
 }
 
 

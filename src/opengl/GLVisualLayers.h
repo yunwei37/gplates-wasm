@@ -139,7 +139,7 @@ namespace GPlatesOpenGL
 		 * that shares the same shared state as @a opengl_context.
 		 *
 		 * This basically allows objects that use textures and display lists to be shared
-		 * across QOpenGLWidgets objects (or whatever objects have different OpenGL contexts).
+		 * across QGLWidgets objects (or whatever objects have different OpenGL contexts).
 		 * The sharing depends on whether the two OpenGL contexts allow shared textures/display-lists.
 		 */
 		static
@@ -294,7 +294,7 @@ namespace GPlatesOpenGL
 			virtual
 			bool
 			is_required_direct_or_indirect_dependency(
-					const GPlatesAppLogic::LayerProxyHandle::non_null_ptr_type &layer_proxy) const { return false;};
+					const GPlatesAppLogic::LayerProxyHandle::non_null_ptr_type &layer_proxy) const = 0;
 
 			/**
 			 * Notifies that a layer (proxy) is about to be removed.

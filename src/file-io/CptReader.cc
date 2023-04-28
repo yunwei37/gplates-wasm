@@ -690,8 +690,8 @@ GPlatesFileIO::CptParser::process_comment(
 			i++;
 	}
 
-    static const QRegularExpression hsv_regex("COLOR_MODEL\\s*=\\s*\\+?HSV");
-    if(hsv_regex.match(line).hasMatch())
+	static const QRegExp hsv_regex("COLOR_MODEL\\s*=\\s*\\+?HSV");			
+	if(-1 != hsv_regex.indexIn(line))
 	{
 			d_default_model = HSV;
 	}
@@ -701,8 +701,8 @@ GPlatesFileIO::CptParser::ColourData
 GPlatesFileIO::CptParser::parse_gmt_fill(
 		const QString& token)
 {
-	QRegularExpression rx("p\\d+/");
-    if(rx.match(token).hasMatch())
+	QRegExp rx("p\\d+/");
+	if(rx.indexIn(token) != -1)
 	{
 		//We don't support "fill pattern" yet. 
 		//It looks something like "p200/16". 
@@ -714,7 +714,7 @@ GPlatesFileIO::CptParser::parse_gmt_fill(
 	ColourData data;
 
 	//TODO: this function needs to be rewritten.
-	//try QRegularExpression
+	//try QRegExp
 	if (token.contains('/'))
 	{
 		// R/G/B triplet.

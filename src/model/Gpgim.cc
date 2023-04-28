@@ -268,13 +268,12 @@ GPlatesModel::Gpgim::load_gpgim_resource(
 		const QString &gpgim_resource_filename)
 {
 	PROFILE_FUNC();
-	qDebug("load_gpgim_resource");
+
 	QXmlStreamReader xml_reader;
 
 	QFile input_file(gpgim_resource_filename);
 	if (!input_file.open(QIODevice::ReadOnly | QIODevice::Text))
 	{
-		qDebug("GPlatesFileIO::ErrorOpeningFileForReadingException");
 		throw GPlatesFileIO::ErrorOpeningFileForReadingException(
 				GPLATES_EXCEPTION_SOURCE,
 				gpgim_resource_filename);
@@ -298,8 +297,7 @@ GPlatesModel::Gpgim::load_gpgim_resource(
 			alias_to_namespace_map);
 
 	if (xml_reader.error())
-    {
-        qDebug("XML parse error: The XML was malformed somewhere along the line.");
+	{
 		// The XML was malformed somewhere along the line.
 		throw GpgimInitialisationException(
 				GPLATES_EXCEPTION_SOURCE,
@@ -531,7 +529,7 @@ GPlatesModel::Gpgim::read_gpgim_element(
 	// Determine the GPGIM version.
 	//
 
-	const QStringView gpgim_version_string = xml_reader.attributes().value(
+	const QStringRef gpgim_version_string = xml_reader.attributes().value(
 			GPlatesUtils::XmlNamespaces::get_gpgim_namespace_qstring(), "version");
 
 	boost::optional<GpgimVersion> gpgim_version = GpgimVersion::create(gpgim_version_string.toString());

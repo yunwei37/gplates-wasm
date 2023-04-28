@@ -30,9 +30,9 @@
 
 #include "UtilitiesMenu.h"
 
-// #include "api/PythonExecutionMonitor.h"
-// #include "api/PythonExecutionThread.h"
-// #include "api/PythonInterpreterLocker.h"
+#include "api/PythonExecutionMonitor.h"
+#include "api/PythonExecutionThread.h"
+#include "api/PythonInterpreterLocker.h"
 #include "api/Sleeper.h"
 
 
@@ -41,12 +41,12 @@ Q_DECLARE_METATYPE( boost::function< void () > )
 GPlatesGui::UtilitiesMenu::UtilitiesMenu(
 		QMenu *utilities_menu,
 		QAction *before_action,
-//		GPlatesGui::PythonManager& python_manager,
+		GPlatesGui::PythonManager& python_manager,
 		QObject *parent_) :
 	QObject(parent_),
 	d_utilities_menu(utilities_menu),
-    d_before_action(utilities_menu->insertSeparator(before_action))
-//	d_python_manager(python_manager)
+	d_before_action(utilities_menu->insertSeparator(before_action)),
+	d_python_manager(python_manager)
 { }
 
 
@@ -79,12 +79,12 @@ GPlatesGui::UtilitiesMenu::add_utility(
 void
 GPlatesGui::UtilitiesMenu::handle_action_triggered()
 {
-    const QAction *action = qobject_cast<const QAction*>(static_cast<const QObject*>(sender()));
+	QAction *action = qobject_cast<QAction *>(sender());
 	// Extract the callback from the action and call it.
 	typedef boost::function< void () > callback_type;
 	callback_type callback = action->data().value<callback_type>();
 
-//	d_python_manager.get_python_execution_thread()->exec_function(callback);
+	d_python_manager.get_python_execution_thread()->exec_function(callback);
 }
 
 

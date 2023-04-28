@@ -23,7 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include <QRegularExpression>
+#include <QRegExp>
 
 #include "ConfigBundleUtils.h"
 
@@ -42,7 +42,7 @@ GPlatesUtils::match_prefix(
 		const QStringList &keys,
 		const QString &prefix)
 {
-	QRegularExpression rx("^" + QRegularExpression::escape(prefix) + "/*");
+	QRegExp rx("^" + QRegExp::escape(prefix) + "/*");
 	return keys.filter(rx);
 }
 
@@ -52,7 +52,7 @@ GPlatesUtils::strip_prefix(
 		QStringList &keys,
 		const QString &prefix)
 {
-	QRegularExpression rx("^" + QRegularExpression::escape(prefix) + "/*");
+	QRegExp rx("^" + QRegExp::escape(prefix) + "/*");
 	keys.replaceInStrings(rx, "");
 }
 
@@ -61,7 +61,7 @@ void
 GPlatesUtils::strip_all_except_root(
 		QStringList &keys)
 {
-	QRegularExpression rx("/*$");
+	QRegExp rx("/*$");
 	keys.replaceInStrings(rx, "");
 }
 

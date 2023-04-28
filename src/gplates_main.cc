@@ -44,7 +44,7 @@
 #include "app-logic/ApplicationState.h"
 #include "app-logic/GPlatesQtMsgHandler.h"
 
-// #include "api/PythonInterpreterLocker.h"
+#include "api/PythonInterpreterLocker.h"
 #include "api/Sleeper.h"
 
 #include "cli/CliCommandDispatcher.h"
@@ -59,13 +59,13 @@
 #include "gui/DrawStyleManager.h"
 #include "gui/FileIOFeedback.h"
 #include "gui/GPlatesQApplication.h"
-// #include "gui/PythonManager.h"
+#include "gui/PythonManager.h"
 
 #include "maths/MathsUtils.h"
 
 #include "presentation/Application.h"
 
-// #include "qt-widgets/PythonInitFailedDialog.h"
+#include "qt-widgets/PythonInitFailedDialog.h"
 #include "qt-widgets/ViewportWindow.h"
 
 #include "utils/CommandLineParser.h"
@@ -101,9 +101,9 @@ namespace
 	public:
 		GuiCommandLineOptions() :
 			debug_gui(false),
-            enable_python(false), // Enabled by default.
+			enable_python(true), // Enabled by default.
 			enable_external_syncing(false),
-            enable_data_mining(false),//Enable data mining by default
+			enable_data_mining(true),//Enable data mining by default
 			enable_symbol_table(false),
 			enable_hellinger_three_plate(false) // Disable three-plate fitting by default
 		{  }
@@ -725,34 +725,31 @@ namespace
 			GPlatesPresentation::Application *app,
 			char* argv[])
 	{
-		// using namespace GPlatesGui;
-		// PythonManager* mgr = PythonManager::instance();
-		// try
-		// {
-		// 	mgr->initialize(argv,app);
-		// }
-		// catch(const PythonInitFailed& ex)
-		// {
-		// 	std::stringstream ss;
-		// 	ex.write(ss);
-		// 	qWarning() << ss.str().c_str();
+		using namespace GPlatesGui;
+		PythonManager* mgr = PythonManager::instance();
+		try
+		{
+			mgr->initialize(argv,app);
+		}
+		catch(const PythonInitFailed& ex)
+		{
+			std::stringstream ss;
+			ex.write(ss);
+			qWarning() << ss.str().c_str();
 			
-		// 	if(mgr->show_init_fail_dlg())
-		// 	{
-		// 		// using namespace GPlatesQtWidgets;
-		// 		// boost::scoped_ptr<PythonInitFailedDialog> python_fail_dlg(
-		// 		// 	new PythonInitFailedDialog);
+			if(mgr->show_init_fail_dlg())
+			{
+				using namespace GPlatesQtWidgets;
+				boost::scoped_ptr<PythonInitFailedDialog> python_fail_dlg(
+					new PythonInitFailedDialog);
 
-		// 		// python_fail_dlg->exec();
-		// 		// mgr->set_show_init_fail_dlg(python_fail_dlg->show_again());
-		// 		// print an error message
-		// 		qWarning() << "Python initialization failed. GPlates will not be able to run any Python scripts.";
+				python_fail_dlg->exec();
+				mgr->set_show_init_fail_dlg(python_fail_dlg->show_again());
+			}
 
-		// 	}
-
-		// 	GPlatesUtils::ComponentManager::instance().disable(
-		// 		GPlatesUtils::ComponentManager::Component::python());
-		// }
+			GPlatesUtils::ComponentManager::instance().disable(
+				GPlatesUtils::ComponentManager::Component::python());
+		}
 	}
 
 	void
@@ -763,13 +760,13 @@ namespace
 		// is called then contained objects are destroyed in correct order.
 		// Also we should be careful about excessive use of singletons because they are essentially global data.
 
-//		if(GPlatesUtils::ComponentManager::instance().is_enabled(
-//				GPlatesUtils::ComponentManager::Component::python()))
-//		{
-//			GPlatesApi::PythonInterpreterLocker lock;
-//			delete GPlatesGui::DrawStyleManager::instance(); //delete draw style manager singleton.
-//		}
-//		delete GPlatesGui::PythonManager::instance();
+		if(GPlatesUtils::ComponentManager::instance().is_enabled(
+				GPlatesUtils::ComponentManager::Component::python()))
+		{
+			GPlatesApi::PythonInterpreterLocker lock;
+			delete GPlatesGui::DrawStyleManager::instance(); //delete draw style manager singleton.
+		}
+		delete GPlatesGui::PythonManager::instance();
 	}
 }
 
@@ -791,7 +788,7 @@ internal_main(int argc, char* argv[])
 	Q_INIT_RESOURCE(python);
 	Q_INIT_RESOURCE(gpgim);
 	Q_INIT_RESOURCE(qt_widgets);
-    qDebug("internal_main(int argc, char* argv[])");
+
 	//on Ubuntu Natty, we need to set this env variable to avoid the funny looking of spherical grid.
 	#if defined(linux) || defined(__linux__) || defined(__linux)
 	{
@@ -856,7 +853,7 @@ internal_main(int argc, char* argv[])
 		GPlatesUtils::ComponentManager::instance().disable(
 			GPlatesUtils::ComponentManager::Component::hellinger_three_plate());
 	}
-    qDebug(" Enable high DPI pixmaps (for high DPI displays like Apple Retina).");
+
 	// Enable high DPI pixmaps (for high DPI displays like Apple Retina).
 	//
 	// For example this enables a QImage with a device pixel ratio of 2
@@ -902,7 +899,7 @@ internal_main(int argc, char* argv[])
 	// Note: This attribute was added in Qt 5.6 (which our minimum Qt requirement satisfies).
 	QCoreApplication::setAttribute(Qt::AA_DisableHighDpiScaling);
 #endif
-    qDebug("GPlatesGui::GPlatesQApplication qapplication(argc, argv);");
+
 	// GPlatesQApplication is a QApplication that also handles uncaught exceptions in the Qt event thread.
 	GPlatesGui::GPlatesQApplication qapplication(argc, argv);
 
@@ -925,7 +922,7 @@ internal_main(int argc, char* argv[])
 	// suffix until after QApplication is created (and hence the GPlates organization and application
 	// names have been set via QCoreApplication).
 	qt_message_handler.add_log_file_handler();
-    qDebug("GPlatesFileIO::StandaloneBundle::initialise();");
+
 	// Initialise so that queries on the standalone bundle can be made.
 	// Note: This must be done *after* QApplication is initialised (via GPlatesQApplication above) since
 	// 	     it uses QCoreApplication::applicationDirPath().
@@ -943,9 +940,8 @@ internal_main(int argc, char* argv[])
 	// An exception will be thrown if 'Application::instance()' is called before here or if it
 	// is called after 'application' goes out of scope.
 	//
-    // Note that python references 'Application' so this should be instantiated before python is initialised.
-    qDebug("GPlatesPresentation::Application application;");
-    GPlatesPresentation::Application application;
+	// Note that python references 'Application' so this should be instantiated before python is initialised.
+	GPlatesPresentation::Application application;
 
 	// Initialise python if it's enabled.
 	if(GPlatesUtils::ComponentManager::instance().is_enabled(
@@ -981,12 +977,12 @@ internal_main(int argc, char* argv[])
 // 	{
 // 		application.get_main_window().hide_symbol_menu();
 // 	}
-    qDebug("application.get_main_window().display();");
+
 	// Display the main window.
 	// This calls QMainWindow::show() and then performs extra actions that depend on the
 	// main window being visible.
 	application.get_main_window().display();
-    qDebug("qapplication.exec();");
+
 	// Start the application event loop.
 	const int ret = qapplication.exec();
 

@@ -32,7 +32,7 @@
 #include <boost/optional.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/noncopyable.hpp>
-#include <QOpenGLWidget>
+#include <QGLWidget>
 #include <opengl/OpenGL.h>
 
 #include "Colour.h"

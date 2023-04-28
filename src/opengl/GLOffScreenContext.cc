@@ -38,20 +38,19 @@
 #include "global/PreconditionViolationError.h"
 
 
-GPlatesOpenGL::GLOffScreenContext::GLOffScreenContext()
+GPlatesOpenGL::GLOffScreenContext::GLOffScreenContext(
+		const QGLFormat &qgl_format)
 {
-//	initialise(qgl_format);
-    qDebug("initialise(qgl_format);");
+	initialise(qgl_format);
 }
 
 
 GPlatesOpenGL::GLOffScreenContext::GLOffScreenContext(
-		const QOpenGLWidgetContext &qgl_widget_context) :
+		const QGLWidgetContext &qgl_widget_context) :
 	d_qgl_widget_context(qgl_widget_context)
 {
 	// Use the same format as the existing context...
-//	initialise(qgl_widget_context.context->get_qgl_format());
-    qDebug("initialise(qgl_widget_context.context->get_qgl_format());");
+	initialise(qgl_widget_context.context->get_qgl_format());
 }
 
 
@@ -86,7 +85,7 @@ GPlatesOpenGL::GLOffScreenContext::begin_off_screen_render(
 		GLContext &off_screen_context = *d_off_screen_context.get();
 
 		// Make sure our OpenGL context is the currently active context.
-		// It could be either the QOpenGLWidget context or the 'pbuffer' context.
+		// It could be either the QGLWidget context or the 'pbuffer' context.
 		off_screen_context.make_current();
 
 		if (d_screen_render_target)
@@ -119,29 +118,28 @@ GPlatesOpenGL::GLOffScreenContext::begin_off_screen_render(
 					GPLATES_ASSERTION_SOURCE);
 
 			// If using a 'pbuffer' then update its dimensions if necessary.
-            qDebug("If using a 'pbuffer' then update its dimensions if necessary.");
-//			if (frame_buffer_width != off_screen_context.get_width() ||
-//				frame_buffer_height != off_screen_context.get_height())
-//			{
-//				// Release the current 'pbuffer'.
-//				d_qgl_pixel_buffer = boost::none;
+			if (frame_buffer_width != off_screen_context.get_width() ||
+				frame_buffer_height != off_screen_context.get_height())
+			{
+				// Release the current 'pbuffer'.
+				d_qgl_pixel_buffer = boost::none;
 
-//				// Create a new 'pbuffer'.
-//				d_qgl_pixel_buffer = boost::in_place(
-//						frame_buffer_width,
-//						frame_buffer_height,
-//						off_screen_context.get_qgl_format(),
-//						// It's important to share textures, etc, with our QOpenGLWidget OpenGL context (if provided)...
-//						d_qgl_widget_context /*shareWidget*/
-//								? d_qgl_widget_context->qgl_widget
-//								: static_cast<QOpenGLWidget *>(0));
+				// Create a new 'pbuffer'.
+				d_qgl_pixel_buffer = boost::in_place(
+						frame_buffer_width,
+						frame_buffer_height,
+						off_screen_context.get_qgl_format(),
+						// It's important to share textures, etc, with our QGLWidget OpenGL context (if provided)...
+						d_qgl_widget_context /*shareWidget*/
+								? d_qgl_widget_context->qgl_widget
+								: static_cast<QGLWidget *>(0));
 
-//				// Install the new QOpenGLFramebufferObject into our 'pbuffer' context impl.
-//				d_qgl_pixel_buffer_impl.get()->set_pixel_buffer(d_qgl_pixel_buffer.get());
+				// Install the new QGLPixelBuffer into our 'pbuffer' context impl.
+				d_qgl_pixel_buffer_impl.get()->set_pixel_buffer(d_qgl_pixel_buffer.get());
 
-//				// We've just installed a new 'pbuffer' context so make it current.
-//				off_screen_context.make_current();
-//			}
+				// We've just installed a new 'pbuffer' context so make it current.
+				off_screen_context.make_current();
+			}
 
 			// Create a renderer.
 			// NOTE: We do this after making any changes to the 'pbuffer' dimensions so
@@ -161,11 +159,11 @@ GPlatesOpenGL::GLOffScreenContext::begin_off_screen_render(
 			}
 		}
 	}
-	else // Emulating off-screen rendering via the QOpenGLWidget main frame buffer...
+	else // Emulating off-screen rendering via the QGLWidget main frame buffer...
 	{
 		GLContext &qgl_widget_context = *d_qgl_widget_context->context;
 
-		// Make sure the QOpenGLWidget OpenGL context is the currently active context.
+		// Make sure the QGLWidget OpenGL context is the currently active context.
 		qgl_widget_context.make_current();
 
 		// Create a renderer.
@@ -183,16 +181,16 @@ GPlatesOpenGL::GLOffScreenContext::begin_off_screen_render(
 			d_renderer.get()->begin_render();
 		}
 
-		// We are falling back to using the *main* frame buffer of the QOpenGLWidget context.
+		// We are falling back to using the *main* frame buffer of the QGLWidget context.
 		// We need to preserve the main frame buffer (since not using frame buffer object or pbuffer).
-//		d_save_restore_framebuffer = boost::in_place(
-//				d_renderer.get()->get_capabilities(),
-//				qgl_widget_context.get_width(),
-//				qgl_widget_context.get_height(),
-//				GL_RGBA8/*save_restore_colour_texture_internalformat*/,
-//				qgl_widget_context.get_qgl_format().depth()/*save_restore_depth_buffer*/,
-//				qgl_widget_context.get_qgl_format().stencil()/*save_restore_stencil_buffer*/);
-        qDebug("d_save_restore_framebuffer = boost::in_place(");
+		d_save_restore_framebuffer = boost::in_place(
+				d_renderer.get()->get_capabilities(),
+				qgl_widget_context.get_width(),
+				qgl_widget_context.get_height(),
+				GL_RGBA8/*save_restore_colour_texture_internalformat*/,
+				qgl_widget_context.get_qgl_format().depth()/*save_restore_depth_buffer*/,
+				qgl_widget_context.get_qgl_format().stencil()/*save_restore_stencil_buffer*/);
+
 		// Save its contents.
 		d_save_restore_framebuffer->save(*d_renderer.get());
 	}
@@ -224,7 +222,7 @@ GPlatesOpenGL::GLOffScreenContext::end_off_screen_render()
 	}
 	else
 	{
-		// We are falling back to using the *main* frame buffer of the QOpenGLWidget context.
+		// We are falling back to using the *main* frame buffer of the QGLWidget context.
 		GPlatesGlobal::Assert<GPlatesGlobal::AssertionFailureException>(
 				d_qgl_widget_context && d_save_restore_framebuffer,
 				GPLATES_ASSERTION_SOURCE);
@@ -245,11 +243,12 @@ GPlatesOpenGL::GLOffScreenContext::end_off_screen_render()
 
 
 void
-GPlatesOpenGL::GLOffScreenContext::initialise()
+GPlatesOpenGL::GLOffScreenContext::initialise(
+		const QGLFormat &qgl_format)
 {
 	if (d_qgl_widget_context)
 	{
-		// Try a frame buffer object in the QOpenGLWidget context.
+		// Try a frame buffer object in the QGLWidget context.
 		d_off_screen_context = d_qgl_widget_context->context;
 		if (initialise_screen_render_target())
 		{
@@ -259,13 +258,14 @@ GPlatesOpenGL::GLOffScreenContext::initialise()
 		// Next try a 'pbuffer' context.
 		d_off_screen_context = boost::none;
 		if (initialise_pbuffer_context(
+				qgl_format,
 				d_qgl_widget_context->qgl_widget->width(),
 				d_qgl_widget_context->qgl_widget->height()))
 		{
 			return;
 		}
 
-		// Fall back to using main frame buffer of the QOpenGLWidget.
+		// Fall back to using main frame buffer of the QGLWidget.
 		d_off_screen_context = boost::none;
 
 		return;
@@ -273,24 +273,23 @@ GPlatesOpenGL::GLOffScreenContext::initialise()
 
 	// We need to specify buffer dimensions but we don't know this until @a begin_off_screen_render
 	// is called - for now we'll just specify an arbitrary dimension.
-    qDebug("We need to specify buffer dimensions but we don't know this until @a begin_off_screen_render");
-//	const int initial_pbuffer_dimension = 256;
-//	if (initialise_pbuffer_context(
-//			qgl_format,
-//			initial_pbuffer_dimension/*initial_width*/,
-//			initial_pbuffer_dimension/*initial_height*/))
-//	{
-//		// Attempt to use a frame buffer object even though we already have an off-screen buffer
-//		// in the form of a 'pbuffer'. This is because it's faster to later change the dimensions
-//		// of an FBO than it is for a 'pbuffer'.
-//		if (initialise_screen_render_target())
-//		{
-//			return;
-//		}
+	const int initial_pbuffer_dimension = 256;
+	if (initialise_pbuffer_context(
+			qgl_format,
+			initial_pbuffer_dimension/*initial_width*/,
+			initial_pbuffer_dimension/*initial_height*/))
+	{
+		// Attempt to use a frame buffer object even though we already have an off-screen buffer
+		// in the form of a 'pbuffer'. This is because it's faster to later change the dimensions
+		// of an FBO than it is for a 'pbuffer'.
+		if (initialise_screen_render_target())
+		{
+			return;
+		}
 
-//		// Otherwise just use the 'pbuffer' itself as the off-screen render target.
-//		return;
-//	}
+		// Otherwise just use the 'pbuffer' itself as the off-screen render target.
+		return;
+	}
 
 	// If we get here then 'is_valid()' should return false.
 	d_off_screen_context = boost::none;
@@ -316,63 +315,63 @@ GPlatesOpenGL::GLOffScreenContext::initialise_screen_render_target()
 	// Pass in the viewport of the window currently attached to the OpenGL context.
 	GLRenderer::RenderScope render_scope(*renderer);
 
-//	const GLint texture_internalformat = GL_RGBA8;
-//	const bool include_depth_buffer = off_screen_context.get_qgl_format().depth();
-//	const bool include_stencil_buffer = off_screen_context.get_qgl_format().stencil();
-    qDebug("if (!GLScreenRenderTarget::is_supported(");
-//	if (!GLScreenRenderTarget::is_supported(
-//			*renderer,
-//			texture_internalformat,
-//			include_depth_buffer,
-//			include_stencil_buffer))
-//	{
+	const GLint texture_internalformat = GL_RGBA8;
+	const bool include_depth_buffer = off_screen_context.get_qgl_format().depth();
+	const bool include_stencil_buffer = off_screen_context.get_qgl_format().stencil();
+
+	if (!GLScreenRenderTarget::is_supported(
+			*renderer,
+			texture_internalformat,
+			include_depth_buffer,
+			include_stencil_buffer))
+	{
 		return false;
-//	}
+	}
 
-//	d_screen_render_target =
-//			GLScreenRenderTarget::create(
-//					*renderer,
-//					texture_internalformat,
-//					include_depth_buffer,
-//					include_stencil_buffer);
+	d_screen_render_target =
+			GLScreenRenderTarget::create(
+					*renderer,
+					texture_internalformat,
+					include_depth_buffer,
+					include_stencil_buffer);
 
-//	return true;
+	return true;
 }
 
 
 bool
 GPlatesOpenGL::GLOffScreenContext::initialise_pbuffer_context(
+		const QGLFormat &qgl_format,
 		int initial_width,
 		int initial_height)
 {
 	// Return early if 'pbuffer' extension is not supported.
-//	if (!QOpenGLFramebufferObject::hasOpenGLPbuffers())
-//	{
-//		return false;
-//	}
+	if (!QGLPixelBuffer::hasOpenGLPbuffers())
+	{
+		return false;
+	}
 
-	// Create a QOpenGLFramebufferObject.
-//	d_qgl_pixel_buffer = boost::in_place(
-//			initial_width,
-//			initial_height,
-//			qgl_format,
-//			// It's important to share textures, etc, with our QOpenGLWidget OpenGL context (if provided)...
-//			d_qgl_widget_context /*shareWidget*/
-//					? d_qgl_widget_context->qgl_widget
-//					: static_cast<QOpenGLWidget *>(0));
+	// Create a QGLPixelBuffer.
+	d_qgl_pixel_buffer = boost::in_place(
+			initial_width,
+			initial_height,
+			qgl_format,
+			// It's important to share textures, etc, with our QGLWidget OpenGL context (if provided)...
+			d_qgl_widget_context /*shareWidget*/
+					? d_qgl_widget_context->qgl_widget
+					: static_cast<QGLWidget *>(0));
 
-	// Return early if the QOpenGLFramebufferObject is invalid.
-//	if (!d_qgl_pixel_buffer->isValid())
-//	{
-    qDebug("!d_qgl_pixel_buffer->isValid() Return early if the QOpenGLFramebufferObject is invalid.");
+	// Return early if the QGLPixelBuffer is invalid.
+	if (!d_qgl_pixel_buffer->isValid())
+	{
 		d_qgl_pixel_buffer = boost::none;
 		return false;
-//	}
+	}
 
 	d_qgl_pixel_buffer_impl = boost::in_place(
-			new GLContextImpl::QOpenGLFramebufferObjectImpl(d_qgl_pixel_buffer.get()));
+			new GLContextImpl::QGLPixelBufferImpl(d_qgl_pixel_buffer.get()));
 
-	// Create a context (wrapper) for the QOpenGLFramebufferObject.
+	// Create a context (wrapper) for the QGLPixelBuffer.
 	if (d_qgl_widget_context)
 	{
 		d_off_screen_context = GLContext::create(

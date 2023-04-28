@@ -62,7 +62,7 @@ namespace GPlatesMaths
 		 * Predicate to sort intersections from beginning of the geometry to end.
 		 */
 		class SortGeometryIntersection :
-				public std::function<bool(unsigned int, unsigned int)>
+				public std::binary_function<unsigned int, unsigned int, bool>
 		{
 		public:
 

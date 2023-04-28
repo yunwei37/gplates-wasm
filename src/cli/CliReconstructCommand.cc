@@ -275,8 +275,8 @@ GPlatesCli::ReconstructCommand::run(
 	// Export the reconstructed feature geometries.
 	GPlatesFileIO::ReconstructedFeatureGeometryExport::export_reconstructed_feature_geometries(
 				export_filename.get_qfileinfo().filePath(),
-                GPlatesFileIO::ReconstructedFeatureGeometryExport::get_export_file_format(
-            QFileInfo(export_filename.get_qfileinfo().filePath()),
+				GPlatesFileIO::ReconstructedFeatureGeometryExport::get_export_file_format(
+						export_filename.get_qfileinfo().filePath(),
 						file_io.get_file_format_registry()),
 				reconstruct_feature_geom_seq,
 				reconstructable_file_ptrs,

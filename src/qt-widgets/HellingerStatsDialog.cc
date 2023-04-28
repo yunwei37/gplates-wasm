@@ -52,7 +52,7 @@ GPlatesQtWidgets::HellingerStatsDialog::update()
 	if (dataFile.open(QFile::ReadOnly))
 	{
 		QTextStream in(&dataFile);
-        in.setEncoding(QStringConverter::Utf8);
+		in.setCodec("UTF-8");
 		do
 		{
 			line = in.readLine();

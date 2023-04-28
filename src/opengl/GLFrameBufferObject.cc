@@ -112,7 +112,7 @@ GPlatesOpenGL::GLFrameBufferObject::Allocator::allocate(
 			GPLATES_ASSERTION_SOURCE);
 
 	GLuint fbo;
-	glGenFramebuffers(1, &fbo);
+	glGenFramebuffersEXT(1, &fbo);
 	return fbo;
 }
 
@@ -121,7 +121,7 @@ void
 GPlatesOpenGL::GLFrameBufferObject::Allocator::deallocate(
 		GLuint fbo)
 {
-	glDeleteFramebuffers(1, &fbo);
+	glDeleteFramebuffersEXT(1, &fbo);
 }
 
 
@@ -154,7 +154,7 @@ GPlatesOpenGL::GLFrameBufferObject::gl_generate_mipmap(
 	// This also makes sure the renderer applies the bind to OpenGL before we call OpenGL directly.
 	GLRenderer::BindTextureAndApply save_restore_bind(renderer, texture, GL_TEXTURE0, texture_target);
 
-	glGenerateMipmap(texture_target);
+	glGenerateMipmapEXT(texture_target);
 }
 
 
@@ -202,14 +202,14 @@ GPlatesOpenGL::GLFrameBufferObject::gl_attach_texture_1D(
 			renderer,
 			attachment,
 			GPLATES_ASSERTION_SOURCE);
-	qDebug("glFramebufferTexture1D");
+
 	// Attach to the texture.
-	// glFramebufferTexture1D(
-	// 		GL_FRAMEBUFFER_EXT,
-	// 		attachment,
-	// 		texture_target,
-	// 		texture->get_texture_resource_handle(),
-	// 		level);
+	glFramebufferTexture1DEXT(
+			GL_FRAMEBUFFER_EXT,
+			attachment,
+			texture_target,
+			texture->get_texture_resource_handle(),
+			level);
 
 	// Keep track of the attachment.
 	const AttachmentPoint attachment_point(
@@ -249,7 +249,7 @@ GPlatesOpenGL::GLFrameBufferObject::gl_attach_texture_2D(
 			GPLATES_ASSERTION_SOURCE);
 
 	// Attach to the texture.
-	glFramebufferTexture2D(
+	glFramebufferTexture2DEXT(
 			GL_FRAMEBUFFER_EXT,
 			attachment,
 			texture_target,
@@ -293,15 +293,15 @@ GPlatesOpenGL::GLFrameBufferObject::gl_attach_texture_3D(
 			renderer,
 			attachment,
 			GPLATES_ASSERTION_SOURCE);
-	qDebug("glFramebufferTexture3D");
+
 	// Attach to the texture.
-	// glFramebufferTexture3D(
-	// 		GL_FRAMEBUFFER_EXT,
-	// 		attachment,
-	// 		texture_target,
-	// 		texture->get_texture_resource_handle(),
-	// 		level,
-	// 		zoffset);
+	glFramebufferTexture3DEXT(
+			GL_FRAMEBUFFER_EXT,
+			attachment,
+			texture_target,
+			texture->get_texture_resource_handle(),
+			level,
+			zoffset);
 
 	// Keep track of the attachment.
 	const AttachmentPoint attachment_point(
@@ -350,7 +350,7 @@ GPlatesOpenGL::GLFrameBufferObject::gl_attach_texture_array_layer(
 			GPLATES_ASSERTION_SOURCE);
 
 	// Attach to the texture.
-	glFramebufferTextureLayer(
+	glFramebufferTextureLayerEXT(
 			GL_FRAMEBUFFER_EXT,
 			attachment,
 			texture->get_texture_resource_handle(),
@@ -399,13 +399,13 @@ GPlatesOpenGL::GLFrameBufferObject::gl_attach_texture_array(
 	GPlatesGlobal::Assert<GPlatesGlobal::AssertionFailureException>(
 			capabilities.shader.gl_EXT_geometry_shader4,
 			GPLATES_ASSERTION_SOURCE);
-	qDebug("glFramebufferTexture");
+
 	// Attach to the texture.
-// glFramebufferTexture(
-// 			GL_FRAMEBUFFER_EXT,
-// 			attachment,
-// 			texture->get_texture_resource_handle(),
-// 			level);
+	glFramebufferTextureEXT(
+			GL_FRAMEBUFFER_EXT,
+			attachment,
+			texture->get_texture_resource_handle(),
+			level);
 
 	// Keep track of the attachment.
 	const AttachmentPoint attachment_point(
@@ -440,7 +440,7 @@ GPlatesOpenGL::GLFrameBufferObject::gl_attach_render_buffer(
 			GPLATES_ASSERTION_SOURCE);
 
 	// Attach to the render buffer.
-	glFramebufferRenderbuffer(
+	glFramebufferRenderbufferEXT(
 			GL_FRAMEBUFFER_EXT,
 			attachment,
 			GL_RENDERBUFFER_EXT,
@@ -488,13 +488,12 @@ GPlatesOpenGL::GLFrameBufferObject::gl_detach(
 					attachment_point->texture &&
 					attachment_point->texture_level,
 				GPLATES_ASSERTION_SOURCE);
-		qDebug("glFramebufferTexture1D");
-		// glFramebufferTexture1D(
-		// 		GL_FRAMEBUFFER_EXT,
-		// 		attachment_point->attachment,
-		// 		attachment_point->attachment_target.get(),
-		// 		0/*texture*/,
-		// 		attachment_point->texture_level.get());
+		glFramebufferTexture1DEXT(
+				GL_FRAMEBUFFER_EXT,
+				attachment_point->attachment,
+				attachment_point->attachment_target.get(),
+				0/*texture*/,
+				attachment_point->texture_level.get());
 		break;
 
 	case ATTACHMENT_TEXTURE_2D:
@@ -503,7 +502,7 @@ GPlatesOpenGL::GLFrameBufferObject::gl_detach(
 					attachment_point->texture &&
 					attachment_point->texture_level,
 				GPLATES_ASSERTION_SOURCE);
-		glFramebufferTexture2D(
+		glFramebufferTexture2DEXT(
 				GL_FRAMEBUFFER_EXT,
 				attachment_point->attachment,
 				attachment_point->attachment_target.get(),
@@ -518,14 +517,13 @@ GPlatesOpenGL::GLFrameBufferObject::gl_detach(
 					attachment_point->texture_level &&
 					attachment_point->texture_zoffset,
 				GPLATES_ASSERTION_SOURCE);
-			qDebug("glFramebufferTexture3D");
-		// glFramebufferTexture3D(
-		// 		GL_FRAMEBUFFER_EXT,
-		// 		attachment_point->attachment,
-		// 		attachment_point->attachment_target.get(),
-		// 		0/*texture*/,
-		// 		attachment_point->texture_level.get(),
-		// 		attachment_point->texture_zoffset.get());
+		glFramebufferTexture3DEXT(
+				GL_FRAMEBUFFER_EXT,
+				attachment_point->attachment,
+				attachment_point->attachment_target.get(),
+				0/*texture*/,
+				attachment_point->texture_level.get(),
+				attachment_point->texture_zoffset.get());
 		break;
 
 	case ATTACHMENT_TEXTURE_ARRAY_LAYER:
@@ -534,7 +532,7 @@ GPlatesOpenGL::GLFrameBufferObject::gl_detach(
 					attachment_point->texture_level &&
 					attachment_point->texture_zoffset,
 				GPLATES_ASSERTION_SOURCE);
-		glFramebufferTextureLayer(
+		glFramebufferTextureLayerEXT(
 				GL_FRAMEBUFFER_EXT,
 				attachment_point->attachment,
 				0/*texture*/,
@@ -562,13 +560,13 @@ GPlatesOpenGL::GLFrameBufferObject::gl_detach(
 		// ...so we should be able to use either to 'detach' an attachment point.
 		//
 #if 0
-		glFramebufferTexture(
+		glFramebufferTextureEXT(
 				GL_FRAMEBUFFER_EXT,
 				attachment_point->attachment,
 				0/*texture*/,
 				attachment_point->texture_level.get());
 #else
-		glFramebufferRenderbuffer(
+		glFramebufferRenderbufferEXT(
 				GL_FRAMEBUFFER_EXT,
 				attachment_point->attachment,
 				GL_RENDERBUFFER_EXT, // value ignored for zero render buffer
@@ -580,7 +578,7 @@ GPlatesOpenGL::GLFrameBufferObject::gl_detach(
 		GPlatesGlobal::Assert<GPlatesGlobal::AssertionFailureException>(
 				attachment_point->attachment_target,
 				GPLATES_ASSERTION_SOURCE);
-		glFramebufferRenderbuffer(
+		glFramebufferRenderbufferEXT(
 				GL_FRAMEBUFFER_EXT,
 				attachment_point->attachment,
 				attachment_point->attachment_target.get(),
@@ -629,17 +627,17 @@ GPlatesOpenGL::GLFrameBufferObject::gl_draw_buffers(
 	GLRenderer::BindFrameBufferAndApply save_restore_bind(renderer, shared_from_this());
 
 	// If just one buffer then use the OpenGL 1.1 function.
-	// if (bufs.size() == 1)
-	// {
-	// 	glDrawBuffer(bufs[0]);
-	// 	return;
-	// }
+	if (bufs.size() == 1)
+	{
+		glDrawBuffer(bufs[0]);
+		return;
+	}
 	// Otherwise use the GL_ARB_draw_buffers extension for multiple buffers.
 	GPlatesGlobal::Assert<GPlatesGlobal::AssertionFailureException>(
 			capabilities.framebuffer.gl_ARB_draw_buffers,
 			GPLATES_ASSERTION_SOURCE);
 
-	glDrawBuffers(bufs.size(), &bufs[0]);
+	glDrawBuffersARB(bufs.size(), &bufs[0]);
 }
 
 
@@ -666,7 +664,7 @@ GPlatesOpenGL::GLFrameBufferObject::gl_check_frame_buffer_status(
 	// This also makes sure the renderer applies the bind to OpenGL before we call OpenGL directly.
 	GLRenderer::BindFrameBufferAndApply save_restore_bind(renderer, shared_from_this());
 
-	const GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER_EXT);
+	const GLenum status = glCheckFramebufferStatusEXT(GL_FRAMEBUFFER_EXT);
 	switch(status)
 	{
 	case GL_FRAMEBUFFER_COMPLETE_EXT:

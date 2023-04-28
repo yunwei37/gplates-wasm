@@ -136,8 +136,8 @@ GPlatesOpenGL::GLPixelBufferImpl::gl_tex_image_1D(
 
 	// Unbind pixel buffers on the *unpack* target so that client memory arrays are used.
 	GLRenderer::UnbindBufferObjectAndApply save_restore_unbind_pixel_buffer(renderer, GLBuffer::TARGET_PIXEL_UNPACK_BUFFER);
-	qDebug("glTexImage1D");
-	// glTexImage1D(target, level, internalformat, width, border, format, type, pixels);
+
+	glTexImage1D(target, level, internalformat, width, border, format, type, pixels);
 }
 
 
@@ -227,8 +227,8 @@ GPlatesOpenGL::GLPixelBufferImpl::gl_tex_sub_image_1D(
 
 	// Unbind pixel buffers on the *unpack* target so that client memory arrays are used.
 	GLRenderer::UnbindBufferObjectAndApply save_restore_unbind_pixel_buffer(renderer, GLBuffer::TARGET_PIXEL_UNPACK_BUFFER);
-	qDebug("glTexSubImage1D");
-	// glTexSubImage1D(target, level, xoffset, width, format, type, pixels);
+
+	glTexSubImage1D(target, level, xoffset, width, format, type, pixels);
 }
 
 
