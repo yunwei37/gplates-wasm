@@ -1,12 +1,29 @@
-GPlates README
-==============
+# GPlates WebAssembly
+
+A port of GPlates 2.3.0 with WebAssembly.
+
+## Dependencies
+
+- Qt 6.5.0
+- emscripten 3.1.25
+- CMake
+- GDAL library: <https://github.com/yunwei37/gdal-proj-wasm>
+
+## demo
+
+<https://yunwei37.github.io/gplates-wasm/examples/wasm-gplates-qt-demo/>
+
+## benchmark
+
+<https://yunwei37.github.io/gplates-wasm/examples/benchmark/benchmark-js.html>
+
+## GPlates README
 
 This is the source code for the GPlates software.
 
 GPlates is open-source software, distributed under the terms of the GNU General
 Public License (version 2, dated June 1991) unless otherwise explicitly stated.
 A copy of the license can be found in the file "COPYING" in this directory.
-
 
 Compiling GPlates on Linux
 --------------------------
@@ -24,7 +41,6 @@ and then optionally:
 More information can be found in the files "DEPS.Linux" and "BUILD.Linux" in
 this directory.
 
-
 Compiling GPlates on macOS
 --------------------------
 
@@ -41,7 +57,6 @@ and then optionally:
 More information can be found in the files "DEPS.OSX" and "BUILD.OSX" in
 this directory.
 
-
 Compiling GPlates on Windows
 ----------------------------
 
@@ -50,24 +65,23 @@ as documented in the "Program and library dependencies" section in the "DEPS.Win
 file in this directory.
 
 To compile on Windows:
- * Run the CMake GUI program.
- * Set both the 'source' and 'build' directories to the root GPlates source directory
+
+- Run the CMake GUI program.
+- Set both the 'source' and 'build' directories to the root GPlates source directory
    (the one that has 'src' as a sub-directory).
- * Click 'configure'.
- * Specify 'Visual Studio 14 2015', or above.
-   * And specify 'x64' as the optional platform (to compile GPlates as 64-bit).
- * Click 'configure' once more.
- * Click 'generate'.
- * Open newly created 'GPlates.sln' with the Visual Studio IDE.
- * Select 'Release' build from the "Build->Configuration Manager..." menu.
- * Right-click the 'gplates' project and select 'build'.
+- Click 'configure'.
+- Specify 'Visual Studio 14 2015', or above.
+  - And specify 'x64' as the optional platform (to compile GPlates as 64-bit).
+- Click 'configure' once more.
+- Click 'generate'.
+- Open newly created 'GPlates.sln' with the Visual Studio IDE.
+- Select 'Release' build from the "Build->Configuration Manager..." menu.
+- Right-click the 'gplates' project and select 'build'.
 
 More information can be found in the files "DEPS.Windows" and "BUILD.Windows" in this directory.
-
 
 GPlates on the Web
 ------------------
 
 For up-to-date information about GPlates, you can go to the GPlates website:
- http://www.gplates.org/
-
+ <http://www.gplates.org/>
