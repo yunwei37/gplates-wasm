@@ -41,6 +41,34 @@ void output_reconstructions(
     GPlatesModel::FeatureCollectionHandle::weak_ref isochrons,
     GPlatesModel::FeatureCollectionHandle::weak_ref total_recon_seqs);
 
+/**
+ * The results of parsing the GUI command-line options.
+ *
+ * Any command-line options specific to a particular non-GUI command are handled by
+ * GPlatesCli::CommandDispatcher (when GPlates is *not* used as the familiar GUI application).
+ */
+class GuiCommandLineOptions
+{
+public:
+    GuiCommandLineOptions() : debug_gui(false),
+        enable_python(false), // Enabled by default.
+        enable_external_syncing(false),
+        enable_data_mining(false), // Enable data mining by default
+        enable_symbol_table(false),
+        enable_hellinger_three_plate(false) // Disable three-plate fitting by default
+    {
+    }
+
+    boost::optional<QString> project_filename;
+    QStringList feature_collection_filenames;
+    bool debug_gui;
+    bool enable_python;
+    bool enable_external_syncing;
+    bool enable_data_mining;
+    bool enable_symbol_table;
+    bool enable_hellinger_three_plate;
+};
+
 boost::optional<GuiCommandLineOptions>
 process_command_line_options(
     int argc,

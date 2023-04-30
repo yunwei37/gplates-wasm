@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <h2>My test for js</h2>
+    <h2>2.4 Wasm与JavaScript在时空数据分析中的性能对比</h2>
+    <p>Test for JavaScripts</p>
+    <p>
+      在这个示例中，我们将使用 Proj4js 库实现地理坐标（WGS84）到 NAD83
+      投影坐标的转换。
+    </p>
+    <h1>坐标转换性能测试</h1>
+    <p id="result">正在进行转换...</p>
+    <p id="demo"></p>
+    <pre>The Gplates demo</pre>
+    <pre id="output"></pre>
+    <script
+      async
+      type="text/javascript"
+      src="gplates-no-gui.js"
+      onload="createQtAppInstance().then(() => { console.log('App loaded'); }).catch((e) => { console.error('Error loading app:', e); });"
+    ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.7.5/proj4.js"></script>
+    <script>
+      // 定义源坐标系（WGS84）和目标坐标系
+      const sourceProjection = "EPSG:4326";
+      const targetProjection = "EPSG:4269";
+
+      // Proj4js 对象，用于执行坐标转换
+      const transform = proj4(sourceProjection, targetProjection);
+
+      // 生成虚拟地理坐标数据点
+      const generateRandomPoints = (numPoints) => {
+        const points = [];
+        for (let i = 0; i < numPoints; i++) {
+          const lat = Math.random() * 180 - 90;
+          const lon = Math.random() * 360 - 180;
+          points.push([lon, lat]);
+        }
+        return points;
+      };
+
+      // 测试性能
+      const testPerformance = (numPoints) => {
+        const points = generateRandomPoints(numPoints);
+
+        const startTime = performance.now();
+        // 转换坐标
+        const convertedPoints = points.map((point) => transform.forward(point));
+        const endTime = performance.now();
+
+        console.log(`转换 ${numPoints} 个点耗时：${endTime - startTime} 毫秒`);
+        const resultElement = document.getElementById("result");
+        resultElement.innerHTML =
+          resultElement.innerHTML +
+          `<br>转换 ${numPoints} 个点耗时：${endTime - startTime} 毫秒</br>`;
+      };
+
+      // 执行性能测试
+      testPerformance(10000);
+      testPerformance(50000);
+      testPerformance(100000);
+      testPerformance(500000);
+      testPerformance(1000000);
+      testPerformance(2000000);
+      testPerformance(4000000);
+      testPerformance(6000000);
+      testPerformance(8000000);
+      testPerformance(10000000);
+    </script>
+  </body>
+</html>

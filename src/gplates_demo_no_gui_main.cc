@@ -34,7 +34,10 @@
 #include <emscripten.h>
 #include <iostream>
 #include <streambuf>
-
+#include <iostream>
+#include <proj_api.h>
+#include <vector>
+#include <chrono>
 #include "reconstructions.h"
 
 EMSCRIPTEN_KEEPALIVE
@@ -66,57 +69,109 @@ private:
     std::string buffer;
 };
 
+struct Coordinate {
+    double x;
+    double y;
+};
+
+std::vector<Coordinate> generate_virtual_coordinates(int num_points) {
+    std::vector<Coordinate> coordinates(num_points);
+    for (int i = 0; i < num_points; ++i) {
+        coordinates[i].x = -180.0 + (rand() % 360);
+        coordinates[i].y = -90.0 + (rand() % 180);
+    }
+    return coordinates;
+}
+
+extern "C" {
+
+void convert_coordinates(int num_points) {
+    projPJ source, target;
+    source = pj_init_plus("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs");
+    target = pj_init_plus("+proj=lcc +lat_1=33.90363494575049 +lat_2=33.62529000000013 +lat_0=33.26439869496681 +lon_0=-117.8193892996399 +x_0=200000.0000000002 +y_0=500000.0000000001 +ellps=GRS80 +datum=NAD83 +units=m +no_defs");
+
+    std::vector<Coordinate> coordinates = generate_virtual_coordinates(num_points);
+    double z = 0;
+    auto start = std::chrono::high_resolution_clock::now();
+    for (int i = 0; i < num_points; ++i) {
+        pj_transform(source, target, 1, 1, &coordinates[i].x, &coordinates[i].y, &z);
+    }
+    auto end = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+
+    std::cout << "转换 " << num_points << " 个点耗时：" << duration << " 毫秒" << std::endl;
+
+    pj_free(source);
+    pj_free(target);
+}
+
+}
+
+void test_reconstruction() {
+    // Initialize Qt resources that exist in the static 'qt-resources' library.
+    // NOTE: This is done here so that both the GUI and command-line-only paths have initialized resources.
+    //
+    // NOTE: According to the QtResources documentation calls to Q_INIT_RESOURCE are not needed if
+    // the resources are compiled into a shared library (further, if resources only accessed from
+    // within shared library then there's also no issue with the shared library not being loaded yet).
+    // So Q_INIT_RESOURCE is not called for the python (API) shared library (since this source
+    // file is not included in it) but that's no problem since the python shared library is used
+    // externally (ie, used by an external python interpreter not the GPlates embedded interpreter)
+    // and so the resources are only accessed internally by the shared library.
+    //
+    Q_INIT_RESOURCE(opengl);
+    Q_INIT_RESOURCE(python);
+    Q_INIT_RESOURCE(gpgim);
+    Q_INIT_RESOURCE(qt_widgets);
+    qDebug() << "init resource";
+    GPlatesMaths::assert_has_infinity_and_nan();
+
+    GPlatesModel::ModelInterface model;
+
+    std::cout << "read structural types from a GPML file." << std::endl;
+    GPlatesModel::Gpgim::instance();
+    // Used to read structural types from a GPML file.
+    GPlatesFileIO::GpmlPropertyStructuralTypeReader::non_null_ptr_to_const_type gpml_structural_type_reader =
+        GPlatesFileIO::GpmlPropertyStructuralTypeReader::create();
+    std::cout << "create a new GpmlPropertyStructuralType" << std::endl;
+
+    std::pair<GPlatesModel::FeatureCollectionHandle::weak_ref,
+              GPlatesModel::FeatureCollectionHandle::weak_ref>
+        isochrons_and_total_recon_seqs =
+        ::populate_feature_store(model);
+    std::cout << "populate_feature_store in model" << std::endl;
+
+    GPlatesModel::FeatureCollectionHandle::weak_ref isochrons =
+        isochrons_and_total_recon_seqs.first;
+    GPlatesModel::FeatureCollectionHandle::weak_ref total_recon_seqs =
+        isochrons_and_total_recon_seqs.second;
+
+    ::output_as_gpml(isochrons);
+    ::output_reconstructions(isochrons, total_recon_seqs);
+}
 
 int
 main()
 {
-	// Initialize Qt resources that exist in the static 'qt-resources' library.
-	// NOTE: This is done here so that both the GUI and command-line-only paths have initialized resources.
-	//
-	// NOTE: According to the QtResources documentation calls to Q_INIT_RESOURCE are not needed if
-	// the resources are compiled into a shared library (further, if resources only accessed from
-	// within shared library then there's also no issue with the shared library not being loaded yet).
-	// So Q_INIT_RESOURCE is not called for the python (API) shared library (since this source
-	// file is not included in it) but that's no problem since the python shared library is used
-	// externally (ie, used by an external python interpreter not the GPlates embedded interpreter)
-	// and so the resources are only accessed internally by the shared library.
-	//
-	Q_INIT_RESOURCE(opengl);
-	Q_INIT_RESOURCE(python);
-	Q_INIT_RESOURCE(gpgim);
-	Q_INIT_RESOURCE(qt_widgets);
 
     qDebug() << QString("Hello from qDebug()");
 	OutputLabelStreamBuffer htmlStreamBuffer;
     std::streambuf *oldCoutBuffer = std::cout.rdbuf();
     std::cout.rdbuf(&htmlStreamBuffer);
-	std::cout << "begin..." << std::endl;
-
-	GPlatesMaths::assert_has_infinity_and_nan();
-
-	GPlatesModel::ModelInterface model;
-
-    std::cout << "read structural types from a GPML file." << std::endl;
-    GPlatesModel::Gpgim::instance();
-	// Used to read structural types from a GPML file.
-	GPlatesFileIO::GpmlPropertyStructuralTypeReader::non_null_ptr_to_const_type gpml_structural_type_reader =
-			GPlatesFileIO::GpmlPropertyStructuralTypeReader::create();
-    std::cout << "create a new GpmlPropertyStructuralType" << std::endl;
-
-	std::pair<GPlatesModel::FeatureCollectionHandle::weak_ref,
-			GPlatesModel::FeatureCollectionHandle::weak_ref>
-			isochrons_and_total_recon_seqs =
-					::populate_feature_store(model);
-    std::cout << "populate_feature_store in model" << std::endl;
-
-	GPlatesModel::FeatureCollectionHandle::weak_ref isochrons =
-			isochrons_and_total_recon_seqs.first;
-	GPlatesModel::FeatureCollectionHandle::weak_ref total_recon_seqs =
-			isochrons_and_total_recon_seqs.second;
-
-	::output_as_gpml(isochrons);
-    ::output_reconstructions(isochrons, total_recon_seqs);
-#if 0
+    std::cout << "begin..." << std::endl;
+    // in js: test performance
+    // convert_coordinates(10000);
+    // convert_coordinates(50000);
+    // convert_coordinates(100000);
+    // convert_coordinates(500000);
+    // convert_coordinates(1000000);
+    // convert_coordinates(2000000);
+    // convert_coordinates(4000000);
+    // convert_coordinates(6000000);
+    // convert_coordinates(8000000);
+    // convert_coordinates(10000000);
+//    test_reconstruction();
+#if 1
 	// Test GPML 1.6 reader.
 	if (argc > 1) {
 

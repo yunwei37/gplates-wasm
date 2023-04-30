@@ -23,6 +23,7 @@
 #include "property-values/StructuralType.h"
 
 #include "cli/CliCommandDispatcher.h"
+#include "utils/CommandLineParser.h"
 
 const GPlatesModel::FeatureHandle::weak_ref
 create_isochron(
@@ -496,34 +497,6 @@ const char *HELP_COMMAND_OPTION_NAME = "help-command";
  */
 const char *COMMAND_OPTION_NAME = "command";
 
-/**
- * The results of parsing the GUI command-line options.
- *
- * Any command-line options specific to a particular non-GUI command are handled by
- * GPlatesCli::CommandDispatcher (when GPlates is *not* used as the familiar GUI application).
- */
-class GuiCommandLineOptions
-{
-public:
-	GuiCommandLineOptions() : debug_gui(false),
-							  enable_python(false), // Enabled by default.
-							  enable_external_syncing(false),
-							  enable_data_mining(false), // Enable data mining by default
-							  enable_symbol_table(false),
-							  enable_hellinger_three_plate(false) // Disable three-plate fitting by default
-	{
-	}
-
-	boost::optional<QString> project_filename;
-	QStringList feature_collection_filenames;
-	bool debug_gui;
-	bool enable_python;
-	bool enable_external_syncing;
-	bool enable_data_mining;
-	bool enable_symbol_table;
-	bool enable_hellinger_three_plate;
-};
-
 //! Option name associated with positional arguments (project files or feature collection files).
 const char *POSITIONAL_FILENAMES_OPTION_NAME = "positional";
 
@@ -674,7 +647,7 @@ void parse_and_run_command(
 	// GPlatesQApplication is a QApplication that also handles uncaught exceptions in the Qt event thread.
 	// NOTE: This enables the console (command-line) version of GPlates to pop up error message
 	// dialogs such as QMessageBox (which happens in some file I/O code, but really shouldn't).
-	GPlatesGui::GPlatesQApplication qapplication(argc, argv);
+//	GPlatesGui::GPlatesQApplication qapplication(argc, argv);
 
 	// Add some simple options.
 	GPlatesUtils::CommandLineParser::InputOptions input_options;
@@ -847,53 +820,4 @@ process_command_line_options(
 	qWarning() << "Not yet implemented" << "\nGPlatesGlobal::NotYetImplementedException(GPLATES_EXCEPTION_SOURCE);";
 }
 
-void initialise_python(
-	GPlatesPresentation::Application *app,
-	char *argv[])
-{
-	// using namespace GPlatesGui;
-	// PythonManager* mgr = PythonManager::instance();
-	// try
-	// {
-	// 	mgr->initialize(argv,app);
-	// }
-	// catch(const PythonInitFailed& ex)
-	// {
-	// 	std::stringstream ss;
-	// 	ex.write(ss);
-	// 	qWarning() << ss.str().c_str();
-
-	// 	if(mgr->show_init_fail_dlg())
-	// 	{
-	// 		// using namespace GPlatesQtWidgets;
-	// 		// boost::scoped_ptr<PythonInitFailedDialog> python_fail_dlg(
-	// 		// 	new PythonInitFailedDialog);
-
-	// 		// python_fail_dlg->exec();
-	// 		// mgr->set_show_init_fail_dlg(python_fail_dlg->show_again());
-	// 		// print an error message
-	// 		qWarning() << "Python initialization failed. GPlates will not be able to run any Python scripts.";
-
-	// 	}
-
-	// 	GPlatesUtils::ComponentManager::instance().disable(
-	// 		GPlatesUtils::ComponentManager::Component::python());
-	// }
-}
-
-void clean_up()
-{
-	// FIXME: If we can merge multiple singletons into a single singleton that would be better
-	// from a management/organization point-of-view and also when destructor of single singleton
-	// is called then contained objects are destroyed in correct order.
-	// Also we should be careful about excessive use of singletons because they are essentially global data.
-
-	//		if(GPlatesUtils::ComponentManager::instance().is_enabled(
-	//				GPlatesUtils::ComponentManager::Component::python()))
-	//		{
-	//			GPlatesApi::PythonInterpreterLocker lock;
-	//			delete GPlatesGui::DrawStyleManager::instance(); //delete draw style manager singleton.
-	//		}
-	//		delete GPlatesGui::PythonManager::instance();
-}
 

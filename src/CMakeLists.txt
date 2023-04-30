@@ -339,9 +339,12 @@ target_include_directories(gplates PRIVATE
 #
 # Add 'gplates-no-gui' executable target (linked to gplates-lib).
 #
-add_executable(gplates-no-gui EXCLUDE_FROM_ALL gplates_demo_no_gui_main.cc ScribeExportGPlatesDemoNoGui.cc reconstructions.cc)
+add_executable(gplates-no-gui EXCLUDE_FROM_ALL
+    gplates_demo_no_gui_main.cc
+    ScribeExportGPlatesDemoNoGui.cc
+    reconstructions.cc)
 target_link_libraries(gplates-no-gui PRIVATE gplates-lib)
-
+target_link_libraries(gplates-no-gui PRIVATE boost_program_options)
 if (EMSCRIPTEN)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -s WASM=1 -s MODULARIZE=1 -sNO_DISABLE_EXCEPTION_CATCHING -sFULL_ES2")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -s EXPORTED_RUNTIME_METHODS=['ccall','cwrap','setValue','getValue','specialHTMLTargets']")
