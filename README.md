@@ -2,12 +2,20 @@
 
 A port of GPlates 2.3.0 with WebAssembly.
 
-## Dependencies
+## Compiling GPlates with Emscripten
+
+Use the Qt Creator to open the `CMakelists.txt` file in the root directory of the project, and then select the `WebAssembly_Qt_6_5_0_single_threaded` build kit to compile.
+
+The tested compiling platform is Windows 11.
+
+### Dependencies
 
 - Qt 6.5.0
 - emscripten 3.1.25
 - CMake
 - GDAL library: <https://github.com/yunwei37/gdal-proj-wasm>
+
+All other dependencies are checked in and included in the `third_party` directory.
 
 ## demo
 
