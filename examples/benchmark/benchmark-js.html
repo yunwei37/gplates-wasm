@@ -20,6 +20,7 @@
       onload="createQtAppInstance().then(() => { console.log('App loaded'); }).catch((e) => { console.error('Error loading app:', e); });"
     ></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.7.5/proj4.js"></script>
+    <button onclick="myFunction()">Try it</button>
     <script>
       // 定义源坐标系（WGS84）和目标坐标系
       const sourceProjection = "EPSG:4326";
@@ -56,16 +57,20 @@
       };
 
       // 执行性能测试
-      testPerformance(10000);
-      testPerformance(50000);
-      testPerformance(100000);
-      testPerformance(500000);
-      testPerformance(1000000);
-      testPerformance(2000000);
-      testPerformance(4000000);
-      testPerformance(6000000);
-      testPerformance(8000000);
-      testPerformance(10000000);
+      function myFunction() {
+        testPerformance(100);
+        testPerformance(1000);
+        testPerformance(10000);
+        testPerformance(50000);
+        testPerformance(100000);
+        testPerformance(500000);
+        testPerformance(1000000);
+        testPerformance(2000000);
+        testPerformance(4000000);
+        testPerformance(6000000);
+        testPerformance(8000000);
+        testPerformance(10000000);
+      }
     </script>
   </body>
 </html>
